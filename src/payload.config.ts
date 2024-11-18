@@ -1,6 +1,7 @@
 // storage-adapter-import-placeholder
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
+import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'
 
 import { tr } from 'payload/i18n/tr'
 import { en } from 'payload/i18n/en'
@@ -111,8 +112,8 @@ const plugins: any = [
 if (process.env.BLOB_READ_WRITE_TOKEN) {
   const vercelBlob = vercelBlobStorage({
     collections: {
-      [Media.slug]: true,
-      [MSDS.slug]: true,
+      media: true,
+      msds: true,
     },
     token: process.env.BLOB_READ_WRITE_TOKEN || '',
   })
@@ -211,11 +212,23 @@ export default buildConfig({
       ]
     },
   }),
-  db: postgresAdapter({
-    pool: {
-      connectionString: process.env.DATABASE_URI || '',
-    },
-  }),
+  db:
+    process.env.NODE_ENV === 'development'
+      ? postgresAdapter({
+          pool: {
+            connectionString: process.env.DATABASE_URL || '',
+          },
+        })
+      : vercelPostgresAdapter({
+          pool: {
+            connectionString: process.env.DATABASE_URL || '',
+          },
+        }),
+  // db: postgresAdapter({
+  //   pool: {
+  //     connectionString: process.env.DATABASE_URL || '',
+  //   },
+  // }),
   // collections: [Pages, Posts, Media, Categories, AdminUsers, CompanyUsers, Companies, MSDS],
   collections: [Media, AdminUsers, CompanyUsers, Companies, MSDS],
   cors: [process.env.NEXT_PUBLIC_SERVER_URL || ''].filter(Boolean),
