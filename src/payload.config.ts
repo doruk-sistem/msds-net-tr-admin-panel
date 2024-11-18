@@ -45,10 +45,12 @@ import CompanyUsers from './collections/CompanyUsers'
 import MSDS from './collections/MSDS'
 import Companies from './collections/Companies'
 
-dotenv.config()
-
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+dotenv.config({
+  path: path.resolve(__dirname, `../.env.${process.env.NODE_ENV}`),
+})
 
 const plugins: any = [
   // redirectsPlugin({
