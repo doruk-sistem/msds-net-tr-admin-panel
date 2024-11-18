@@ -1,4 +1,4 @@
-import 'dotenv/config'
+import dotenv from 'dotenv'
 
 // storage-adapter-import-placeholder
 import { postgresAdapter } from '@payloadcms/db-postgres'
@@ -44,6 +44,8 @@ import AdminUsers from './collections/AdminUsers'
 import CompanyUsers from './collections/CompanyUsers'
 import MSDS from './collections/MSDS'
 import Companies from './collections/Companies'
+
+dotenv.config()
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
