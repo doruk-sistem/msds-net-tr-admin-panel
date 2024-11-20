@@ -6,7 +6,7 @@ const privatePages = ['/dashboard']
 const authPages = ['/login']
 
 const isInPage = (currentPathname: string, pages: string[]) => {
-  return pages.some((page) => page.startsWith(currentPathname))
+  return pages.some((page) => currentPathname.startsWith(page))
 }
 
 export async function middleware(req: NextRequest) {

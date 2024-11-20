@@ -1,13 +1,13 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { MoveLeft } from "lucide-react";
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { MoveLeft } from 'lucide-react'
 
 export default function NotFound() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background relative overflow-hidden">
       {/* Soft gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-primary/5" />
-      
+
       {/* Floating circles decoration */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-primary/5 blur-3xl animate-pulse" />
@@ -20,18 +20,16 @@ export default function NotFound() {
           <h1 className="text-[10rem] font-black leading-none tracking-tighter bg-gradient-to-b from-primary/50 to-primary/5 bg-clip-text text-transparent select-none">
             404
           </h1>
-          
+
           {/* Decorative line */}
           <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-24 h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
         </div>
 
         {/* Content with soft shadows */}
         <div className="mt-12 space-y-6">
-          <h2 className="text-3xl font-semibold text-foreground/90">
-            Oops! Page Not Found
-          </h2>
+          <h2 className="text-3xl font-semibold text-foreground/90">Oops! Page Not Found</h2>
           <p className="text-lg text-muted-foreground max-w-md mx-auto leading-relaxed">
-            The page you're looking for seems to have wandered off into the digital sunset.
+            The page you&apos;re looking for seems to have wandered off into the digital sunset.
           </p>
 
           {/* Action buttons with hover effects */}
@@ -64,5 +62,5 @@ export default function NotFound() {
         </div>
       </div>
     </div>
-  );
+  )
 }
