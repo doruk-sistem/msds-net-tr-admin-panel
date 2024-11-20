@@ -1,3 +1,4 @@
+import dotenv from 'dotenv'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 
@@ -5,6 +6,15 @@ import { type AuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
 import { LoginResponse } from '@/utilities/login'
+
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const filename = fileURLToPath(import.meta.url)
+const dirname = path.dirname(filename)
+dotenv.config({
+  path: path.resolve(dirname, `../.env.${process.env.NODE_ENV}`),
+})
 
 const authOptions: AuthOptions = {
   providers: [

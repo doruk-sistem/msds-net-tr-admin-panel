@@ -7,7 +7,7 @@ export const Providers: React.FC<{
 }> = ({ children }) => {
   return (
     <AuthProvider>
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+      <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
         {children}
       </ThemeProvider>
     </AuthProvider>

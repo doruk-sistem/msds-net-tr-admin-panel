@@ -23,8 +23,9 @@ import {
 } from '@payloadcms/richtext-lexical'
 import sharp from 'sharp' // editor-import
 import { UnderlineFeature } from '@payloadcms/richtext-lexical'
-import path from 'path'
 import { buildConfig } from 'payload'
+
+import path from 'path'
 import { fileURLToPath } from 'url'
 
 // import { seedHandler } from './endpoints/seedHandler'
