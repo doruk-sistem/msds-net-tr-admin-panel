@@ -18,9 +18,11 @@ import { useToast } from '@/components/ui/use-toast'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ThemeToggle } from '@/components/frontend/theme-toggle'
 
+import { signIn } from 'next-auth/react'
+
 const formSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(6),
+  password: z.string().min(3),
 })
 
 export default function LoginPage() {
@@ -30,17 +32,30 @@ export default function LoginPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: 'admin@example.com',
-      password: '123456',
+      email: 'client@mail.com',
+      password: '123',
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    toast({
-      title: 'Welcome back!',
-      description: 'Logging you into the dashboard...',
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const auth = await signIn('credentials', {
+      email: values.email,
+      password: values.password,
+      redirect: false,
     })
-    router.push('/dashboard')
+
+    if (auth?.ok) {
+      toast({
+        title: 'Welcome back!',
+        description: 'Logging you into the dashboard...',
+      })
+      router.push('/dashboard')
+    } else {
+      toast({
+        title: 'Invalid credentials!',
+        description: 'Incorrect email or password. Please check again your information',
+      })
+    }
   }
 
   return (

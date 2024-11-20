@@ -45,9 +45,9 @@ export interface Config {
     | (CompanyUser & {
         collection: 'companyUsers';
       });
-  jobs?: {
+  jobs: {
     tasks: unknown;
-    workflows?: unknown;
+    workflows: unknown;
   };
 }
 export interface AdminUserAuthOperations {

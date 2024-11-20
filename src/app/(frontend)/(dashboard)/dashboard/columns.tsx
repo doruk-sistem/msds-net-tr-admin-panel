@@ -1,8 +1,7 @@
-"use client";
+'use client'
 
-import { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { ColumnDef } from '@tanstack/react-table'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,46 +9,32 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { MoreHorizontal } from "lucide-react";
+} from '@/components/ui/dropdown-menu'
+import { MoreHorizontal } from 'lucide-react'
 
-export type User = {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-  status: string;
-};
+export type Row = {
+  msdsName: string
+  qrCode: string
+  name: string
+}
 
-export const columns: ColumnDef<User>[] = [
+export const columns: ColumnDef<Row>[] = [
   {
-    accessorKey: "name",
-    header: "Name",
+    accessorKey: 'name',
+    header: 'Name',
   },
   {
-    accessorKey: "email",
-    header: "Email",
+    accessorKey: 'msdsName',
+    header: 'MSDS Name',
   },
   {
-    accessorKey: "role",
-    header: "Role",
+    accessorKey: 'qrCode',
+    header: 'QR Code',
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    id: 'actions',
     cell: ({ row }) => {
-      const status = row.getValue("status") as string;
-      return (
-        <Badge variant={status === "Active" ? "default" : "secondary"}>
-          {status}
-        </Badge>
-      );
-    },
-  },
-  {
-    id: "actions",
-    cell: ({ row }) => {
-      const user = row.original;
+      const user = row.original
 
       return (
         <DropdownMenu>
@@ -61,17 +46,17 @@ export const columns: ColumnDef<User>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(user.id)}
-            >
-              Copy user ID
+            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(user.qrCode)}>
+              Copy PDF Link
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(user.qrCode)}>
+              Copy QR Link
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View user details</DropdownMenuItem>
-            <DropdownMenuItem>Edit user</DropdownMenuItem>
+            <DropdownMenuItem>View Content</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      );
+      )
     },
   },
-];
+]

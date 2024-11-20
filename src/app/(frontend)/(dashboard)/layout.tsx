@@ -7,7 +7,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div className="min-h-screen">
       <div className="border-b">
         <div className="flex h-16 items-center px-4">
-          <div className="text-xl font-bold text-primary">Doruk Sistem</div>
+          <div className="text-xl font-bold text-primary">Doruk Sistem (Beta)</div>
           <div className="ml-auto flex items-center space-x-4">
             <ThemeToggle />
             <UserNav />

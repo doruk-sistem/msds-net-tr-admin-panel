@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { ThemeProvider } from '@/components/frontend/theme-provider'
-import { Toaster } from '@/components/ui/toaster'
 import { draftMode } from 'next/headers'
+
+import { Toaster } from '@/components/ui/toaster'
 import { AdminBar } from '@/components/AdminBar'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+
+import { Providers } from '@/providers'
 
 import './globals.css'
 
@@ -25,12 +27,7 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <Providers>
           <AdminBar
             adminBarProps={{
               preview: isEnabled,
@@ -40,7 +37,7 @@ export default async function RootLayout({
 
           {children}
           <Toaster />
-        </ThemeProvider>
+        </Providers>
       </body>
     </html>
   )
