@@ -24,10 +24,7 @@ const CompanyUsers: CollectionConfig = {
     defaultColumns: ['fullname', 'email', 'personalPhoneNumber'],
     useAsTitle: 'fullname',
   },
-  auth: {
-    useAPIKey: true,
-    disableLocalStrategy: true,
-  },
+  auth: true,
   fields: [
     {
       name: 'fullname',
