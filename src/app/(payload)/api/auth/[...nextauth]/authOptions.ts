@@ -13,7 +13,7 @@ import { fileURLToPath } from 'url'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 dotenv.config({
-  path: path.resolve(dirname, `../.env.${process.env.NODE_ENV}`),
+  path: path.resolve(dirname, `../../../../../../.env.${process.env.NODE_ENV}`),
 })
 
 const authOptions: AuthOptions = {
