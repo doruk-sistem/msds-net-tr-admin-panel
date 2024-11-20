@@ -45,9 +45,9 @@ export interface Config {
     | (CompanyUser & {
         collection: 'companyUsers';
       });
-  jobs?: {
+  jobs: {
     tasks: unknown;
-    workflows?: unknown;
+    workflows: unknown;
   };
 }
 export interface AdminUserAuthOperations {
@@ -196,14 +196,18 @@ export interface AdminUser {
 export interface CompanyUser {
   id: number;
   fullname?: string | null;
-  email?: string | null;
   turkishIdentity?: number | null;
   personalPhoneNumber?: string | null;
   updatedAt: string;
   createdAt: string;
-  enableAPIKey?: boolean | null;
-  apiKey?: string | null;
-  apiKeyIndex?: string | null;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  password?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -684,14 +688,17 @@ export interface AdminUsersSelect<T extends boolean = true> {
  */
 export interface CompanyUsersSelect<T extends boolean = true> {
   fullname?: T;
-  email?: T;
   turkishIdentity?: T;
   personalPhoneNumber?: T;
   updatedAt?: T;
   createdAt?: T;
-  enableAPIKey?: T;
-  apiKey?: T;
-  apiKeyIndex?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
