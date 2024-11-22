@@ -1,3 +1,5 @@
+'use client'
+
 import { DataTable } from '@/components/frontend/data-table'
 import { columns, Row } from './columns'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'

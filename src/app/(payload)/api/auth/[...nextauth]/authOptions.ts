@@ -39,6 +39,7 @@ const authOptions: AuthOptions = {
               email: credentials?.email,
               password: credentials?.password,
             },
+            depth: 0,
           })
 
           if (loginResponse) {

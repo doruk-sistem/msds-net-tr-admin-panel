@@ -21,7 +21,11 @@ export interface Config {
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    companies: {
+      companyUsers: 'companyUsers';
+    };
+  };
   collectionsSelect: {
     media: MediaSelect<false> | MediaSelect<true>;
     adminUsers: AdminUsersSelect<false> | AdminUsersSelect<true>;
@@ -198,6 +202,7 @@ export interface CompanyUser {
   fullname?: string | null;
   turkishIdentity?: number | null;
   personalPhoneNumber?: string | null;
+  company: number | Company;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -218,7 +223,10 @@ export interface Company {
   companyName: string;
   status?: ('active' | 'passive') | null;
   msdsContent?: (number | Msd)[] | null;
-  companyUsers?: (number | CompanyUser)[] | null;
+  companyUsers?: {
+    docs?: (number | CompanyUser)[] | null;
+    hasNextPage?: boolean | null;
+  } | null;
   taxNumber?: string | null;
   taxOffice?: string | null;
   tradeRegistryNumber?: string | null;
@@ -690,6 +698,7 @@ export interface CompanyUsersSelect<T extends boolean = true> {
   fullname?: T;
   turkishIdentity?: T;
   personalPhoneNumber?: T;
+  company?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
