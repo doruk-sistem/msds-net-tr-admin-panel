@@ -63,7 +63,7 @@ const Companies: CollectionConfig = {
     {
       name: 'msdsContent',
       label: {
-        tr: 'MSDS İçeriği',
+        tr: 'MSDS İçerikleri',
         en: 'MSDS Content',
       },
       hasMany: true,
@@ -76,9 +76,9 @@ const Companies: CollectionConfig = {
         tr: 'Şirket Kullanıcıları',
         en: 'Company Users',
       },
-      type: 'relationship',
-      relationTo: 'companyUsers',
-      hasMany: true,
+      type: 'join',
+      collection: 'companyUsers',
+      on: 'company',
     },
     {
       type: 'collapsible',
