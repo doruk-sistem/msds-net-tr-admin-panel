@@ -24,6 +24,7 @@ export interface Config {
   collectionsJoins: {
     companies: {
       companyUsers: 'companyUsers';
+      msdsContent: 'msds';
     };
   };
   collectionsSelect: {
@@ -222,11 +223,6 @@ export interface Company {
   id: number;
   companyName: string;
   status?: ('active' | 'passive') | null;
-  msdsContent?: (number | Msd)[] | null;
-  companyUsers?: {
-    docs?: (number | CompanyUser)[] | null;
-    hasNextPage?: boolean | null;
-  } | null;
   taxNumber?: string | null;
   taxOffice?: string | null;
   tradeRegistryNumber?: string | null;
@@ -489,6 +485,14 @@ export interface Company {
   city?: string | null;
   address?: string | null;
   phoneNumber?: string | null;
+  companyUsers?: {
+    docs?: (number | CompanyUser)[] | null;
+    hasNextPage?: boolean | null;
+  } | null;
+  msdsContent?: {
+    docs?: (number | Msd)[] | null;
+    hasNextPage?: boolean | null;
+  } | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -499,6 +503,8 @@ export interface Company {
 export interface Msd {
   id: number;
   msdsName: string;
+  companies?: (number | null) | Company;
+  publishedAt?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -716,8 +722,6 @@ export interface CompanyUsersSelect<T extends boolean = true> {
 export interface CompaniesSelect<T extends boolean = true> {
   companyName?: T;
   status?: T;
-  msdsContent?: T;
-  companyUsers?: T;
   taxNumber?: T;
   taxOffice?: T;
   tradeRegistryNumber?: T;
@@ -727,6 +731,8 @@ export interface CompaniesSelect<T extends boolean = true> {
   city?: T;
   address?: T;
   phoneNumber?: T;
+  companyUsers?: T;
+  msdsContent?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -736,6 +742,8 @@ export interface CompaniesSelect<T extends boolean = true> {
  */
 export interface MsdsSelect<T extends boolean = true> {
   msdsName?: T;
+  companies?: T;
+  publishedAt?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
