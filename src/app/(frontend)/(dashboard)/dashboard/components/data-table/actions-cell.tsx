@@ -49,11 +49,12 @@ export default function ActionsCell({ row }: CellContext<Row, unknown>): React.J
   }
 
   const copyPDFLink = () => {
+    window.navigator.clipboard.writeText(contentUrl)
+
     toast({
       title: 'Link Copied!',
+      description: contentUrl,
     })
-
-    window.navigator.clipboard.writeText(contentUrl)
   }
 
   const downloadPDF = () => {
@@ -64,7 +65,7 @@ export default function ActionsCell({ row }: CellContext<Row, unknown>): React.J
   }
 
   return (
-    <div className="flex justify-end">
+    <div className="flex justify-end items-center">
       <Button
         variant="ghost"
         className="mr-4 text-primary hover:text-primary"

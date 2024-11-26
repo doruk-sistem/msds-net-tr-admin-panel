@@ -5,8 +5,9 @@ import { PaginatedDocs } from 'payload'
 import { CompanyUser, Msd } from '@/payload-types'
 import getAuthSession from '@/utilities/getAuthSession'
 
-export default async function DashboardPage() {
+export default async function DashboardPage({ searchParams: searchParamsPromise }) {
   const session = await getAuthSession()
+  const { name, page } = await searchParamsPromise
 
   const companyId = session?.user?.company
 
@@ -20,11 +21,19 @@ export default async function DashboardPage() {
       depth: 0,
       collection: 'msds',
       sort: '-publishedAt',
+      limit: 10,
+      page: Number(page) || 1,
       where: {
         companies: {
           equals: companyId,
         },
-        or: [],
+        ...(!!name
+          ? {
+              msdsName: {
+                like: name,
+              },
+            }
+          : {}),
       },
       select: {
         msdsName: true,

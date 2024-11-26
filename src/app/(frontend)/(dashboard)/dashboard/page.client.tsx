@@ -7,6 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 import { DataTable } from './components/data-table'
 import { columns, type Row } from './components/data-table/columns'
+import SearchMsds from './components/search-msds'
+import TablePagination from './components/table-pagination'
+import { useSearchParams } from 'next/navigation'
 
 interface Props {
   serverData: {
@@ -16,6 +19,10 @@ interface Props {
 }
 
 export default function DashboardClient({ serverData: { msds, companyUsers } }: Props) {
+  const searchParams = useSearchParams()
+
+  const msdsSearchParam = searchParams.get('name')
+
   const msdsContent = msds?.docs
 
   const data: Row[] | null = Array.isArray(msdsContent)
@@ -33,7 +40,10 @@ export default function DashboardClient({ serverData: { msds, companyUsers } }: 
       <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-2">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Total MSDS</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Total MSDS
+              {!!msdsSearchParam && <span className="text-primary"> (Filtered)</span>}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{msds?.totalDocs}</div>
@@ -53,7 +63,15 @@ export default function DashboardClient({ serverData: { msds, companyUsers } }: 
           <CardTitle>MSDS Content</CardTitle>
         </CardHeader>
         <CardContent>
-          {Array.isArray(data) ? <DataTable columns={columns} data={data} /> : null}
+          <div className="mb-4">
+            <SearchMsds />
+          </div>
+          {Array.isArray(data) ? (
+            <>
+              <DataTable columns={columns} data={data} />
+              <TablePagination totalPages={msds?.totalPages || 1} />
+            </>
+          ) : null}
         </CardContent>
       </Card>
     </div>
