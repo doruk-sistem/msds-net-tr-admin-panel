@@ -1,11 +1,11 @@
 'use client'
+
 import React, { useRef } from 'react'
 import { CellContext } from '@tanstack/react-table'
 import QRCode from 'react-qr-code'
 import {
   ArrowUpRight,
   Download,
-  FileDown,
   FileScan,
   FileText,
   MoreHorizontal,
@@ -31,6 +31,8 @@ import { useToast } from '@/hooks/use-toast'
 import { Row } from './columns'
 import downloadFile from '@/utilities/downloadFile'
 
+const w = typeof window === 'undefined' ? null : window
+
 export default function ActionsCell({ row }: CellContext<Row, unknown>): React.JSX.Element {
   const { toast } = useToast()
   const contentRef = useRef<HTMLDivElement>(null)
@@ -42,14 +44,14 @@ export default function ActionsCell({ row }: CellContext<Row, unknown>): React.J
   const item = row.original
 
   const contentPath = typeof item.contentUrl === 'string' ? encodeURI(item.contentUrl) : ''
-  const contentUrl = `${window.location.origin}${contentPath}`
+  const contentUrl = `${w?.location?.origin}${contentPath}`
 
   const openPdfToNewTab = () => {
-    window.open(contentPath, '_blank')
+    w?.open(contentPath, '_blank')
   }
 
   const copyPDFLink = () => {
-    window.navigator.clipboard.writeText(contentUrl)
+    w?.navigator.clipboard.writeText(contentUrl)
 
     toast({
       title: 'Link Copied!',
@@ -76,7 +78,7 @@ export default function ActionsCell({ row }: CellContext<Row, unknown>): React.J
         <ArrowUpRight className="h-4 w-4 ml-1" />
       </Button>
       <Tooltip delayDuration={150} content={<p>Download the MSDS</p>}>
-        <Button variant="outline" className="mr-4" onClick={downloadPDF}>
+        <Button variant="outline" size="icon" className="mr-4" onClick={downloadPDF}>
           <Download className="h-4 w-4" />
         </Button>
       </Tooltip>
