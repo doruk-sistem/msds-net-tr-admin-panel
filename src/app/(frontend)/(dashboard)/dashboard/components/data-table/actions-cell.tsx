@@ -65,7 +65,11 @@ export default function ActionsCell({ row }: CellContext<Row, unknown>): React.J
 
   return (
     <div className="flex justify-end">
-      <Button variant="ghost" className="mr-4" onClick={openPdfToNewTab}>
+      <Button
+        variant="ghost"
+        className="mr-4 text-primary hover:text-primary"
+        onClick={openPdfToNewTab}
+      >
         <FileText className="h-4 w-4 mr-1" />
         Open the MSDS
         <ArrowUpRight className="h-4 w-4 ml-1" />
