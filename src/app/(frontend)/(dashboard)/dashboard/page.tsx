@@ -1,51 +1,67 @@
-import { DataTable } from '@/components/frontend/data-table'
-import { columns, Row } from './columns'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import getPayloadCMS from '@/utilities/getPayloadCMS'
 
-// Mock data - replace with actual API call
-const data: Row[] = [
-  {
-    name: '1',
-    msdsName: 'MSDS Content 1',
-    qrCode: '123',
-  },
-  {
-    name: '2',
-    msdsName: 'MSDS Content 2',
-    qrCode: '123',
-  },
-]
+import DashboardClient from './page.client'
+import { PaginatedDocs } from 'payload'
+import { CompanyUser, Msd } from '@/payload-types'
+import getAuthSession from '@/utilities/getAuthSession'
 
-export default function DashboardPage() {
-  return (
-    <div className="space-y-4">
-      <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-      <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-2">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active MSDS</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">2</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Company Users</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">5</div>
-          </CardContent>
-        </Card>
-      </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>Users</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <DataTable columns={columns} data={data} />
-        </CardContent>
-      </Card>
-    </div>
-  )
+export default async function DashboardPage({ searchParams: searchParamsPromise }) {
+  const session = await getAuthSession()
+  const { name, page } = await searchParamsPromise
+
+  const companyId = session?.user?.company
+
+  let msds: PaginatedDocs<Msd> | null = null
+  let companyUsers: PaginatedDocs<CompanyUser> | null = null
+
+  try {
+    const payload = await getPayloadCMS()
+
+    const msdsResponse = await payload.find({
+      depth: 0,
+      collection: 'msds',
+      sort: '-publishedAt',
+      limit: 10,
+      page: Number(page) || 1,
+      where: {
+        companies: {
+          equals: companyId,
+        },
+        ...(!!name
+          ? {
+              msdsName: {
+                like: name,
+              },
+            }
+          : {}),
+      },
+      select: {
+        msdsName: true,
+        publishedAt: true,
+        filename: true,
+        url: true,
+      },
+    })
+
+    const companyUsersResponse = await payload.find({
+      collection: 'companyUsers',
+      depth: 0,
+      where: {
+        company: {
+          equals: companyId,
+        },
+      },
+      select: {
+        fullname: true,
+      },
+    })
+
+    msds = msdsResponse as any
+    companyUsers = companyUsersResponse as any
+  } catch (error) {
+    msds = null
+    console.error('DashboardPage error: ', error)
+  }
+
+  return <DashboardClient serverData={{ msds, companyUsers }} />
 }

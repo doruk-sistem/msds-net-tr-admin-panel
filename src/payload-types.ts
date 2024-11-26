@@ -21,7 +21,12 @@ export interface Config {
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    companies: {
+      companyUsers: 'companyUsers';
+      msdsContent: 'msds';
+    };
+  };
   collectionsSelect: {
     media: MediaSelect<false> | MediaSelect<true>;
     adminUsers: AdminUsersSelect<false> | AdminUsersSelect<true>;
@@ -198,6 +203,7 @@ export interface CompanyUser {
   fullname?: string | null;
   turkishIdentity?: number | null;
   personalPhoneNumber?: string | null;
+  company: number | Company;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -217,8 +223,6 @@ export interface Company {
   id: number;
   companyName: string;
   status?: ('active' | 'passive') | null;
-  msdsContent?: (number | Msd)[] | null;
-  companyUsers?: (number | CompanyUser)[] | null;
   taxNumber?: string | null;
   taxOffice?: string | null;
   tradeRegistryNumber?: string | null;
@@ -481,6 +485,14 @@ export interface Company {
   city?: string | null;
   address?: string | null;
   phoneNumber?: string | null;
+  companyUsers?: {
+    docs?: (number | CompanyUser)[] | null;
+    hasNextPage?: boolean | null;
+  } | null;
+  msdsContent?: {
+    docs?: (number | Msd)[] | null;
+    hasNextPage?: boolean | null;
+  } | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -491,6 +503,8 @@ export interface Company {
 export interface Msd {
   id: number;
   msdsName: string;
+  companies?: (number | null) | Company;
+  publishedAt?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -690,6 +704,7 @@ export interface CompanyUsersSelect<T extends boolean = true> {
   fullname?: T;
   turkishIdentity?: T;
   personalPhoneNumber?: T;
+  company?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -707,8 +722,6 @@ export interface CompanyUsersSelect<T extends boolean = true> {
 export interface CompaniesSelect<T extends boolean = true> {
   companyName?: T;
   status?: T;
-  msdsContent?: T;
-  companyUsers?: T;
   taxNumber?: T;
   taxOffice?: T;
   tradeRegistryNumber?: T;
@@ -718,6 +731,8 @@ export interface CompaniesSelect<T extends boolean = true> {
   city?: T;
   address?: T;
   phoneNumber?: T;
+  companyUsers?: T;
+  msdsContent?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -727,6 +742,8 @@ export interface CompaniesSelect<T extends boolean = true> {
  */
 export interface MsdsSelect<T extends boolean = true> {
   msdsName?: T;
+  companies?: T;
+  publishedAt?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;

@@ -54,6 +54,16 @@ const CompanyUsers: CollectionConfig = {
       },
       type: 'text',
     },
+    {
+      name: 'company',
+      label: {
+        tr: 'Bağlı Olduğu Şirket',
+        en: 'User Company',
+      },
+      type: 'relationship',
+      relationTo: 'companies',
+      required: true,
+    },
   ],
   timestamps: true,
 }

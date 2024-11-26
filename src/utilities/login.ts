@@ -14,6 +14,7 @@ export interface LoginResponse {
     personalPhoneNumber: string
     turkishIdentity: number
     updatedAt: string
+    company: number
   }
 }
 
