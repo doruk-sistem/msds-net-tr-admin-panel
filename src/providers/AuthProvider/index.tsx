@@ -1,45 +1,31 @@
-'use client'
+import getAuthSession from '@/utilities/getAuthSession'
+import { getPayload, PaginatedDocs } from 'payload'
+import configPromise from '@payload-config'
+import { Company } from '@/payload-types'
+import AuthProviderClient from './AuthProviderClient'
 
-import { Session } from 'next-auth'
-import { type SessionContextValue, SessionProvider, useSession } from 'next-auth/react'
-import React, { createContext, useMemo } from 'react'
+export default async function AuthProvider({ children }: { children: React.ReactNode }) {
+  let userCompany: PaginatedDocs<Company>['docs'][0] | null = null
 
-export type UseAuth = {
-  session: SessionContextValue['data']
-  updateAuth: SessionContextValue['update']
-  status: SessionContextValue['status']
-  user?: Session['user']
-}
+  try {
+    const session = await getAuthSession()
+    const payload = await getPayload({ config: configPromise })
 
-export const AuthProviderClientContext = createContext<null | UseAuth>(null)
+    const companyResponse = await payload.find({
+      collection: 'companies',
+      limit: 1,
+      depth: 0,
+      where: {
+        id: {
+          equals: session?.user.company,
+        },
+      },
+    })
 
-export default function AuthProvider({ children }: { children: React.ReactNode }) {
-  return (
-    <SessionProvider refetchOnWindowFocus={false}>
-      <AuthInit>{children}</AuthInit>
-    </SessionProvider>
-  )
-}
+    userCompany = companyResponse.docs[0]
+  } catch (error) {
+    console.log('AuthProviderError: ', error)
+  }
 
-function AuthInit({ children }: { children: React.ReactNode }) {
-  const sessionData = useSession()
-  const { data: session, status, update } = sessionData
-
-  const user = session?.user
-
-  const value = useMemo(
-    () => ({
-      user,
-      session,
-      status,
-      updateAuth: update,
-    }),
-    [session, status, update, user],
-  )
-
-  return (
-    <AuthProviderClientContext.Provider value={value}>
-      {children}
-    </AuthProviderClientContext.Provider>
-  )
+  return <AuthProviderClient serverSideData={{ userCompany }}>{children}</AuthProviderClient>
 }
