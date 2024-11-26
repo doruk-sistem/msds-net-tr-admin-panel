@@ -61,26 +61,6 @@ const Companies: CollectionConfig = {
       defaultValue: 'active',
     },
     {
-      name: 'msdsContent',
-      label: {
-        tr: 'MSDS İçerikleri',
-        en: 'MSDS Content',
-      },
-      hasMany: true,
-      type: 'relationship',
-      relationTo: 'msds',
-    },
-    {
-      name: 'companyUsers',
-      label: {
-        tr: 'Şirket Kullanıcıları',
-        en: 'Company Users',
-      },
-      type: 'join',
-      collection: 'companyUsers',
-      on: 'company',
-    },
-    {
       type: 'collapsible',
       label: {
         tr: 'Genel Bilgiler',
@@ -178,6 +158,26 @@ const Companies: CollectionConfig = {
           type: 'text',
         },
       ],
+    },
+    {
+      name: 'companyUsers',
+      label: {
+        tr: 'Şirket Kullanıcıları',
+        en: 'Company Users',
+      },
+      type: 'join',
+      collection: 'companyUsers',
+      on: 'company',
+    },
+    {
+      name: 'msdsContent',
+      label: {
+        tr: 'MSDS İçerikleri',
+        en: 'MSDS Content',
+      },
+      type: 'join',
+      collection: 'msds',
+      on: 'companies',
     },
   ],
 }
