@@ -1,4 +1,4 @@
-import getAuthSession from '@/utilities/getAuthToken'
+import getAuthSession from '@/utilities/getAuthSession'
 import { getPayload, PaginatedDocs } from 'payload'
 import configPromise from '@payload-config'
 import { Company } from '@/payload-types'
