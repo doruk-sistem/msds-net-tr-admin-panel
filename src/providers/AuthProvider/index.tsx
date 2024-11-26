@@ -1,7 +1,9 @@
-import getAuthSession from '@/utilities/getAuthSession'
-import { getPayload, PaginatedDocs } from 'payload'
-import configPromise from '@payload-config'
 import { Company } from '@/payload-types'
+import { type PaginatedDocs } from 'payload'
+
+import getAuthSession from '@/utilities/getAuthSession'
+import getPayloadCMS from '@/utilities/getPayloadCMS'
+
 import AuthProviderClient from './AuthProviderClient'
 
 export default async function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -9,20 +11,22 @@ export default async function AuthProvider({ children }: { children: React.React
 
   try {
     const session = await getAuthSession()
-    const payload = await getPayload({ config: configPromise })
+    const payload = await getPayloadCMS()
 
-    const companyResponse = await payload.find({
-      collection: 'companies',
-      limit: 1,
-      depth: 0,
-      where: {
-        id: {
-          equals: session?.user.company,
+    if (session?.user?.company) {
+      const companyResponse = await payload.find({
+        collection: 'companies',
+        limit: 1,
+        depth: 0,
+        where: {
+          id: {
+            equals: session?.user?.company,
+          },
         },
-      },
-    })
+      })
 
-    userCompany = companyResponse.docs[0]
+      userCompany = companyResponse.docs[0]
+    }
   } catch (error) {
     console.log('AuthProviderError: ', error)
   }
