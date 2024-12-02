@@ -29,8 +29,8 @@ const Companies: CollectionConfig = {
     {
       name: 'companyName',
       label: {
-        tr: 'Şirket İsmi',
-        en: 'Company Name',
+        tr: 'Şirket Kodu',
+        en: 'Company Code',
       },
       type: 'text',
       required: true,
@@ -63,10 +63,37 @@ const Companies: CollectionConfig = {
     {
       type: 'collapsible',
       label: {
-        tr: 'Genel Bilgiler',
-        en: 'General Informations',
+        tr: 'Resmî Bilgiler',
+        en: 'Official Informations',
       },
       fields: [
+        {
+          name: 'email',
+          label: {
+            tr: 'Şirket E-posta Adresi',
+            en: 'Company E-mail',
+          },
+          type: 'email',
+          required: true,
+        },
+        {
+          name: 'address',
+          label: {
+            tr: 'Adres',
+            en: 'Address',
+          },
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'phoneNumber',
+          label: {
+            tr: 'Telefon Numarası',
+            en: 'Phone Number',
+          },
+          type: 'text',
+          required: true,
+        },
         {
           name: 'taxNumber',
           label: {
@@ -141,43 +168,52 @@ const Companies: CollectionConfig = {
             },
           },
         },
-        {
-          name: 'address',
-          label: {
-            tr: 'Adres',
-            en: 'Address',
-          },
-          type: 'text',
-        },
-        {
-          name: 'phoneNumber',
-          label: {
-            tr: 'Telefon Numarası',
-            en: 'Phone Number',
-          },
-          type: 'text',
-        },
       ],
     },
     {
-      name: 'companyUsers',
+      type: 'tabs',
       label: {
         tr: 'Şirket Kullanıcıları',
         en: 'Company Users',
       },
-      type: 'join',
-      collection: 'companyUsers',
-      on: 'company',
-    },
-    {
-      name: 'msdsContent',
-      label: {
-        tr: 'MSDS İçerikleri',
-        en: 'MSDS Content',
-      },
-      type: 'join',
-      collection: 'msds',
-      on: 'companies',
+      tabs: [
+        {
+          label: {
+            tr: 'Şirket Kullanıcıları',
+            en: 'Company Users',
+          },
+          fields: [
+            {
+              name: 'companyUsers',
+              label: {
+                tr: 'Şirket Kullanıcıları',
+                en: 'Company Users',
+              },
+              type: 'join',
+              collection: 'companyUsers',
+              on: 'company',
+            },
+          ],
+        },
+        // {
+        //   label: {
+        //     tr: 'Güvenlik Bilgi Formları',
+        //     en: 'Safety Data Sheets',
+        //   },
+        //   fields: [
+        //     {
+        //       name: 'msdsContent',
+        //       label: {
+        //         tr: 'Güvenlik Bilgi Formları',
+        //         en: 'Safety Data Sheets',
+        //       },
+        //       type: 'join',
+        //       collection: 'msds',
+        //       on: 'companies',
+        //     },
+        //   ],
+        // },
+      ],
     },
   ],
 }

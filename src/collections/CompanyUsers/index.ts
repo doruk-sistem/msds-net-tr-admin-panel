@@ -21,8 +21,9 @@ const CompanyUsers: CollectionConfig = {
     update: authenticated,
   },
   admin: {
-    defaultColumns: ['fullname', 'email', 'personalPhoneNumber'],
+    defaultColumns: ['fullname', 'email', 'personalPhoneNumber', 'company'],
     useAsTitle: 'fullname',
+    listSearchableFields: ['fullname', 'email'],
   },
   auth: true,
   fields: [
@@ -33,24 +34,26 @@ const CompanyUsers: CollectionConfig = {
         en: 'Fullname',
       },
       type: 'text',
+      required: true,
     },
     {
       name: 'email',
-      type: 'text',
-    },
-    {
-      name: 'turkishIdentity',
-      label: {
-        tr: 'TC. Kimlik Numarası',
-        en: 'Turkish Identity',
-      },
-      type: 'number',
+      type: 'email',
     },
     {
       name: 'personalPhoneNumber',
       label: {
         tr: 'Kişisel Telefon Numarası',
         en: 'Personal Phone Number',
+      },
+      type: 'text',
+      required: true,
+    },
+    {
+      name: 'position',
+      label: {
+        tr: 'Pozisyon',
+        en: 'Position',
       },
       type: 'text',
     },
