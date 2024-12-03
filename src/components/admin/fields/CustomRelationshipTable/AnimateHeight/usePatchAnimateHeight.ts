@@ -40,7 +40,7 @@ export const usePatchAnimateHeight = ({
         }
 
         // Trigger reflow
-        container.offsetHeight // eslint-disable-line @typescript-eslint/no-unused-expressions
+        container.offsetHeight
 
         // Start animation
         container.style.transition = `height ${duration}ms ease`
