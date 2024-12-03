@@ -25,6 +25,7 @@ import plugins from './plugins'
 
 import collections from './collections'
 import AdminUsers from './collections/AdminUsers'
+import { migrations } from './migrations'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -135,6 +136,7 @@ export default buildConfig({
           pool: {
             connectionString: process.env.DATABASE_URL || '',
           },
+          prodMigrations: migrations,
         }),
   collections,
   cors: [process.env.NEXT_PUBLIC_SERVER_URL || ''].filter(Boolean),
