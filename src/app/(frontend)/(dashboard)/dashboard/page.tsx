@@ -2,7 +2,7 @@ import getPayloadCMS from '@/utilities/getPayloadCMS'
 
 import DashboardClient from './page.client'
 import { PaginatedDocs } from 'payload'
-import { CompanyUser, Msd } from '@/payload-types'
+import type { CompanyUser, MsdsContent } from '@/payload-types'
 import getAuthSession from '@/utilities/getAuthSession'
 
 export default async function DashboardPage({ searchParams: searchParamsPromise }) {
@@ -11,35 +11,29 @@ export default async function DashboardPage({ searchParams: searchParamsPromise 
 
   const companyId = session?.user?.company
 
-  let msds: PaginatedDocs<Msd> | null = null
+  let msds: PaginatedDocs<MsdsContent> | null = null
   let companyUsers: PaginatedDocs<CompanyUser> | null = null
 
   try {
     const payload = await getPayloadCMS()
 
     const msdsResponse = await payload.find({
-      depth: 0,
-      collection: 'msds',
+      depth: 2,
+      collection: 'msdsContents',
       sort: '-publishedAt',
       limit: 10,
       page: Number(page) || 1,
       where: {
-        companies: {
+        company: {
           equals: companyId,
         },
         ...(!!name
           ? {
-              msdsName: {
+              name: {
                 like: name,
               },
             }
           : {}),
-      },
-      select: {
-        msdsName: true,
-        publishedAt: true,
-        filename: true,
-        url: true,
       },
     })
 

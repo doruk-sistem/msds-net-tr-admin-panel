@@ -25,7 +25,7 @@ export interface Config {
   collectionsJoins: {
     companies: {
       companyUsers: 'companyUsers';
-      msdsContent2: 'msdsContents';
+      msdsContent: 'msdsContents';
     };
   };
   collectionsSelect: {
@@ -492,7 +492,7 @@ export interface Company {
     docs?: (number | CompanyUser)[] | null;
     hasNextPage?: boolean | null;
   } | null;
-  msdsContent2?: {
+  msdsContent?: {
     docs?: (number | MsdsContent)[] | null;
     hasNextPage?: boolean | null;
   } | null;
@@ -508,7 +508,7 @@ export interface MsdsContent {
   name: string;
   company: number | Company;
   msdsContent: {
-    msdsFile?: (number | null) | MsdsDoc;
+    msdsFile: number | MsdsDoc;
     msdsLanguage:
       | 'aa'
       | 'aa-DJ'
@@ -1584,7 +1584,7 @@ export interface CompaniesSelect<T extends boolean = true> {
   state?: T;
   city?: T;
   companyUsers?: T;
-  msdsContent2?: T;
+  msdsContent?: T;
   updatedAt?: T;
   createdAt?: T;
 }

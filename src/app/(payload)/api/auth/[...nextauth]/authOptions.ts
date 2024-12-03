@@ -1,6 +1,4 @@
 import dotenv from 'dotenv'
-import { getPayload } from 'payload'
-import configPromise from '@payload-config'
 
 import { type AuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
@@ -8,6 +6,7 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { ClientUser } from 'types/auth.types'
+import getPayloadCMS from '@/utilities/getPayloadCMS'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -30,7 +29,7 @@ const authOptions: AuthOptions = {
             return null
           }
 
-          const payload = await getPayload({ config: configPromise })
+          const payload = await getPayloadCMS()
 
           const loginResponse = await payload.login({
             collection: 'companyUsers',

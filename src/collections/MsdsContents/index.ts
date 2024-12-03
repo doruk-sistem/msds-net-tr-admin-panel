@@ -76,6 +76,7 @@ const MsdsContents: CollectionConfig = {
           name: 'msdsFile',
           type: 'upload',
           relationTo: 'msdsDocs',
+          required: true,
         },
         {
           name: 'msdsLanguage',
