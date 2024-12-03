@@ -88,28 +88,13 @@ const MsdsContents: CollectionConfig = {
           required: true,
         },
         {
-          name: 'msdsName',
-          type: 'text',
-          label: {
-            tr: 'İçerik İsmi ya da Kodu',
-            en: 'Content Name or Code',
-          },
-          admin: {
-            description: {
-              tr: 'Bu içeriğe özgü bir tanım giriniz.',
-              en: 'You enter a unique name/code for this content.',
-            },
-          },
-          required: true,
-        },
-        {
           name: 'msdsUniuqeId',
           type: 'text',
           admin: {
             readOnly: true,
             description: {
-              tr: "Eklediğiniz MSDS içeriği için oluşturulan benzersiz bir id'dir. Şu kombinasyonlara göre oluşur: {msdsCompanyName}-{msdsId}-{msdsName}-{msdsContentId}-{msdsContentName}-{msdsContentLanguage}. Bunlardan herhangi biri değiştiği taktirde id güncellenecektir.",
-              en: 'It is a unique id generated for the MSDS content you add. It is created according to these combinations: {msdsCompanyName}-{msdsId}-{msdsName}-{msdsContentId}-{msdsContentName}-{msdsContentLanguage}. If any of these changes, the id will be updated.',
+              tr: "Eklediğiniz MSDS içeriği için oluşturulan benzersiz bir id'dir. Şu kombinasyonlara göre oluşur: {msdsCompanyName}-{msdsId}-{msdsName}-{msdsContentId}-{msdsContentLanguage}. Bunlardan herhangi biri değiştiği taktirde id güncellenecektir.",
+              en: 'It is a unique id generated for the MSDS content you add. It is created according to these combinations: {msdsCompanyName}-{msdsId}-{msdsName}-{msdsContentId}-{msdsContentLanguage}. If any of these changes, the id will be updated.',
             },
           },
           hooks: {
@@ -125,10 +110,9 @@ const MsdsContents: CollectionConfig = {
                 const originalMsdsContentId = originalDoc?.id
                 const originalMsdsContentName = slugify(originalDoc?.name, { strict: true })
                 const msdsItemId = siblingData?.id
-                const msdsItemName = slugify(siblingData?.msdsName, { strict: true })
                 const msdsItemLanguage = siblingData?.msdsLanguage
 
-                return `${originalMsdsContentCompany}-${originalMsdsContentId}-${originalMsdsContentName}-${msdsItemId}-${msdsItemName}-${msdsItemLanguage}`
+                return `${originalMsdsContentCompany}-${originalMsdsContentId}-${originalMsdsContentName}-${msdsItemId}-${msdsItemLanguage}`
               },
             ],
           },

@@ -25,6 +25,7 @@ export interface Config {
   collectionsJoins: {
     companies: {
       companyUsers: 'companyUsers';
+      msdsContent2: 'msdsContents';
     };
   };
   collectionsSelect: {
@@ -491,26 +492,12 @@ export interface Company {
     docs?: (number | CompanyUser)[] | null;
     hasNextPage?: boolean | null;
   } | null;
+  msdsContent2?: {
+    docs?: (number | MsdsContent)[] | null;
+    hasNextPage?: boolean | null;
+  } | null;
   updatedAt: string;
   createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "msdsDocs".
- */
-export interface MsdsDoc {
-  id: number;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1351,7 +1338,6 @@ export interface MsdsContent {
       | 'dje-NE'
       | 'zu'
       | 'zu-ZA';
-    msdsName: string;
     msdsUniuqeId?: string | null;
     id?: string | null;
   }[];
@@ -1359,6 +1345,24 @@ export interface MsdsContent {
   isPublished?: boolean | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "msdsDocs".
+ */
+export interface MsdsDoc {
+  id: number;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1580,6 +1584,7 @@ export interface CompaniesSelect<T extends boolean = true> {
   state?: T;
   city?: T;
   companyUsers?: T;
+  msdsContent2?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1612,7 +1617,6 @@ export interface MsdsContentsSelect<T extends boolean = true> {
     | {
         msdsFile?: T;
         msdsLanguage?: T;
-        msdsName?: T;
         msdsUniuqeId?: T;
         id?: T;
       };

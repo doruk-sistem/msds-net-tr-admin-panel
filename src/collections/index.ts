@@ -1,4 +1,5 @@
-import { CollectionConfig } from 'payload'
+import { type CollectionConfig } from 'payload'
+
 import { Media } from './Media'
 import AdminUsers from './AdminUsers'
 import CompanyUsers from './CompanyUsers'
