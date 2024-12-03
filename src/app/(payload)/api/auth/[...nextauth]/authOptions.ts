@@ -1,14 +1,12 @@
 import dotenv from 'dotenv'
-import { getPayload } from 'payload'
-import configPromise from '@payload-config'
 
 import { type AuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
-import { LoginResponse } from '@/utilities/login'
-
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { ClientUser } from 'types/auth.types'
+import getPayloadCMS from '@/utilities/getPayloadCMS'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -31,7 +29,7 @@ const authOptions: AuthOptions = {
             return null
           }
 
-          const payload = await getPayload({ config: configPromise })
+          const payload = await getPayloadCMS()
 
           const loginResponse = await payload.login({
             collection: 'companyUsers',
@@ -58,8 +56,8 @@ const authOptions: AuthOptions = {
     strategy: 'jwt',
   },
   callbacks: {
-    jwt: async ({ token, user }) => {
-      const authorizeData: LoginResponse = user as any
+    jwt: async ({ token, user, trigger, session }) => {
+      const authorizeData: ClientUser = user as any
 
       // First-time login, store tokens
       if (authorizeData) {
@@ -71,7 +69,18 @@ const authOptions: AuthOptions = {
       // Access token expiration check and refresh logic
       const currentTime = Math.floor(Date.now() / 1000)
 
-      if (currentTime < token?.exp) {
+      if (trigger === 'update') {
+        if (session) {
+          if ('user' in session && typeof session.user === 'object') {
+            token.user = {
+              ...token.user,
+              ...session.user,
+            }
+          }
+        }
+      }
+
+      if (token?.exp && currentTime < token?.exp) {
         return token
       }
 

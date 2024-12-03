@@ -1,6 +1,7 @@
-import { cn } from 'src/utilities/cn'
-import { Slot } from '@radix-ui/react-slot'
-import { type VariantProps, cva } from 'class-variance-authority'
+import { cva, type VariantProps } from 'class-variance-authority'
+import { Slot, Slottable } from '@radix-ui/react-slot'
+import { Loader2 } from 'lucide-react'
+import { cn } from '@/utilities/cn'
 import * as React from 'react'
 
 const buttonVariants = cva(
@@ -9,6 +10,7 @@ const buttonVariants = cva(
     defaultVariants: {
       size: 'default',
       variant: 'default',
+      rounded: 'default',
     },
     variants: {
       size: {
@@ -17,6 +19,7 @@ const buttonVariants = cva(
         icon: 'h-10 w-10',
         lg: 'h-11 rounded-md px-8',
         sm: 'h-9 rounded-md px-3',
+        full: 'w-full py-2',
       },
       variant: {
         default: 'bg-primary text-primary-foreground hover:bg-primary/90',
@@ -25,6 +28,13 @@ const buttonVariants = cva(
         link: 'text-primary items-start justify-start underline-offset-4 hover:underline',
         outline: 'border border-border bg-background hover:bg-card hover:text-accent-foreground',
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+        white: 'bg-accent text-accent-foreground hover:opacity-90 hover:text-slate-700',
+      },
+      rounded: {
+        default: 'rounded-md',
+        full: 'rounded-full',
+        md: 'rounded-md',
+        lg: 'rounded-lg',
       },
     },
   },
@@ -34,13 +44,25 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
+  loading?: boolean
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ asChild = false, className, size, variant, ...props }, ref) => {
+  (
+    { className, loading = false, children, disabled, variant, size, asChild = false, ...props },
+    ref,
+  ) => {
     const Comp = asChild ? Slot : 'button'
     return (
-      <Comp className={cn(buttonVariants({ className, size, variant }))} ref={ref} {...props} />
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        disabled={loading || disabled}
+        {...props}
+      >
+        {loading && <Loader2 className="h-5 w-5 mr-2 animate-spin text-muted" />}
+        <Slottable>{children}</Slottable>
+      </Comp>
     )
   },
 )

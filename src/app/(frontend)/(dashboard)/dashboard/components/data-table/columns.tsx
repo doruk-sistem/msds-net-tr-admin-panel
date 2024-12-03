@@ -1,18 +1,22 @@
 'use client'
 
 import { PaginatedDocs } from 'payload'
-import { Msd } from '@/payload-types'
+import { MsdsContent, MsdsDoc } from '@/payload-types'
 import { ColumnDef } from '@tanstack/react-table'
-import { Files } from 'lucide-react'
 
 import ActionsCell from './actions-cell'
 import { formatDateTime } from '@/utilities/formatDateTime'
 
 export type Row = {
-  name: PaginatedDocs<Msd>['docs'][0]['msdsName']
-  fileName: PaginatedDocs<Msd>['docs'][0]['filename']
-  contentUrl: PaginatedDocs<Msd>['docs'][0]['url']
-  publishedAt: PaginatedDocs<Msd>['docs'][0]['publishedAt']
+  name: PaginatedDocs<MsdsContent>['docs'][0]['name']
+  msdsContents: Array<{
+    fileName: MsdsDoc['filename']
+    contentUrl: MsdsDoc['url']
+    msdsUniuqeId: PaginatedDocs<MsdsContent>['docs'][0]['msdsContent'][0]['msdsUniuqeId']
+    id: PaginatedDocs<MsdsContent>['docs'][0]['msdsContent'][0]['id']
+    msdsLanguage: PaginatedDocs<MsdsContent>['docs'][0]['msdsContent'][0]['msdsLanguage']
+  }>
+  publishedAt: PaginatedDocs<MsdsContent>['docs'][0]['publishedAt']
 }
 
 export const columns: ColumnDef<Row>[] = [
@@ -24,12 +28,7 @@ export const columns: ColumnDef<Row>[] = [
         original: { name },
       },
     }) => {
-      return (
-        <div className="text-black flex gap-2">
-          <Files />
-          {name}
-        </div>
-      )
+      return <div className="text-black flex gap-2 font-bold">{name}</div>
     },
   },
   {
