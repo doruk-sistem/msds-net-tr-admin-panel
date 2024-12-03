@@ -10,3 +10,4 @@ node_modules
 # Payload default media upload directory
 public/media/
 public/msds/
+src/assets/msdsFiles

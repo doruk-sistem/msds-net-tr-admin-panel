@@ -1,7 +1,7 @@
 'use client'
 
 import { PaginatedDocs } from 'payload'
-import { CompanyUser, Msd } from '@/payload-types'
+import { CompanyUser, MsdsContent } from '@/payload-types'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
@@ -13,7 +13,7 @@ import { useSearchParams } from 'next/navigation'
 
 interface Props {
   serverData: {
-    msds: PaginatedDocs<Msd> | null
+    msds: PaginatedDocs<MsdsContent> | null
     companyUsers: PaginatedDocs<CompanyUser> | null
   }
 }
@@ -27,10 +27,15 @@ export default function DashboardClient({ serverData: { msds, companyUsers } }: 
 
   const data: Row[] | null = Array.isArray(msdsContent)
     ? msdsContent?.map((item) => ({
-        name: item.msdsName,
+        name: item?.name,
         publishedAt: item.publishedAt,
-        fileName: item.filename,
-        contentUrl: item.url,
+        msdsContents: item?.msdsContent?.map((msds: any) => ({
+          fileName: msds.msdsFile?.filename,
+          contentUrl: msds.msdsFile?.url,
+          msdsUniuqeId: msds.msdsUniuqeId,
+          id: msds.id,
+          msdsLanguage: msds.msdsLanguage,
+        })),
       }))
     : null
 

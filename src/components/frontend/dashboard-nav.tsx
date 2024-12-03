@@ -12,7 +12,7 @@ const items = [
   },
   {
     title: 'Settings',
-    href: '/dashboard/settings',
+    href: '/dashboard/settings/profile',
     icon: Settings,
   },
 ]

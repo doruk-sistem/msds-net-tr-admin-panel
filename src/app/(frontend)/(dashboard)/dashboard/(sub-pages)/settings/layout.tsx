@@ -4,7 +4,7 @@ import { SidebarNav } from '@/components/frontend/sidebar-nav'
 const sidebarNavItems = [
   {
     title: 'User Settings',
-    href: '/dashboard/settings',
+    href: '/dashboard/settings/profile',
   },
   {
     title: 'Company Settings',
