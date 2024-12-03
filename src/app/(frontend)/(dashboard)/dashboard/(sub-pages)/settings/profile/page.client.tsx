@@ -49,13 +49,6 @@ export default function SettingsPageClient({ serverData: { user } }: Props) {
     },
   })
 
-  const secretIdentity = user?.turkishIdentity
-    ? String(user?.turkishIdentity)
-        .split('')
-        .map(() => '*')
-        .join('')
-    : null
-
   const [identityIsHidden, setIdentityIsHidden] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -120,33 +113,6 @@ export default function SettingsPageClient({ serverData: { user } }: Props) {
             <div>
               <label className="text-sm font-medium">Email</label>
               <p className="font-semibold text-sm">{user?.email || 'No data'}</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <ScanFace />
-            <div>
-              <label className="text-sm font-medium">Turkish Identity</label>
-              <div className="flex gap-2">
-                {user?.turkishIdentity ? (
-                  <>
-                    <p className="font-semibold text-sm">
-                      {identityIsHidden ? secretIdentity : user?.turkishIdentity}
-                    </p>
-                    <div
-                      className="flex items-center cursor-pointer opacity-50 hover:opacity-100"
-                      onClick={() => setIdentityIsHidden((prev) => !prev)}
-                    >
-                      {identityIsHidden ? (
-                        <Eye className="w-4 h-4" />
-                      ) : (
-                        <EyeOffIcon className="w-4 h-4" />
-                      )}
-                    </div>
-                  </>
-                ) : (
-                  <p className="font-semibold text-sm">No data</p>
-                )}
-              </div>
             </div>
           </div>
         </CardContent>
