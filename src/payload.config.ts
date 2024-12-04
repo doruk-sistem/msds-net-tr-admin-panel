@@ -129,12 +129,12 @@ export default buildConfig({
     process.env.NODE_ENV === 'development'
       ? postgresAdapter({
           pool: {
-            connectionString: process.env.DATABASE_URL || '',
+            connectionString: process.env.POSTGRES_URL || '',
           },
         })
       : vercelPostgresAdapter({
           pool: {
-            connectionString: process.env.DATABASE_URL || '',
+            connectionString: process.env.POSTGRES_URL || '',
           },
           prodMigrations: migrations,
         }),
