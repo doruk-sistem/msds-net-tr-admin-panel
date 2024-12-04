@@ -125,19 +125,6 @@ export default buildConfig({
       ]
     },
   }),
-  // db:
-  //   process.env.NODE_ENV === 'development'
-  //     ? postgresAdapter({
-  //         pool: {
-  //           connectionString: process.env.POSTGRES_URL || '',
-  //         },
-  //       })
-  //     : vercelPostgresAdapter({
-  //         pool: {
-  //           connectionString: process.env.POSTGRES_URL || '',
-  //         },
-  //         prodMigrations: migrations,
-  //       }),
   db: postgresAdapter({
     pool: {
       connectionString: process.env.POSTGRES_URL || '',
