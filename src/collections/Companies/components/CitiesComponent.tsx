@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { SelectInput, useField, useWatchForm, useLocale, useTranslation } from '@payloadcms/ui'
+import { SelectInput, useField, useWatchForm, useTranslation } from '@payloadcms/ui'
 
 import { City } from 'country-state-city'
 

@@ -6,15 +6,16 @@ import type { CompanyUser, MsdsContent } from '@/payload-types'
 import getAuthSession from '@/utilities/getAuthSession'
 
 export default async function DashboardPage({ searchParams: searchParamsPromise }) {
-  const session = await getAuthSession()
   const { name, page } = await searchParamsPromise
-
-  const companyId = session?.user?.company
 
   let msds: PaginatedDocs<MsdsContent> | null = null
   let companyUsers: PaginatedDocs<CompanyUser> | null = null
 
   try {
+    const session = await getAuthSession()
+
+    const companyId = session?.user?.company
+
     const payload = await getPayloadCMS()
 
     const msdsResponse = await payload.find({

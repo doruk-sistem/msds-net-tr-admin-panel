@@ -1,6 +1,9 @@
 import type { CollectionConfig } from 'payload'
 
+import bcrypt from 'bcryptjs'
+
 import { authenticated } from '../../access/authenticated'
+import generateRandomPassword from '@/utilities/generatePassword'
 
 const CompanyUsers: CollectionConfig = {
   slug: 'companyUsers',
@@ -25,49 +28,133 @@ const CompanyUsers: CollectionConfig = {
     useAsTitle: 'fullname',
     listSearchableFields: ['fullname', 'email'],
   },
-  auth: true,
+  auth: {
+    useAPIKey: true,
+    disableLocalStrategy: true,
+  },
   fields: [
     {
-      name: 'fullname',
-      label: {
-        tr: 'İsim-Soyisim',
-        en: 'Fullname',
+      name: 'description',
+      type: 'ui',
+      admin: {
+        components: {
+          Field: 'src/collections/CompanyUsers/components/Description',
+        },
       },
-      type: 'text',
-      required: true,
     },
     {
       name: 'email',
       type: 'email',
+      required: true,
+      unique: true,
     },
     {
-      name: 'personalPhoneNumber',
+      name: 'hashedPassword',
       label: {
-        tr: 'Kişisel Telefon Numarası',
-        en: 'Personal Phone Number',
+        tr: 'Parola',
+        en: 'Password',
       },
       type: 'text',
-      required: true,
+      admin: {
+        components: {
+          Field: 'src/collections/CompanyUsers/components/HashedPassword',
+        },
+      },
+      hooks: {
+        beforeValidate: [
+          async ({ value, operation, originalDoc, req, data }) => {
+            if (req.payloadAPI === 'local' && operation === 'update') {
+              return originalDoc?.hashedPassword
+            }
+
+            if (operation === 'create' || operation === 'update') {
+              console.log('all values: ', { value, operation, originalDoc, data })
+
+              try {
+                const isSameValue = originalDoc?.hashedPassword === value
+
+                if (operation === 'update' && isSameValue) return value
+
+                const newPassword = !value ? generateRandomPassword() : value
+
+                const hashedPassword = await bcrypt.hash(newPassword, 10)
+
+                return hashedPassword
+              } catch (error) {
+                console.error('hashedPassword field error: ', error)
+                throw new Error(error)
+              }
+            }
+
+            return value
+          },
+        ],
+      },
     },
     {
-      name: 'position',
-      label: {
-        tr: 'Pozisyon',
-        en: 'Position',
-      },
-      type: 'text',
-    },
-    {
-      name: 'company',
-      label: {
-        tr: 'Bağlı Olduğu Şirket',
-        en: 'User Company',
-      },
-      type: 'relationship',
-      relationTo: 'companies',
-      required: true,
+      type: 'tabs',
+      tabs: [
+        {
+          label: {
+            tr: 'Genel Bilgiler',
+            en: 'General Information',
+          },
+          fields: [
+            {
+              name: 'fullname',
+              label: {
+                tr: 'İsim-Soyisim',
+                en: 'Fullname',
+              },
+              type: 'text',
+              required: true,
+            },
+            {
+              name: 'personalPhoneNumber',
+              label: {
+                tr: 'Kişisel Telefon Numarası',
+                en: 'Personal Phone Number',
+              },
+              type: 'text',
+              required: true,
+            },
+            {
+              name: 'position',
+              label: {
+                tr: 'Pozisyon',
+                en: 'Position',
+              },
+              type: 'text',
+            },
+            {
+              name: 'company',
+              label: {
+                tr: 'Bağlı Olduğu Şirket',
+                en: 'User Company',
+              },
+              type: 'relationship',
+              relationTo: 'companies',
+              required: true,
+            },
+          ],
+        },
+      ],
     },
   ],
+  hooks: {
+    beforeChange: [
+      ({ data }) => {
+        if (!data?.enableAPIKey) {
+          return {
+            ...data,
+            enableAPIKey: true,
+          }
+        }
+
+        return data
+      },
+    ],
+  },
   timestamps: true,
 }
 

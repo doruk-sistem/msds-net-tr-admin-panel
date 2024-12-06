@@ -2,9 +2,16 @@
 
 import { Company } from '@/payload-types'
 import { Session } from 'next-auth'
-import { type SessionContextValue, SessionProvider, useSession } from 'next-auth/react'
+import {
+  getSession,
+  type SessionContextValue,
+  SessionProvider,
+  signIn,
+  signOut,
+  useSession,
+} from 'next-auth/react'
 import { PaginatedDocs } from 'payload'
-import React, { createContext, useMemo } from 'react'
+import React, { createContext, useEffect, useMemo } from 'react'
 
 export type UseAuth = {
   session: SessionContextValue['data']
@@ -24,10 +31,11 @@ interface ServerSideData {
 
 export default function AuthProviderClient({
   children,
+  session,
   ...rest
-}: { children: React.ReactNode } & ServerSideData) {
+}: { children: React.ReactNode; session: Session | null } & ServerSideData) {
   return (
-    <SessionProvider refetchOnWindowFocus={false}>
+    <SessionProvider refetchOnWindowFocus={false} session={session}>
       <AuthInit {...rest}>{children}</AuthInit>
     </SessionProvider>
   )
@@ -50,6 +58,17 @@ function AuthInit({ children, serverSideData }: { children: React.ReactNode } & 
     }),
     [session, status, update, user, userCompany],
   )
+
+  useEffect(() => {
+    if (session?.error === 'RefreshTokenExpired') {
+      alert('Your session is expired. Please sign in again.')
+      signOut()
+    }
+    if (session?.error === 'RefreshTokenError') {
+      alert('Your session could not be verified.')
+      signOut()
+    }
+  }, [session?.error])
 
   return (
     <AuthProviderClientContext.Provider value={value}>

@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth'
 import { JWT } from 'next-auth/jwt'
 
-import { ClientUser } from './auth.types'
+import { AuthError, ClientUser } from './auth.types'
 
 declare module 'next-auth' {
   /**
@@ -9,17 +9,16 @@ declare module 'next-auth' {
    */
   interface Session {
     user: ClientUser['user']
-    token: ClientUser['token']
-    error?: 'RefreshAccessTokenError'
+    auth: ClientUser['auth']
+    error?: AuthError
   }
 }
 
 declare module 'next-auth/jwt' {
   /** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
   interface JWT {
-    exp: ClientUser['exp']
-    token: ClientUser['token']
     user: ClientUser['user']
-    error?: NextAuthSession['error']
+    auth: ClientUser['auth']
+    error?: AuthError
   }
 }

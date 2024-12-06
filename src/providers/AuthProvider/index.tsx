@@ -5,12 +5,14 @@ import getAuthSession from '@/utilities/getAuthSession'
 import getPayloadCMS from '@/utilities/getPayloadCMS'
 
 import AuthProviderClient from './AuthProviderClient'
+import { Session } from 'next-auth'
 
 export default async function AuthProvider({ children }: { children: React.ReactNode }) {
   let userCompany: PaginatedDocs<Company>['docs'][0] | null = null
+  let session: Session | null = null
 
   try {
-    const session = await getAuthSession()
+    session = await getAuthSession()
     const payload = await getPayloadCMS()
 
     if (session?.user?.company) {
@@ -31,5 +33,9 @@ export default async function AuthProvider({ children }: { children: React.React
     console.log('AuthProviderError: ', error)
   }
 
-  return <AuthProviderClient serverSideData={{ userCompany }}>{children}</AuthProviderClient>
+  return (
+    <AuthProviderClient serverSideData={{ userCompany }} session={session}>
+      {children}
+    </AuthProviderClient>
+  )
 }

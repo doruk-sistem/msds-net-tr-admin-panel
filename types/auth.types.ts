@@ -1,6 +1,13 @@
-import { Result as LoginResult } from 'node_modules/payload/dist/auth/operations/login'
 import { DataFromCollectionSlug } from 'payload'
 
-export type ClientUser = Omit<LoginResult, 'user'> & {
+export type AuthError = 'RefreshTokenExpired' | 'TokenExpired' | 'RefreshTokenError'
+
+export type ClientUser = {
   user: DataFromCollectionSlug<'companyUsers'>
+  auth: {
+    accessToken: string
+    refreshToken: string
+    accessTokenExpires: number
+    refreshTokenExpires: number
+  }
 }

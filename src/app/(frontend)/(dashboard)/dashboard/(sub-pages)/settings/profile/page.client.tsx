@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Eye, Mail, ScanFace, EyeOffIcon } from 'lucide-react'
+import { Mail } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -21,10 +21,9 @@ import {
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
-import payloadClient from '@/utilities/payloadClient'
-
 import useAuth from '@/hooks/use-auth'
 import { useToast } from '@/hooks/use-toast'
+import auth from '@/requests/auth'
 
 const formSchema = z.object({
   fullname: z.string().min(2).max(30),
@@ -49,18 +48,16 @@ export default function SettingsPageClient({ serverData: { user } }: Props) {
     },
   })
 
-  const [identityIsHidden, setIdentityIsHidden] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      if (session?.token && user?.id) {
+      if (session?.auth.accessToken && user?.id) {
         setIsLoading(true)
 
-        const response = await payloadClient.updateById({
-          collection: 'companyUsers',
+        const response = await auth.updateUser({
           id: user?.id,
-          token: session.token,
+          accessToken: session?.auth?.accessToken,
           body: {
             fullname: data.fullname,
             personalPhoneNumber: data.phoneNumber,
@@ -68,10 +65,10 @@ export default function SettingsPageClient({ serverData: { user } }: Props) {
         })
 
         // update the user data from next-auth session data
-        updateAuth({
+        await updateAuth({
           user: {
-            fullname: response?.doc.fullname,
-            personalPhoneNumber: response?.doc.personalPhoneNumber,
+            fullname: response?.fullname,
+            personalPhoneNumber: response?.personalPhoneNumber,
           },
         } as { user: Partial<ClientUser['user']> })
 
@@ -92,6 +89,8 @@ export default function SettingsPageClient({ serverData: { user } }: Props) {
           'If you want to see the error, open developer console or contact developer team',
         variant: 'destructive',
       })
+
+      console.error('ERROR: ', error)
     } finally {
       setIsLoading(false)
     }
