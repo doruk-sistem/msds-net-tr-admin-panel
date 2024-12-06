@@ -12,10 +12,10 @@ import { signJWT, verifyJWT } from '@/utilities/jwt'
 dotenvConfig(`../../../../../../.env.${process.env.NODE_ENV}`)
 
 // const ACCESS_TOKEN_EXPIRES_IN = 15 * 60 * 1000 // 15 minutes
-const ACCESS_TOKEN_EXPIRES_IN = 2 * 60 * 1000 // 2 minutes
+const ACCESS_TOKEN_EXPIRES_IN = 120 * 60 * 1000 // 2 hours
 const REFRESH_TOKEN_EXPIRES_IN = 7 * 24 * 60 * 60 * 1000 // 7 days
 // const ACCESS_TOKEN_EXPIRES_IN_STR = '15m'
-const ACCESS_TOKEN_EXPIRES_IN_STR = '2m'
+const ACCESS_TOKEN_EXPIRES_IN_STR = '2h'
 const REFRESH_TOKEN_EXPIRES_IN_STR = '7d'
 
 const authOptions: AuthOptions = {
