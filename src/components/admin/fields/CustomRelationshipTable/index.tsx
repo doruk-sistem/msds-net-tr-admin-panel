@@ -120,7 +120,11 @@ export const RelationshipTable = ({ searchFields = [], ...props }: Props) => {
     }
   })
 
-  const { i18n, t } = useTranslation()
+  const {
+    i18n,
+    t,
+    i18n: { language },
+  } = useTranslation()
 
   const [query, setQuery] = useState<ListQuery>()
   const [openColumnSelector, setOpenColumnSelector] = useState(false)
@@ -128,6 +132,8 @@ export const RelationshipTable = ({ searchFields = [], ...props }: Props) => {
   const [collectionConfig] = useState(
     () => getEntityConfig({ collectionSlug: relationTo }) as ClientCollectionConfig,
   )
+
+  console.log('collection config: ', collectionConfig)
 
   const [isLoadingTable, setIsLoadingTable] = useState(true)
   const [data, setData] = useState<PaginatedDocs>(initialData)
@@ -280,15 +286,13 @@ export const RelationshipTable = ({ searchFields = [], ...props }: Props) => {
             <div className={`${baseClass}__no-results`}>
               <p>
                 {i18n.t('general:noResults', {
-                  //   label: getTranslation(collectionConfig?.labels?.plural, i18n),
-                  label: collectionConfig?.labels?.plural,
+                  label: collectionConfig?.labels?.plural[language],
                 })}
               </p>
               {canCreate && (
                 <Button onClick={openDrawer}>
                   {i18n.t('general:createNewLabel', {
-                    // label: getTranslation(collectionConfig?.labels?.singular, i18n),
-                    label: collectionConfig?.labels?.singular,
+                    label: collectionConfig?.labels?.singular[language],
                   })}
                 </Button>
               )}
