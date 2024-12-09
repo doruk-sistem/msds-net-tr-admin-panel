@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { authenticated } from '../../access/authenticated'
 import cantEraseYourself from './hooks/cantEraseYourself'
+import { isAdmin } from '@/access/isAdmin'
 
 const AdminUsers: CollectionConfig = {
   slug: 'adminUsers',
@@ -17,10 +18,10 @@ const AdminUsers: CollectionConfig = {
   },
   access: {
     admin: authenticated,
-    create: authenticated,
-    delete: authenticated,
+    create: isAdmin,
+    delete: isAdmin,
     read: authenticated,
-    update: authenticated,
+    update: isAdmin,
   },
   admin: {
     defaultColumns: ['name', 'email'],
@@ -44,8 +45,8 @@ const AdminUsers: CollectionConfig = {
       hasMany: true,
       options: [
         {
-          label: 'superadmin',
-          value: 'superadmin',
+          label: 'editor',
+          value: 'editor',
         },
         {
           label: 'admin',

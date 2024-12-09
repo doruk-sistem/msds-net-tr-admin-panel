@@ -184,7 +184,7 @@ export interface Media {
 export interface AdminUser {
   id: number;
   name?: string | null;
-  roles: ('superadmin' | 'admin')[];
+  roles: ('editor' | 'admin')[];
   updatedAt: string;
   createdAt: string;
   email: string;
