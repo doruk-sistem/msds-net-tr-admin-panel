@@ -2,9 +2,9 @@ import { ClientUser } from 'types/auth.types'
 
 import getAuthSession from '@/utilities/getAuthSession'
 
-import SettingsPageClient from './page.client'
+import ProfileSettingsPageClient from './page.client'
 
-export default async function SettingsPage() {
+export default async function ProfileSettingsPage() {
   let user: ClientUser['user'] | undefined = undefined
 
   try {
@@ -15,5 +15,5 @@ export default async function SettingsPage() {
     user = undefined
   }
 
-  return <SettingsPageClient serverData={{ user }} />
+  return <ProfileSettingsPageClient serverData={{ user }} />
 }

@@ -1,12 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { Mail } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
-
-import { ClientUser } from 'types/auth.types'
+import { DataFromCollectionSlug } from 'payload'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -23,57 +21,57 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 import useAuth from '@/hooks/use-auth'
 import { useToast } from '@/hooks/use-toast'
-import auth from '@/requests/auth'
+
+import companyRequest from '@/requests/company'
 
 const formSchema = z.object({
-  fullname: z.string().min(2).max(30),
+  name: z.string().min(2).max(30),
   phoneNumber: z.string().min(2).max(20),
+  address: z.string().min(2).max(40),
 })
 
 interface Props {
   serverData: {
-    user: ClientUser['user'] | undefined
+    company: DataFromCollectionSlug<'companies'> | undefined
   }
 }
 
-export default function ProfileSettingsPageClient({ serverData: { user } }: Props) {
+export default function CompanySettingsPageClient({ serverData: { company } }: Props) {
   const { toast } = useToast()
-  const { session, updateAuth } = useAuth()
+  const { session } = useAuth()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fullname: user?.fullname || '',
-      phoneNumber: user?.personalPhoneNumber || '',
+      name: company?.companyName || '',
+      phoneNumber: company?.phoneNumber || '',
+      address: company?.address,
     },
   })
 
   const [isLoading, setIsLoading] = useState(false)
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    console.log('data: ', data)
+
     try {
-      if (session?.auth.accessToken && user?.id) {
+      if (session?.auth.accessToken && company?.id) {
         setIsLoading(true)
 
-        const response = await auth.updateUser({
-          id: user?.id,
+        const response = await companyRequest.updateCompany({
+          id: company.id,
           accessToken: session?.auth?.accessToken,
           body: {
-            fullname: data.fullname,
-            personalPhoneNumber: data.phoneNumber,
+            companyName: data.name.trim(),
+            phoneNumber: data.phoneNumber.trim(),
+            address: data.address.trim(),
           },
         })
 
-        // update the user data from next-auth session data
-        await updateAuth({
-          user: {
-            fullname: response?.fullname,
-            personalPhoneNumber: response?.personalPhoneNumber,
-          },
-        } as { user: Partial<ClientUser['user']> })
+        console.log('response: ', response)
 
         toast({
-          title: 'Settings updated',
+          title: 'Company information updated',
           description: 'Your user settings have been saved successfully.',
         })
       } else {
@@ -97,42 +95,27 @@ export default function ProfileSettingsPageClient({ serverData: { user } }: Prop
   }
 
   const notChanged =
-    user?.fullname === form.watch('fullname') &&
-    user?.personalPhoneNumber === form.watch('phoneNumber')
+    company?.companyName === form.watch('name') && company.phoneNumber === form.watch('phoneNumber')
 
   return (
     <>
-      <Card className="mb-5">
-        <CardHeader>
-          <CardTitle>Profile Informations</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center gap-3 mb-3">
-            <Mail />
-            <div>
-              <label className="text-sm font-medium">Email</label>
-              <p className="font-semibold text-sm">{user?.email || 'No data'}</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
       <Card className={isLoading ? 'pointer-events-none opacity-50' : ''}>
         <CardHeader>
-          <CardTitle>User Settings</CardTitle>
+          <CardTitle>Company Settings</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
                 control={form.control}
-                name="fullname"
+                name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Fullname</FormLabel>
+                    <FormLabel>Company Name</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
-                    <FormDescription>This is your public display name.</FormDescription>
+                    <FormDescription>This is company name.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -147,7 +130,23 @@ export default function ProfileSettingsPageClient({ serverData: { user } }: Prop
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
-                      <FormDescription>Your personal phone number.</FormDescription>
+                      <FormDescription>Company phone number.</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )
+                }}
+              />
+              <FormField
+                control={form.control}
+                name="address"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel>Address</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormDescription>Company address.</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )

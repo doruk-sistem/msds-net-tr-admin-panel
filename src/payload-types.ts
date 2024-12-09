@@ -10,6 +10,7 @@ export interface Config {
   auth: {
     adminUsers: AdminUserAuthOperations;
     companyUsers: CompanyUserAuthOperations;
+    authApiKeys: AuthApiKeyAuthOperations;
   };
   collections: {
     media: Media;
@@ -18,6 +19,7 @@ export interface Config {
     companies: Company;
     msdsDocs: MsdsDoc;
     msdsContents: MsdsContent;
+    authApiKeys: AuthApiKey;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -35,6 +37,7 @@ export interface Config {
     companies: CompaniesSelect<false> | CompaniesSelect<true>;
     msdsDocs: MsdsDocsSelect<false> | MsdsDocsSelect<true>;
     msdsContents: MsdsContentsSelect<false> | MsdsContentsSelect<true>;
+    authApiKeys: AuthApiKeysSelect<false> | AuthApiKeysSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -51,6 +54,9 @@ export interface Config {
       })
     | (CompanyUser & {
         collection: 'companyUsers';
+      })
+    | (AuthApiKey & {
+        collection: 'authApiKeys';
       });
   jobs: {
     tasks: unknown;
@@ -76,6 +82,24 @@ export interface AdminUserAuthOperations {
   };
 }
 export interface CompanyUserAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
+  };
+}
+export interface AuthApiKeyAuthOperations {
   forgotPassword: {
     email: string;
     password: string;
@@ -202,20 +226,17 @@ export interface AdminUser {
  */
 export interface CompanyUser {
   id: number;
+  email: string;
+  hashedPassword?: string | null;
   fullname: string;
   personalPhoneNumber: string;
   position?: string | null;
   company: number | Company;
   updatedAt: string;
   createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  password?: string | null;
+  enableAPIKey?: boolean | null;
+  apiKey?: string | null;
+  apiKeyIndex?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1366,6 +1387,18 @@ export interface MsdsDoc {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "authApiKeys".
+ */
+export interface AuthApiKey {
+  id: number;
+  updatedAt: string;
+  createdAt: string;
+  enableAPIKey?: boolean | null;
+  apiKey?: string | null;
+  apiKeyIndex?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -1394,6 +1427,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'msdsContents';
         value: number | MsdsContent;
+      } | null)
+    | ({
+        relationTo: 'authApiKeys';
+        value: number | AuthApiKey;
       } | null);
   globalSlug?: string | null;
   user:
@@ -1404,6 +1441,10 @@ export interface PayloadLockedDocument {
     | {
         relationTo: 'companyUsers';
         value: number | CompanyUser;
+      }
+    | {
+        relationTo: 'authApiKeys';
+        value: number | AuthApiKey;
       };
   updatedAt: string;
   createdAt: string;
@@ -1422,6 +1463,10 @@ export interface PayloadPreference {
     | {
         relationTo: 'companyUsers';
         value: number | CompanyUser;
+      }
+    | {
+        relationTo: 'authApiKeys';
+        value: number | AuthApiKey;
       };
   key?: string | null;
   value?:
@@ -1552,19 +1597,18 @@ export interface AdminUsersSelect<T extends boolean = true> {
  * via the `definition` "companyUsers_select".
  */
 export interface CompanyUsersSelect<T extends boolean = true> {
+  description?: T;
+  email?: T;
+  hashedPassword?: T;
   fullname?: T;
   personalPhoneNumber?: T;
   position?: T;
   company?: T;
   updatedAt?: T;
   createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
+  enableAPIKey?: T;
+  apiKey?: T;
+  apiKeyIndex?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1624,6 +1668,17 @@ export interface MsdsContentsSelect<T extends boolean = true> {
   isPublished?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "authApiKeys_select".
+ */
+export interface AuthApiKeysSelect<T extends boolean = true> {
+  updatedAt?: T;
+  createdAt?: T;
+  enableAPIKey?: T;
+  apiKey?: T;
+  apiKeyIndex?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
