@@ -4,6 +4,8 @@ import CompanySettingsPageClient from './page.client'
 import { DataFromCollectionSlug } from 'payload'
 import getPayloadCMS from '@/utilities/getPayloadCMS'
 
+export const dynamic = 'force-dynamic'
+
 export default async function ProfileSettingsPage() {
   let company: DataFromCollectionSlug<'companies'> | undefined = undefined
 

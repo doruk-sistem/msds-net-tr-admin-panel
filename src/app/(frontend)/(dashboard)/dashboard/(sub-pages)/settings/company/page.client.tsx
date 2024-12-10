@@ -95,7 +95,9 @@ export default function CompanySettingsPageClient({ serverData: { company } }: P
   }
 
   const notChanged =
-    company?.companyName === form.watch('name') && company.phoneNumber === form.watch('phoneNumber')
+    company?.companyName === form.watch('name') &&
+    company.phoneNumber === form.watch('phoneNumber') &&
+    company.address === form.watch('address')
 
   return (
     <>

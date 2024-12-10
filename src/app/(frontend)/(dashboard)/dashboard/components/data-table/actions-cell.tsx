@@ -131,9 +131,9 @@ function MsdsContent({
         {lang}
         <ArrowUpRight className="h-4 w-4 ml-1" />
       </Button>
-      <div>
+      <div className="space-x-2">
         <Tooltip delayDuration={150} content={<p>Download the MSDS</p>}>
-          <Button variant="outline" size="icon" className="mr-4" onClick={downloadPDF}>
+          <Button variant="outline" size="icon" onClick={downloadPDF}>
             <Download className="h-4 w-4" />
           </Button>
         </Tooltip>
@@ -166,7 +166,7 @@ function MsdsContent({
                 </>
               }
             >
-              <Button variant="outline" className="mr-4" size="icon">
+              <Button variant="outline" size="icon">
                 <QrCodeIcon className="h-4 w-4" />
               </Button>
             </Dialog>
