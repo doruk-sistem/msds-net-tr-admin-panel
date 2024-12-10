@@ -12,47 +12,93 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import useAuth from '@/hooks/use-auth'
+import useMounted from '@/hooks/use-mounted'
+import { Building2, LogOut, User } from 'lucide-react'
 import { signOut } from 'next-auth/react'
+import { useTheme } from 'next-themes'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import Loader from '../ui/loader'
+import Link from 'next/link'
 
 export function UserNav() {
+  const mounted = useMounted()
   const router = useRouter()
-
   const { user } = useAuth()
+  const { resolvedTheme } = useTheme()
 
-  const avatarFallback = user?.fullname ? `${user?.fullname[0]}${user?.fullname[1]}` : ''
+  const logoLight = () => (
+    <Image
+      className="w-[170px]"
+      src="/msds-logo-light.png"
+      alt="msds.com.tr logo light"
+      width={400}
+      height={100}
+    />
+  )
+
+  const logoDark = () => (
+    <Image
+      className="w-[170px]"
+      src="/msds-logo-dark.png"
+      alt="msds.com.tr logo dark"
+      width={400}
+      height={100}
+    />
+  )
+
+  if (!mounted)
+    return (
+      <div className="border-b flex justify-center py-2">
+        <Loader className="text-primary w-10 h-10" />{' '}
+      </div>
+    )
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-          <Avatar className="h-8 w-8">
-            <AvatarImage src="/avatars/01.png" alt="@username" />
-            <AvatarFallback>{avatarFallback}</AvatarFallback>
-          </Avatar>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
-        <DropdownMenuLabel className="font-normal">
-          <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{user?.fullname}</p>
-            <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
-          </div>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => router.push('/dashboard/settings/profile')}>
-            Profile
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => router.push('/dashboard/settings/company')}>
-            Company
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => signOut({ callbackUrl: '/login' })}>
-          Log out
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="border-b">
+      <div className="flex h-16 items-center px-4">
+        <Link href="/">{resolvedTheme === 'dark' ? logoLight() : logoDark()}</Link>
+        <div className="ml-auto flex items-center space-x-4">
+          <p className="text-sm font-semibold">Welcome {user?.fullname}!</p>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src="/avatars/01.png" alt="@username" />
+                  <AvatarFallback>
+                    <User className="w-4 h-4" />
+                  </AvatarFallback>
+                </Avatar>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="end" forceMount>
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">{user?.fullname}</p>
+                  <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>Settings</DropdownMenuLabel>
+                <DropdownMenuItem onClick={() => router.push('/dashboard/settings/profile')}>
+                  <User />
+                  Profile
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push('/dashboard/settings/company')}>
+                  <Building2 />
+                  Company
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => signOut({ callbackUrl: '/login' })}>
+                <LogOut />
+                Log out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+    </div>
   )
 }

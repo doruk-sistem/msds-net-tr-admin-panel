@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { Mail } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
+import dynamic from 'next/dynamic'
 
 import { ClientUser } from 'types/auth.types'
 
@@ -20,10 +21,17 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import Loader from '@/components/ui/loader'
 
 import useAuth from '@/hooks/use-auth'
 import { useToast } from '@/hooks/use-toast'
+
 import auth from '@/requests/auth'
+
+const ThemeToggleSection = dynamic(() => import('@/components/frontend/theme-toggle-section'), {
+  ssr: false,
+  loading: () => <Loader className="text-primary w-10 h-10" />,
+})
 
 const formSchema = z.object({
   fullname: z.string().min(2).max(30),
@@ -101,10 +109,10 @@ export default function ProfileSettingsPageClient({ serverData: { user } }: Prop
     user?.personalPhoneNumber === form.watch('phoneNumber')
 
   return (
-    <>
-      <Card className="mb-5">
+    <div className="space-y-5">
+      <Card>
         <CardHeader>
-          <CardTitle>Profile Informations</CardTitle>
+          <CardTitle>Profile Information</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center gap-3 mb-3">
@@ -116,9 +124,27 @@ export default function ProfileSettingsPageClient({ serverData: { user } }: Prop
           </div>
         </CardContent>
       </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Preferences</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            <div>
+              <label className="text-sm font-medium">Theme</label>
+              <p className="text-sm text-muted-foreground">Choose a theme</p>
+            </div>
+            <div className="flex gap-2 items-center">
+              <Suspense fallback={<>Loading...</>}>
+                <ThemeToggleSection />
+              </Suspense>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
       <Card className={isLoading ? 'pointer-events-none opacity-50' : ''}>
         <CardHeader>
-          <CardTitle>User Settings</CardTitle>
+          <CardTitle>Edit Profile</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -160,6 +186,6 @@ export default function ProfileSettingsPageClient({ serverData: { user } }: Prop
           </Form>
         </CardContent>
       </Card>
-    </>
+    </div>
   )
 }

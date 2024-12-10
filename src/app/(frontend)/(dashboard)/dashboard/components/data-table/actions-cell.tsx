@@ -69,7 +69,7 @@ export default function ActionsCell({ row }: CellContext<Row, unknown>): React.J
             </>
           }
         >
-          <Button variant="outline" className="mr-4">
+          <Button variant="default" className="mr-4">
             <FileStack className="h-4 w-4 mr-2" /> Open the Content
             <Maximize2 className="h-3 w-3 ml-2" />
           </Button>
