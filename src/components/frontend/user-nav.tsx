@@ -24,6 +24,7 @@ import useAuth from '@/hooks/use-auth'
 import useMounted from '@/hooks/use-mounted'
 
 import Loader from '../ui/loader'
+import Logo from '../Logo'
 
 export function UserNav() {
   const mounted = useMounted()
@@ -62,7 +63,7 @@ export function UserNav() {
   return (
     <div className="border-b">
       <div className="flex h-16 items-center px-4">
-        <Link href="/">{resolvedTheme === 'dark' ? logoLight() : logoDark()}</Link>
+        <Logo />
         <div className="ml-auto flex items-center space-x-4">
           <p className="text-sm font-semibold">{t('userNav.welcome', { name: user?.fullname })}</p>
           <DropdownMenu>

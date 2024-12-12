@@ -20,6 +20,7 @@ import { ThemeToggle } from '@/components/frontend/theme-toggle'
 
 import { signIn } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
+import Logo from '@/components/frontend/logo'
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -66,8 +67,11 @@ export default function LoginClient() {
         <ThemeToggle />
       </div>
       <Card className="w-[400px]">
-        <CardHeader>
-          <CardTitle className="text-2xl text-center">{t('title')}</CardTitle>
+        <CardHeader className="space-y-8">
+          <div className="w-full flex justify-center">
+            <Logo imageClassName="w-[240px]" />
+          </div>
+          <CardTitle className="text-2xl text-center opacity-75">{t('title')}</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
