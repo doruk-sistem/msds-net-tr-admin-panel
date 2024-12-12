@@ -32,10 +32,13 @@ import { Dialog, DialogDescription, DialogHeader, DialogTitle } from '@/componen
 import downloadFile from '@/utilities/downloadFile'
 import { useToast } from '@/hooks/use-toast'
 import { Row } from './columns'
+import { useTranslations } from 'next-intl'
 
 const w = typeof window === 'undefined' ? null : window
 
 export default function ActionsCell({ row }: CellContext<Row, unknown>): React.JSX.Element {
+  const t = useTranslations('dashboardPage')
+
   const msds = row.original
   const msdsContents = msds.msdsContents
 
@@ -48,10 +51,10 @@ export default function ActionsCell({ row }: CellContext<Row, unknown>): React.J
               <DialogHeader>
                 <DialogTitle className="flex justify-center items-center">
                   <FileScan className="mr-2" />
-                  {msds.name} - Msds Contents (All Languages)
+                  {t('openTheContentDialog.dialogTitle', { name: msds.name })}
                 </DialogTitle>
                 <DialogDescription className="text-center">
-                  MSDS contents are available here.
+                  {t('openTheContentDialog.dialogDescription')}
                 </DialogDescription>
               </DialogHeader>
               <div className="flex flex-col gap-2">
@@ -70,7 +73,7 @@ export default function ActionsCell({ row }: CellContext<Row, unknown>): React.J
           }
         >
           <Button variant="default" className="mr-4">
-            <FileStack className="h-4 w-4 mr-2" /> Open the Content
+            <FileStack className="h-4 w-4 mr-2" /> {t('msdsContentDataTable.openTheContent')}
             <Maximize2 className="h-3 w-3 ml-2" />
           </Button>
         </Dialog>
@@ -92,6 +95,7 @@ function MsdsContent({
   msdsName,
   msdsLanguage,
 }: MsdsContentProps): React.JSX.Element {
+  const t = useTranslations('dashboardPage')
   const { toast } = useToast()
   const contentRef = useRef<HTMLDivElement>(null)
   const reactToPrintFn = useReactToPrint({
@@ -132,12 +136,12 @@ function MsdsContent({
         <ArrowUpRight className="h-4 w-4 ml-1" />
       </Button>
       <div className="space-x-2">
-        <Tooltip delayDuration={150} content={<p>Download the MSDS</p>}>
+        <Tooltip delayDuration={150} content={<p>{t('openTheContentDialog.downloadTheMSDS')}</p>}>
           <Button variant="outline" size="icon" onClick={downloadPDF}>
             <Download className="h-4 w-4" />
           </Button>
         </Tooltip>
-        <Tooltip delayDuration={150} content={<p>Show QR Code</p>}>
+        <Tooltip delayDuration={150} content={<p>{t('openTheContentDialog.showQRCode')}</p>}>
           <div className="inline-block ">
             <Dialog
               DialogContent={
@@ -145,10 +149,12 @@ function MsdsContent({
                   <DialogHeader>
                     <DialogTitle className="flex justify-center items-center">
                       <FileScan className="mr-2" />
-                      {msdsName} ({lang}) - QR Code
+                      {t('openTheContentDialog.showQRCodeDialog.title', {
+                        name: `${msdsName} (${lang})`,
+                      })}
                     </DialogTitle>
                     <DialogDescription className="text-center">
-                      You can print this qr code
+                      {t('openTheContentDialog.showQRCodeDialog.description')}
                     </DialogDescription>
                   </DialogHeader>
                   <div className="flex flex-col items-center py-2 gap-6">
@@ -160,7 +166,7 @@ function MsdsContent({
                     </div>
                     <Button onClick={() => reactToPrintFn()}>
                       <Printer className="mr-1" />
-                      Print / Save as PDF
+                      {t('openTheContentDialog.showQRCodeDialog.print')}
                     </Button>
                   </div>
                 </>
@@ -180,10 +186,10 @@ function MsdsContent({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>More Options</DropdownMenuLabel>
+            <DropdownMenuLabel>{t('openTheContentDialog.moreOptions')} </DropdownMenuLabel>
             <DropdownMenuItem onClick={copyPDFLink}>
               <FileText className="h-3 w-3" />
-              Copy PDF Link
+              {t('openTheContentDialog.copyPDFLink')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -1,5 +1,13 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+import Link from 'next/link'
+import { Building2, LogOut, User } from 'lucide-react'
+import { signOut } from 'next-auth/react'
+import { useTheme } from 'next-themes'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -11,21 +19,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+
 import useAuth from '@/hooks/use-auth'
 import useMounted from '@/hooks/use-mounted'
-import { Building2, LogOut, User } from 'lucide-react'
-import { signOut } from 'next-auth/react'
-import { useTheme } from 'next-themes'
-import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+
 import Loader from '../ui/loader'
-import Link from 'next/link'
 
 export function UserNav() {
   const mounted = useMounted()
   const router = useRouter()
   const { user } = useAuth()
   const { resolvedTheme } = useTheme()
+  const t = useTranslations('common')
 
   const logoLight = () => (
     <Image
@@ -59,7 +64,7 @@ export function UserNav() {
       <div className="flex h-16 items-center px-4">
         <Link href="/">{resolvedTheme === 'dark' ? logoLight() : logoDark()}</Link>
         <div className="ml-auto flex items-center space-x-4">
-          <p className="text-sm font-semibold">Welcome {user?.fullname}!</p>
+          <p className="text-sm font-semibold">{t('userNav.welcome', { name: user?.fullname })}</p>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
@@ -80,20 +85,20 @@ export function UserNav() {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <DropdownMenuLabel>Settings</DropdownMenuLabel>
+                <DropdownMenuLabel>{t('userNav.settings')}</DropdownMenuLabel>
                 <DropdownMenuItem onClick={() => router.push('/dashboard/settings/profile')}>
                   <User />
-                  Profile
+                  {t('userNav.profile')}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push('/dashboard/settings/company')}>
                   <Building2 />
-                  Company
+                  {t('userNav.company')}
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => signOut({ callbackUrl: '/login' })}>
                 <LogOut />
-                Log out
+                {t('userNav.logout')}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

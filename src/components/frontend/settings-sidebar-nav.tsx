@@ -4,16 +4,24 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/utilities/cn'
+import { useTranslations } from 'next-intl'
 
-interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
-  items: {
-    href: string
-    title: string
-  }[]
-}
+const items = [
+  {
+    title: 'sidebarNav.userSettings',
+    href: '/dashboard/settings/profile',
+  },
+  {
+    title: 'sidebarNav.companySettings',
+    href: '/dashboard/settings/company',
+  },
+]
 
-export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
+interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {}
+
+export default function SettingsSidebarNav({ className, ...props }: SidebarNavProps) {
   const pathname = usePathname()
+  const t = useTranslations('settingsPage')
 
   return (
     <nav
@@ -32,7 +40,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
             'justify-start',
           )}
         >
-          {item.title}
+          {t(item.title as any)}
         </Link>
       ))}
     </nav>

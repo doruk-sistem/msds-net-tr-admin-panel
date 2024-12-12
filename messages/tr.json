@@ -1,0 +1,94 @@
+{
+  "common": {
+    "userNav": {
+      "welcome": "Hoş geldin {name}!",
+      "settings": "Ayarlar",
+      "profile": "Profil",
+      "company": "Şirket",
+      "logout": "Çıkış"
+    },
+    "dashboardNav": {
+      "dashboard": "Kontrol Paneli",
+      "settings": "Ayarlar"
+    }
+  },
+  "loginPage": {
+    "title": "Giriş Yap",
+    "email": "E-posta",
+    "password": "Parola",
+    "loginButton": "Giriş",
+    "successToast": {
+      "title": "Tekrar hoş geldiniz!",
+      "description": "Kontrol paneline yönlendiriliyorsunuz..."
+    },
+    "invalidCredentialsToast": {
+      "title": "Geçersiz kimlik bilgileri!",
+      "description": "Geçersiz e-posta veya parola. Lütfen bilgilerinizi tekrar kontrol edin."
+    }
+  },
+  "dashboardPage": {
+    "title": "Kontrol Panel,",
+    "msdsContent": "MSDS İçeriği",
+    "totalMSDS": "Toplam MSDS",
+    "filtered": "Filtrelenmiş",
+    "activeCompanyUsers": "Aktif Şirket Kullanıcıs",
+    "msdsContentDataTable": {
+      "searchByMSDSName": "MSDS ismine göre ara",
+      "openTheContent": "İçeriği Aç",
+      "next": "Sonraki",
+      "previous": "Önceki"
+    },
+    "openTheContentDialog": {
+      "dialogTitle": "{name} - Msds İçerikleri (Tüm Dillerde)",
+      "dialogDescription": "Tüm MSDS içerikleri buradadır.",
+      "downloadTheMSDS": "MSDS'i İndir",
+      "showQRCode": "QR Code'u Gör",
+      "moreOptions": "Daha Fazla Seçenek",
+      "copyPDFLink": "PDF Link'ini Kopyala",
+      "showQRCodeDialog": {
+        "title": "{name} - QR Kod",
+        "description": "Bu qr kodunu yazdırabilsiniz.",
+        "print": "Yazdır / PDF Olarak Kaydet"
+      }
+    }
+  },
+  "settingsPage": {
+    "title": "Ayarlar",
+    "description": "Profil ve şirket ayarlarını yönetin.",
+    "sidebarNav": {
+      "userSettings": "Kullanıcı Ayarları",
+      "companySettings": "Şirket Ayarları"
+    },
+    "userSettingsPage": {
+      "profileInformationSection": {
+        "title": "Profil Bilgileri",
+        "email": "E-posta"
+      },
+      "preferencesSection": {
+        "title": "Tercihler",
+        "theme": "Tema",
+        "themeDescription": "Bir tema seç",
+        "language": "Dil",
+        "languageDescription": "Dili değiştir"
+      },
+      "editProfileSection": {
+        "title": "Profili Düzenle",
+        "fullname": "İsim",
+        "fullnameDescription": "Bu sizin hesap isminiz.",
+        "phone": "Telefon Numarası",
+        "phoneDescription": "Kişisel telefon numaranız.",
+        "saveChanges": "Kaydet"
+      }
+    },
+    "companySettingsPage": {
+      "title": "Şirket Ayarları",
+      "companyName": "Şirket İsmi",
+      "companyNameDescription": "Şirket ismi.",
+      "phone": "Telefon Numarası",
+      "phoneDescription": "Şirket telefon numarası.",
+      "address": "Adres",
+      "addressDescription": "Şirket adresi.",
+      "saveChanges": "Kaydet"
+    }
+  }
+}
