@@ -1,6 +1,9 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
+import { NextIntlClientProvider } from 'next-intl'
+import { getLocale, getMessages } from 'next-intl/server'
+
 import { Toaster } from '@/components/ui/toaster'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
@@ -21,17 +24,25 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
-        <AuthProvider>
-          <Providers>
-            <LivePreviewListener />
+  const locale = await getLocale()
 
-            {children}
-            <Toaster />
-          </Providers>
-        </AuthProvider>
+  // Providing all messages to the client
+  // side is the easiest way to get started
+  const messages = await getMessages()
+
+  return (
+    <html lang={locale} suppressHydrationWarning>
+      <body className={inter.className}>
+        <NextIntlClientProvider messages={messages}>
+          <AuthProvider>
+            <Providers>
+              <LivePreviewListener />
+
+              {children}
+              <Toaster />
+            </Providers>
+          </AuthProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   )

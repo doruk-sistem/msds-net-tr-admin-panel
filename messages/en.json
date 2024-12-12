@@ -1,0 +1,94 @@
+{
+  "common": {
+    "userNav": {
+      "welcome": "Welcome {name}!",
+      "settings": "Settings",
+      "profile": "Profile",
+      "company": "Company",
+      "logout": "Log out"
+    },
+    "dashboardNav": {
+      "dashboard": "Dashboard",
+      "settings": "Settings"
+    }
+  },
+  "loginPage": {
+    "title": "Login",
+    "email": "Email",
+    "password": "Password",
+    "loginButton": "Login",
+    "successToast": {
+      "title": "Welcome Back!",
+      "description": "Logging you into the dashboard..."
+    },
+    "invalidCredentialsToast": {
+      "title": "Invalid credentials!",
+      "description": "Incorrect email or password. Please check again your information"
+    }
+  },
+  "dashboardPage": {
+    "title": "Dashboard",
+    "msdsContent": "MSDS Content",
+    "totalMSDS": "Total MSDS",
+    "filtered": "Filtered",
+    "activeCompanyUsers": "Active Company Users",
+    "msdsContentDataTable": {
+      "searchByMSDSName": "Search by MSDS Name",
+      "openTheContent": "Open the Content",
+      "next": "Next",
+      "previous": "Previous"
+    },
+    "openTheContentDialog": {
+      "dialogTitle": "{name} - Msds Contents (All Languages)",
+      "dialogDescription": "MSDS contents are available here.",
+      "downloadTheMSDS": "Download the MSDS",
+      "showQRCode": "Show QR Code",
+      "moreOptions": "More Options",
+      "copyPDFLink": "Copy PDF Link",
+      "showQRCodeDialog": {
+        "title": "{name} - QR Code",
+        "description": "You can print this qr code",
+        "print": "Print / Save as PDF"
+      }
+    }
+  },
+  "settingsPage": {
+    "title": "Settings",
+    "description": "Manage your account and company settings",
+    "sidebarNav": {
+      "userSettings": "User Settings",
+      "companySettings": "Company Settings"
+    },
+    "userSettingsPage": {
+      "profileInformationSection": {
+        "title": "Profile Information",
+        "email": "Email"
+      },
+      "preferencesSection": {
+        "title": "Preferences",
+        "theme": "Theme",
+        "themeDescription": "Choose a theme",
+        "language": "Language",
+        "languageDescription": "Change language"
+      },
+      "editProfileSection": {
+        "title": "Edit Profile",
+        "fullname": "Fullname",
+        "fullnameDescription": "This is your public display name.",
+        "phone": "Phone Number",
+        "phoneDescription": "Your personal phone number.",
+        "saveChanges": "Save Changes"
+      }
+    },
+    "companySettingsPage": {
+      "title": "Company Settings",
+      "companyName": "Company Name",
+      "companyNameDescription": "This is company name.",
+      "phone": "Phone Number",
+      "phoneDescription": "Company phone number.",
+      "address": "Address",
+      "addressDescription": "Company address.",
+      "saveChanges": "Save Changes"
+    }
+  }
+}

@@ -19,6 +19,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ThemeToggle } from '@/components/frontend/theme-toggle'
 
 import { signIn } from 'next-auth/react'
+import { useTranslations } from 'next-intl'
+import Logo from '@/components/frontend/logo'
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -28,12 +30,13 @@ const formSchema = z.object({
 export default function LoginClient() {
   const router = useRouter()
   const { toast } = useToast()
+  const t = useTranslations('loginPage')
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: 'client@mail.com',
-      password: '123',
+      email: '',
+      password: '',
     },
   })
 
@@ -46,14 +49,14 @@ export default function LoginClient() {
 
     if (auth?.ok) {
       toast({
-        title: 'Welcome back!',
-        description: 'Logging you into the dashboard...',
+        title: t('successToast.title'),
+        description: t('successToast.description'),
       })
       router.push('/dashboard')
     } else {
       toast({
-        title: 'Invalid credentials!',
-        description: 'Incorrect email or password. Please check again your information',
+        title: t('invalidCredentialsToast.title'),
+        description: t('invalidCredentialsToast.description'),
       })
     }
   }
@@ -64,8 +67,11 @@ export default function LoginClient() {
         <ThemeToggle />
       </div>
       <Card className="w-[400px]">
-        <CardHeader>
-          <CardTitle className="text-2xl text-center">Admin Login</CardTitle>
+        <CardHeader className="space-y-8">
+          <div className="w-full flex justify-center">
+            <Logo imageClassName="w-[240px]" />
+          </div>
+          <CardTitle className="text-2xl text-center opacity-75">{t('title')}</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -75,7 +81,7 @@ export default function LoginClient() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>{t('email')}</FormLabel>
                     <FormControl>
                       <Input placeholder="admin@example.com" {...field} />
                     </FormControl>
@@ -88,22 +94,19 @@ export default function LoginClient() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>{t('password')}</FormLabel>
                     <FormControl>
-                      <Input type="password" {...field} />
+                      <Input placeholder="123" type="password" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <Button type="submit" className="w-full">
-                Login
+                {t('loginButton')}
               </Button>
             </form>
           </Form>
-          <p className="text-sm text-muted-foreground mt-4 text-center">
-            Demo credentials are pre-filled. Just click login.
-          </p>
         </CardContent>
       </Card>
     </div>

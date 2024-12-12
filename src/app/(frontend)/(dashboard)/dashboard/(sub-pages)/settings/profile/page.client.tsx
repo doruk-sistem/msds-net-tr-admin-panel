@@ -1,6 +1,7 @@
 'use client'
 
-import { Suspense, useState } from 'react'
+import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Mail } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -22,6 +23,8 @@ import {
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import Loader from '@/components/ui/loader'
+
+import LocaleSwitcher from '@/components/frontend/locale-switcher'
 
 import useAuth from '@/hooks/use-auth'
 import { useToast } from '@/hooks/use-toast'
@@ -47,6 +50,7 @@ interface Props {
 export default function ProfileSettingsPageClient({ serverData: { user } }: Props) {
   const { toast } = useToast()
   const { session, updateAuth } = useAuth()
+  const t = useTranslations('settingsPage.userSettingsPage')
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -112,13 +116,13 @@ export default function ProfileSettingsPageClient({ serverData: { user } }: Prop
     <div className="space-y-5">
       <Card>
         <CardHeader>
-          <CardTitle>Profile Information</CardTitle>
+          <CardTitle>{t('profileInformationSection.title')}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center gap-3 mb-3">
             <Mail />
             <div>
-              <label className="text-sm font-medium">Email</label>
+              <label className="text-sm font-medium">{t('profileInformationSection.email')}</label>
               <p className="font-semibold text-sm">{user?.email || 'No data'}</p>
             </div>
           </div>
@@ -126,25 +130,36 @@ export default function ProfileSettingsPageClient({ serverData: { user } }: Prop
       </Card>
       <Card>
         <CardHeader>
-          <CardTitle>Preferences</CardTitle>
+          <CardTitle>{t('preferencesSection.title')}</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-6">
           <div className="space-y-2">
             <div>
-              <label className="text-sm font-medium">Theme</label>
-              <p className="text-sm text-muted-foreground">Choose a theme</p>
+              <label className="text-sm font-medium">{t('preferencesSection.theme')}</label>
+              <p className="text-sm text-muted-foreground">
+                {t('preferencesSection.themeDescription')}
+              </p>
             </div>
             <div className="flex gap-2 items-center">
-              <Suspense fallback={<>Loading...</>}>
-                <ThemeToggleSection />
-              </Suspense>
+              <ThemeToggleSection />
+            </div>
+          </div>
+          <div className="space-y-2">
+            <div>
+              <label className="text-sm font-medium">{t('preferencesSection.language')}</label>
+              <p className="text-sm text-muted-foreground">
+                {t('preferencesSection.languageDescription')}
+              </p>
+            </div>
+            <div className="flex gap-2 items-center">
+              <LocaleSwitcher />
             </div>
           </div>
         </CardContent>
       </Card>
       <Card className={isLoading ? 'pointer-events-none opacity-50' : ''}>
         <CardHeader>
-          <CardTitle>Edit Profile</CardTitle>
+          <CardTitle>{t('editProfileSection.title')}</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -154,11 +169,11 @@ export default function ProfileSettingsPageClient({ serverData: { user } }: Prop
                 name="fullname"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Fullname</FormLabel>
+                    <FormLabel>{t('editProfileSection.fullname')}</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
-                    <FormDescription>This is your public display name.</FormDescription>
+                    <FormDescription>{t('editProfileSection.fullnameDescription')}</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -169,18 +184,18 @@ export default function ProfileSettingsPageClient({ serverData: { user } }: Prop
                 render={({ field }) => {
                   return (
                     <FormItem>
-                      <FormLabel>Phone Number</FormLabel>
+                      <FormLabel>{t('editProfileSection.phone')}</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
-                      <FormDescription>Your personal phone number.</FormDescription>
+                      <FormDescription>{t('editProfileSection.phoneDescription')}</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )
                 }}
               />
               <Button type="submit" disabled={notChanged} loading={isLoading}>
-                Save changes
+                {t('editProfileSection.saveChanges')}
               </Button>
             </form>
           </Form>
