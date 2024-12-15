@@ -28,7 +28,7 @@ export const columns: ColumnDef<Row>[] = [
         original: { name },
       },
     }) => {
-      return <div className="text-black flex gap-2 font-bold">{name}</div>
+      return <div className="flex gap-2 font-bold">{name}</div>
     },
   },
   {

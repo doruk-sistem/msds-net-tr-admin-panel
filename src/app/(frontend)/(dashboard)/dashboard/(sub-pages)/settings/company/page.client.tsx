@@ -23,6 +23,7 @@ import useAuth from '@/hooks/use-auth'
 import { useToast } from '@/hooks/use-toast'
 
 import companyRequest from '@/requests/company'
+import { useTranslations } from 'next-intl'
 
 const formSchema = z.object({
   name: z.string().min(2).max(30),
@@ -39,6 +40,7 @@ interface Props {
 export default function CompanySettingsPageClient({ serverData: { company } }: Props) {
   const { toast } = useToast()
   const { session } = useAuth()
+  const t = useTranslations('settingsPage.companySettingsPage')
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -95,13 +97,15 @@ export default function CompanySettingsPageClient({ serverData: { company } }: P
   }
 
   const notChanged =
-    company?.companyName === form.watch('name') && company.phoneNumber === form.watch('phoneNumber')
+    company?.companyName === form.watch('name') &&
+    company.phoneNumber === form.watch('phoneNumber') &&
+    company.address === form.watch('address')
 
   return (
     <>
       <Card className={isLoading ? 'pointer-events-none opacity-50' : ''}>
         <CardHeader>
-          <CardTitle>Company Settings</CardTitle>
+          <CardTitle>{t('title')}</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -111,11 +115,11 @@ export default function CompanySettingsPageClient({ serverData: { company } }: P
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Company Name</FormLabel>
+                    <FormLabel>{t('companyName')}</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
-                    <FormDescription>This is company name.</FormDescription>
+                    <FormDescription>{t('companyNameDescription')}</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -126,11 +130,11 @@ export default function CompanySettingsPageClient({ serverData: { company } }: P
                 render={({ field }) => {
                   return (
                     <FormItem>
-                      <FormLabel>Phone Number</FormLabel>
+                      <FormLabel>{t('phone')}</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
-                      <FormDescription>Company phone number.</FormDescription>
+                      <FormDescription>{t('phoneDescription')}</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )
@@ -142,18 +146,18 @@ export default function CompanySettingsPageClient({ serverData: { company } }: P
                 render={({ field }) => {
                   return (
                     <FormItem>
-                      <FormLabel>Address</FormLabel>
+                      <FormLabel>{t('address')}</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
-                      <FormDescription>Company address.</FormDescription>
+                      <FormDescription>{t('addressDescription')}</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )
                 }}
               />
               <Button type="submit" disabled={notChanged} loading={isLoading}>
-                Save changes
+                {t('saveChanges')}
               </Button>
             </form>
           </Form>

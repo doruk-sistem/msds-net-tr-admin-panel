@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { draftMode } from 'next/headers'
+
+import { NextIntlClientProvider } from 'next-intl'
+import { getLocale, getMessages } from 'next-intl/server'
 
 import { Toaster } from '@/components/ui/toaster'
-import { AdminBar } from '@/components/AdminBar'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
 import { Providers } from '@/providers'
@@ -23,24 +24,25 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const { isEnabled } = await draftMode()
+  const locale = await getLocale()
+
+  // Providing all messages to the client
+  // side is the easiest way to get started
+  const messages = await getMessages()
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body className={inter.className}>
-        <AuthProvider>
-          <Providers>
-            <AdminBar
-              adminBarProps={{
-                preview: isEnabled,
-              }}
-            />
-            <LivePreviewListener />
+        <NextIntlClientProvider messages={messages}>
+          <AuthProvider>
+            <Providers>
+              <LivePreviewListener />
 
-            {children}
-            <Toaster />
-          </Providers>
-        </AuthProvider>
+              {children}
+              <Toaster />
+            </Providers>
+          </AuthProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   )

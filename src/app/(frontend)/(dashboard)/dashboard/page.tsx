@@ -1,9 +1,12 @@
+import { PaginatedDocs } from 'payload'
+
+import type { CompanyUser, MsdsContent } from '@/payload-types'
+import getAuthSession from '@/utilities/getAuthSession'
 import getPayloadCMS from '@/utilities/getPayloadCMS'
 
 import DashboardClient from './page.client'
-import { PaginatedDocs } from 'payload'
-import type { CompanyUser, MsdsContent } from '@/payload-types'
-import getAuthSession from '@/utilities/getAuthSession'
+
+export const dynamic = 'force-dynamic'
 
 export default async function DashboardPage({ searchParams: searchParamsPromise }) {
   const { name, page } = await searchParamsPromise

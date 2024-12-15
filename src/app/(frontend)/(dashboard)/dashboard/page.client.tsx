@@ -1,5 +1,7 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { PaginatedDocs } from 'payload'
 import { CompanyUser, MsdsContent } from '@/payload-types'
 
@@ -9,7 +11,6 @@ import { DataTable } from './components/data-table'
 import { columns, type Row } from './components/data-table/columns'
 import SearchMsds from './components/search-msds'
 import TablePagination from './components/table-pagination'
-import { useSearchParams } from 'next/navigation'
 
 interface Props {
   serverData: {
@@ -20,6 +21,7 @@ interface Props {
 
 export default function DashboardClient({ serverData: { msds, companyUsers } }: Props) {
   const searchParams = useSearchParams()
+  const t = useTranslations('dashboardPage')
 
   const msdsSearchParam = searchParams.get('name')
 
@@ -41,13 +43,13 @@ export default function DashboardClient({ serverData: { msds, companyUsers } }: 
 
   return (
     <div className="space-y-4">
-      <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+      <h2 className="text-3xl font-bold tracking-tight">{t('title')}</h2>
       <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-2">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Total MSDS
-              {!!msdsSearchParam && <span className="text-primary"> (Filtered)</span>}
+              {t('totalMSDS')}
+              {!!msdsSearchParam && <span className="text-primary"> ({t('filtered')})</span>}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -56,7 +58,7 @@ export default function DashboardClient({ serverData: { msds, companyUsers } }: 
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Company Users</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('activeCompanyUsers')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{companyUsers?.totalDocs}</div>
@@ -65,7 +67,7 @@ export default function DashboardClient({ serverData: { msds, companyUsers } }: 
       </div>
       <Card>
         <CardHeader>
-          <CardTitle>MSDS Content</CardTitle>
+          <CardTitle>{t('msdsContent')}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="mb-4">

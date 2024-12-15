@@ -34,6 +34,7 @@ import { RelationshipTablePagination } from './Pagination'
 import { TableColumnsProvider } from './TableColumns'
 // import { ColumnSelector } from '@payloadcms/ui/elements/ColumnSelector'
 import ColumnSelector from './ColumnSelector'
+import { useRouter } from 'next/navigation'
 
 const baseClass = 'relationship-table'
 
@@ -49,6 +50,7 @@ export const RelationshipTable = ({ searchFields = [], ...props }: Props) => {
   } = props
 
   const { id: docID } = useDocumentInfo()
+  const router = useRouter()
 
   const { customComponents: { Label } = {}, value } = useField<PaginatedDocs>({
     path,
@@ -120,7 +122,11 @@ export const RelationshipTable = ({ searchFields = [], ...props }: Props) => {
     }
   })
 
-  const { i18n, t } = useTranslation()
+  const {
+    i18n,
+    t,
+    i18n: { language },
+  } = useTranslation()
 
   const [query, setQuery] = useState<ListQuery>()
   const [openColumnSelector, setOpenColumnSelector] = useState(false)
@@ -254,9 +260,17 @@ export const RelationshipTable = ({ searchFields = [], ...props }: Props) => {
         </h4>
         <div className={`${baseClass}__actions`}>
           {canCreate && (
-            <DocumentDrawerToggler className={`${baseClass}__add-new`}>
+            <button
+              type="button"
+              className="btn btn--style-primary btn--size-small"
+              style={{ margin: 0 }}
+              onClick={() => router.push(`/admin/collections/${relationTo}/create`)}
+            >
               {i18n.t('fields:addNew')}
-            </DocumentDrawerToggler>
+            </button>
+            // <DocumentDrawerToggler className={`${baseClass}__add-new`}>
+            //   {i18n.t('fields:addNew')}
+            // </DocumentDrawerToggler>
           )}
           <Pill
             aria-controls={`${baseClass}-columns`}
@@ -280,15 +294,18 @@ export const RelationshipTable = ({ searchFields = [], ...props }: Props) => {
             <div className={`${baseClass}__no-results`}>
               <p>
                 {i18n.t('general:noResults', {
-                  //   label: getTranslation(collectionConfig?.labels?.plural, i18n),
-                  label: collectionConfig?.labels?.plural,
+                  label: collectionConfig?.labels?.plural[language],
                 })}
               </p>
               {canCreate && (
-                <Button onClick={openDrawer}>
+                // <Button onClick={openDrawer}>
+                //   {i18n.t('general:createNewLabel', {
+                //     label: collectionConfig?.labels?.singular[language],
+                //   })}
+                // </Button>
+                <Button onClick={() => router.push(`/admin/collections/${relationTo}/create`)}>
                   {i18n.t('general:createNewLabel', {
-                    // label: getTranslation(collectionConfig?.labels?.singular, i18n),
-                    label: collectionConfig?.labels?.singular,
+                    label: collectionConfig?.labels?.singular[language],
                   })}
                 </Button>
               )}
