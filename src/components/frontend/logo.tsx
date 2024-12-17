@@ -3,6 +3,7 @@ import { useTheme } from 'next-themes'
 import Image from 'next/image'
 import Link from 'next/link'
 import { cn } from '@/utilities/cn'
+import useMounted from '@/hooks/use-mounted'
 
 interface Props {
   imageClassName?: string
@@ -11,6 +12,11 @@ interface Props {
 
 export default function Logo({ imageClassName, className }: Props) {
   const { resolvedTheme } = useTheme()
+  const mounted = useMounted()
+
+  if (!mounted) {
+    return null
+  }
 
   const logoLight = () => (
     <Image
