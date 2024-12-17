@@ -9,7 +9,13 @@ import getPayloadCMS from '@/utilities/getPayloadCMS'
 import dotenvConfig from '@/utilities/dotenvConfig'
 import { signJWT, verifyJWT } from '@/utilities/jwt'
 
-dotenvConfig(`../../../../../../.env.${process.env.NODE_ENV}`)
+import { fileURLToPath } from 'url'
+import path from 'path'
+
+const filename = fileURLToPath(import.meta.url)
+const dirname = path.dirname(filename)
+
+dotenvConfig(dirname, `../../../../../../.env.${process.env.NODE_ENV}`)
 
 // const ACCESS_TOKEN_EXPIRES_IN = 15 * 60 * 1000 // 15 minutes
 const ACCESS_TOKEN_EXPIRES_IN = 120 * 60 * 1000 // 2 hours
