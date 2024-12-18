@@ -160,7 +160,10 @@ const MsdsContents: CollectionConfig = {
             en: 'MSDS File Information',
           },
           admin: {
-            description: 'Bu bölüm seçtiğiniz MSDS dökümanına göre otomatik doldurulur.',
+            description: {
+              tr: 'Bu bölüm seçtiğiniz MSDS dökümanına göre otomatik doldurulur.',
+              en: 'This section is automatically filled according to the MSDS document you have selected.',
+            },
           },
           fields: [
             {
