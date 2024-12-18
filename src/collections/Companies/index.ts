@@ -191,11 +191,6 @@ const Companies: CollectionConfig = {
               type: 'join',
               collection: 'companyUsers',
               on: 'company',
-              admin: {
-                components: {
-                  Field: 'src/collections/Companies/components/CompanyUsers',
-                },
-              },
             },
           ],
         },
@@ -214,11 +209,6 @@ const Companies: CollectionConfig = {
               type: 'join',
               collection: 'msdsContents',
               on: 'company',
-              admin: {
-                components: {
-                  Field: 'src/collections/Companies/components/MsdsContents',
-                },
-              },
             },
           ],
         },
