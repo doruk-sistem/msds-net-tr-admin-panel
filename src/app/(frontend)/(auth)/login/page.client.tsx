@@ -3,6 +3,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
+import { useTranslations } from 'next-intl'
+import { signIn } from 'next-auth/react'
+
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -16,11 +19,9 @@ import { Input } from '@/components/ui/input'
 import { useRouter } from 'next/navigation'
 import { useToast } from '@/hooks/use-toast'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ThemeToggle } from '@/components/frontend/theme-toggle'
 
-import { signIn } from 'next-auth/react'
-import { useTranslations } from 'next-intl'
-import Logo from '@/components/frontend/logo'
+import { ThemeToggle } from '@/components/frontend/theme-toggle'
+import DynamicLogo from '@/components/frontend/dynamic-logo'
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -69,7 +70,7 @@ export default function LoginClient() {
       <Card className="w-[400px]">
         <CardHeader className="space-y-8">
           <div className="w-full flex justify-center">
-            <Logo imageClassName="w-[240px]" />
+            <DynamicLogo imageClassName="w-[240px]" />
           </div>
           <CardTitle className="text-2xl text-center opacity-75">{t('title')}</CardTitle>
         </CardHeader>
