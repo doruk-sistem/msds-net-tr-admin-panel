@@ -24,34 +24,13 @@ import useAuth from '@/hooks/use-auth'
 import useMounted from '@/hooks/use-mounted'
 
 import Loader from '../ui/loader'
-import Logo from '../Logo'
+import DynamicLogo from './dynamic-logo'
 
 export function UserNav() {
   const mounted = useMounted()
   const router = useRouter()
   const { user } = useAuth()
-  const { resolvedTheme } = useTheme()
   const t = useTranslations('common')
-
-  const logoLight = () => (
-    <Image
-      className="w-[170px]"
-      src="/msds-logo-light.png"
-      alt="msds.com.tr logo light"
-      width={400}
-      height={100}
-    />
-  )
-
-  const logoDark = () => (
-    <Image
-      className="w-[170px]"
-      src="/msds-logo-dark.png"
-      alt="msds.com.tr logo dark"
-      width={400}
-      height={100}
-    />
-  )
 
   if (!mounted)
     return (
@@ -63,7 +42,7 @@ export function UserNav() {
   return (
     <div className="border-b">
       <div className="flex h-16 items-center px-4">
-        <Logo />
+        <DynamicLogo />
         <div className="ml-auto flex items-center space-x-4">
           <p className="text-sm font-semibold">{t('userNav.welcome', { name: user?.fullname })}</p>
           <DropdownMenu>

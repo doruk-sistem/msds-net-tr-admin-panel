@@ -10,7 +10,7 @@ interface Props {
   className?: string
 }
 
-export default function Logo({ imageClassName, className }: Props) {
+export default function DynamicLogo({ imageClassName, className }: Props) {
   const { resolvedTheme } = useTheme()
   const mounted = useMounted()
 
