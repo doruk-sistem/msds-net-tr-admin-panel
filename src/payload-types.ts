@@ -1336,6 +1336,10 @@ export interface MsdsContent {
       | 'zu'
       | 'zu-ZA';
     msdsUniuqeId?: string | null;
+    preparation_date?: string | null;
+    form_no?: string | null;
+    new_regulation_date?: string | null;
+    how_many_regulations?: string | null;
     id?: string | null;
   }[];
   publishedAt?: string | null;
@@ -1349,6 +1353,10 @@ export interface MsdsContent {
  */
 export interface MsdsDoc {
   id: number;
+  preparation_date?: string | null;
+  form_no?: string | null;
+  new_regulation_date?: string | null;
+  how_many_regulations?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -1549,7 +1557,6 @@ export interface AdminUsersSelect<T extends boolean = true> {
  * via the `definition` "companyUsers_select".
  */
 export interface CompanyUsersSelect<T extends boolean = true> {
-  description?: T;
   email?: T;
   hashedPassword?: T;
   fullname?: T;
@@ -1589,6 +1596,10 @@ export interface CompaniesSelect<T extends boolean = true> {
  * via the `definition` "msdsDocs_select".
  */
 export interface MsdsDocsSelect<T extends boolean = true> {
+  preparation_date?: T;
+  form_no?: T;
+  new_regulation_date?: T;
+  how_many_regulations?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -1614,6 +1625,10 @@ export interface MsdsContentsSelect<T extends boolean = true> {
         msdsFile?: T;
         msdsLanguage?: T;
         msdsUniuqeId?: T;
+        preparation_date?: T;
+        form_no?: T;
+        new_regulation_date?: T;
+        how_many_regulations?: T;
         id?: T;
       };
   publishedAt?: T;
