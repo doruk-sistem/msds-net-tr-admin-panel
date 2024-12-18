@@ -22,6 +22,8 @@
     "ci": "payload migrate && pnpm build"
   },
   "dependencies": {
+    "@azure/identity": "^4.5.0",
+    "@azure/openai": "^2.0.0",
     "@hookform/resolvers": "^3.9.1",
     "@payloadcms/db-postgres": "3.0.0-beta.135",
     "@payloadcms/db-vercel-postgres": "3.0.0-beta.135",
@@ -67,8 +69,10 @@
     "next-auth": "^4.24.10",
     "next-intl": "^3.26.1",
     "next-themes": "^0.4.3",
+    "openai": "^4.76.3",
     "payload": "3.0.0-beta.135",
     "payload-admin-bar": "^1.0.6",
+    "pdf-parse": "^1.1.1",
     "prism-react-renderer": "^2.3.1",
     "qs": "^6.13.1",
     "react": "19.0.0-rc-65a56d0e-20241020",
@@ -92,6 +96,7 @@
     "@types/escape-html": "^1.0.2",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "22.5.4",
+    "@types/pdf-parse": "^1.1.4",
     "@types/qs": "^6.9.17",
     "@types/react": "npm:types-react@19.0.0-rc.1",
     "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
