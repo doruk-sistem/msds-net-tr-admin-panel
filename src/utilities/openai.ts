@@ -1,5 +1,3 @@
-import 'server-only'
-
 // node
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
