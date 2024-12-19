@@ -37,6 +37,10 @@ export default function DashboardClient({ serverData: { msds, companyUsers } }: 
           msdsUniuqeId: msds.msdsUniuqeId,
           id: msds.id,
           msdsLanguage: msds.msdsLanguage,
+          preparationDate: msds?.preparation_date,
+          formNo: msds?.form_no,
+          newRegulationDate: msds?.new_regulation_date,
+          howManyRegulations: msds?.how_many_regulations,
         })),
       }))
     : null

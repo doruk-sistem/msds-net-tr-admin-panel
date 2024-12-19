@@ -186,7 +186,7 @@ function MsdsContent({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>{t('openTheContentDialog.moreOptions')} </DropdownMenuLabel>
+            <DropdownMenuLabel>{t('openTheContentDialog.moreOptions')}</DropdownMenuLabel>
             <DropdownMenuItem onClick={copyPDFLink}>
               <FileText className="h-3 w-3" />
               {t('openTheContentDialog.copyPDFLink')}

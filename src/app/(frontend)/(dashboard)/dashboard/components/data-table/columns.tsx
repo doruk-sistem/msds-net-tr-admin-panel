@@ -1,22 +1,26 @@
 'use client'
 
-import { PaginatedDocs } from 'payload'
-import { MsdsContent, MsdsDoc } from '@/payload-types'
+import { DataFromCollectionSlug } from 'payload'
+import { MsdsDoc } from '@/payload-types'
 import { ColumnDef } from '@tanstack/react-table'
 
 import ActionsCell from './actions-cell'
 import { formatDateTime } from '@/utilities/formatDateTime'
 
 export type Row = {
-  name: PaginatedDocs<MsdsContent>['docs'][0]['name']
+  name: DataFromCollectionSlug<'msdsContents'>['name']
   msdsContents: Array<{
     fileName: MsdsDoc['filename']
     contentUrl: MsdsDoc['url']
-    msdsUniuqeId: PaginatedDocs<MsdsContent>['docs'][0]['msdsContent'][0]['msdsUniuqeId']
-    id: PaginatedDocs<MsdsContent>['docs'][0]['msdsContent'][0]['id']
-    msdsLanguage: PaginatedDocs<MsdsContent>['docs'][0]['msdsContent'][0]['msdsLanguage']
+    msdsUniuqeId: DataFromCollectionSlug<'msdsContents'>['msdsContent'][0]['msdsUniuqeId']
+    id: DataFromCollectionSlug<'msdsContents'>['msdsContent'][0]['id']
+    msdsLanguage: DataFromCollectionSlug<'msdsContents'>['msdsContent'][0]['msdsLanguage']
+    preparationDate: DataFromCollectionSlug<'msdsContents'>['msdsContent'][0]['preparation_date']
+    formNo: DataFromCollectionSlug<'msdsContents'>['msdsContent'][0]['form_no']
+    newRegulationDate: DataFromCollectionSlug<'msdsContents'>['msdsContent'][0]['new_regulation_date']
+    howManyRegulations: DataFromCollectionSlug<'msdsContents'>['msdsContent'][0]['how_many_regulations']
   }>
-  publishedAt: PaginatedDocs<MsdsContent>['docs'][0]['publishedAt']
+  publishedAt: DataFromCollectionSlug<'msdsContents'>['publishedAt']
 }
 
 export const columns: ColumnDef<Row>[] = [
