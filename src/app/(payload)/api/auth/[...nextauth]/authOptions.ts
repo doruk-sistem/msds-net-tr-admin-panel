@@ -157,8 +157,7 @@ const authOptions: AuthOptions = {
       return session
     },
   },
-  // secret: process.env.NEXTAUTH_SECRET,
-  secret: '7e221b8caf590d540e2c43bb465511b129af897e5b338bbdb4bdd8582acf317b',
+  secret: process.env.NEXTAUTH_SECRET,
 }
 
 function refreshAccessToken(token: JWT): JWT {
