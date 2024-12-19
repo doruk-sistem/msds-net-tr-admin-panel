@@ -2,15 +2,16 @@
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 
+import dotenv from 'dotenv'
 import { AzureOpenAI } from 'openai'
 import * as pdf from 'pdf-parse/lib/pdf-parse.js'
-
-import dotenvConfig from './dotenvConfig'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-dotenvConfig(dirname, `../../.env.${process.env.NODE_ENV}`)
+dotenv.config({
+  path: path.resolve(dirname, `../../.env.${process.env.NODE_ENV}`),
+})
 
 const azureEndpoint = process.env.AZURE_OPENAI_ENDPOINT
 const azureApiKey = process.env.AZURE_OPENAI_KEY

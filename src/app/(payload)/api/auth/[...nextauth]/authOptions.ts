@@ -6,16 +6,18 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import type { ClientUser } from 'types/auth.types'
 
 import getPayloadCMS from '@/utilities/getPayloadCMS'
-import dotenvConfig from '@/utilities/dotenvConfig'
 import { signJWT, verifyJWT } from '@/utilities/jwt'
 
 import { fileURLToPath } from 'url'
 import path from 'path'
+import dotenv from 'dotenv'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-dotenvConfig(dirname, `../../../../../../.env.${process.env.NODE_ENV}`)
+dotenv.config({
+  path: path.resolve(dirname, `../../../../../../.env.${process.env.NODE_ENV}`),
+})
 
 // const ACCESS_TOKEN_EXPIRES_IN = 15 * 60 * 1000 // 15 minutes
 const ACCESS_TOKEN_EXPIRES_IN = 120 * 60 * 1000 // 2 hours
@@ -56,7 +58,7 @@ const authOptions: AuthOptions = {
           const user = users?.docs[0]
 
           if (!user) {
-            throw new Error('user not found')
+            return null
           }
 
           const isValid =
@@ -65,7 +67,7 @@ const authOptions: AuthOptions = {
               : false
 
           if (!isValid) {
-            throw new Error('Password is incorrect.')
+            return null
           }
 
           return user as any

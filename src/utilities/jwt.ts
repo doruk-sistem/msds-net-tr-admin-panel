@@ -1,15 +1,17 @@
 import 'server-only'
 
 import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv'
 
-import dotenvConfig from './dotenvConfig'
 import { fileURLToPath } from 'url'
 import path from 'path'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-dotenvConfig(dirname, `../../.env.${process.env.NODE_ENV}`)
+dotenv.config({
+  path: path.resolve(dirname, `../../.env.${process.env.NODE_ENV}`),
+})
 
 const JWT_SECRET = process.env.JWT_SECRET || ''
 
