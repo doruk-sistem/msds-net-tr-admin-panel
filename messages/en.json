@@ -13,7 +13,8 @@
     }
   },
   "loginPage": {
-    "title": "Login",
+    "title": "Secure Login to <br /><span class='text-primary'>Management Panel</span>",
+    "description": "Securely log in to Doruksistem Engineering, Technology and Consulting services management panel.",
     "email": "Email",
     "password": "Password",
     "loginButton": "Login",
@@ -39,7 +40,7 @@
       "previous": "Previous"
     },
     "openTheContentDialog": {
-      "dialogTitle": "{name} - Msds Contents (All Languages)",
+      "dialogTitle": "{name} - MSDS Contents (All Languages)",
       "dialogDescription": "MSDS contents are available here.",
       "downloadTheMSDS": "Download the MSDS",
       "showQRCode": "Show QR Code",
@@ -47,7 +48,7 @@
       "copyPDFLink": "Copy PDF Link",
       "showQRCodeDialog": {
         "title": "{name} - QR Code",
-        "description": "You can print this qr code",
+        "description": "You can print this QR code",
         "print": "Print / Save as PDF"
       }
     }
@@ -73,7 +74,7 @@
       },
       "editProfileSection": {
         "title": "Edit Profile",
-        "fullname": "Fullname",
+        "fullname": "Full Name",
         "fullnameDescription": "This is your public display name.",
         "phone": "Phone Number",
         "phoneDescription": "Your personal phone number.",
