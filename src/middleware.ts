@@ -4,11 +4,16 @@ import authHelper from './utilities/authHelper'
 
 export const PRIVATE_BASE_PATH = '/dashboard'
 export const AUTH_PATH = '/login'
+export const ADMIN_PATH = '/admin'
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
 
   const isRootPath = pathname === '/'
+
+  if (pathname.startsWith(ADMIN_PATH)) {
+    return NextResponse.next()
+  }
 
   const token = request.cookies.get(authHelper.tokenCookieKey)?.value
   const refreshToken = request.cookies.get(authHelper.refreshTokenCookieKey)?.value
