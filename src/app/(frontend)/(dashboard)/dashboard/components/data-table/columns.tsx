@@ -3,9 +3,11 @@
 import { DataFromCollectionSlug } from 'payload'
 import { MsdsDoc } from '@/payload-types'
 import { ColumnDef } from '@tanstack/react-table'
+import { formatDateTime } from '@/utilities/formatDateTime'
+import { Badge } from '@/components/ui/badge'
+import { FileText } from 'lucide-react'
 
 import ActionsCell from './actions-cell'
-import { formatDateTime } from '@/utilities/formatDateTime'
 
 export type Row = {
   name: DataFromCollectionSlug<'msdsContents'>['name']
@@ -29,10 +31,20 @@ export const columns: ColumnDef<Row>[] = [
     header: 'MSDS Name',
     cell: ({
       row: {
-        original: { name },
+        original: { name, msdsContents },
       },
     }) => {
-      return <div className="flex gap-2 font-bold">{name}</div>
+      return (
+        <div className="flex flex-col space-y-1">
+          <div className="font-medium text-slate-900 dark:text-slate-100">{name}</div>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="text-xs">
+              <FileText className="mr-1 h-3 w-3" />
+              {msdsContents.length} versions
+            </Badge>
+          </div>
+        </div>
+      )
     },
   },
   {
@@ -40,10 +52,13 @@ export const columns: ColumnDef<Row>[] = [
     header: 'Published Date',
     cell: ({ row }) => {
       const date = row.original.publishedAt
-
       const formattedData = typeof date === 'string' ? formatDateTime(date) : ''
 
-      return formattedData
+      return (
+        <div className="flex flex-col">
+          <span className="text-sm text-slate-900 dark:text-slate-100">{formattedData}</span>
+        </div>
+      )
     },
   },
   {

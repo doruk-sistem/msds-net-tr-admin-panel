@@ -43,6 +43,7 @@
       "dialogTitle": "{name} - MSDS Contents (All Languages)",
       "dialogDescription": "MSDS contents are available here.",
       "downloadTheMSDS": "Download the MSDS",
+      "openTheMSDS": "Open the MSDS",
       "showQRCode": "Show QR Code",
       "moreOptions": "More Options",
       "copyPDFLink": "Copy PDF Link",

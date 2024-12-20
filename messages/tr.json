@@ -43,6 +43,7 @@
       "dialogTitle": "{name} - MSDS İçerikleri (Tüm Dillerde)",
       "dialogDescription": "Tüm MSDS içerikleri buradadır.",
       "downloadTheMSDS": "MSDS'i İndir",
+      "openTheMSDS": "MSDS'i Aç",
       "showQRCode": "QR Kod'u Gör",
       "moreOptions": "Daha Fazla Seçenek",
       "copyPDFLink": "PDF Link'ini Kopyala",
