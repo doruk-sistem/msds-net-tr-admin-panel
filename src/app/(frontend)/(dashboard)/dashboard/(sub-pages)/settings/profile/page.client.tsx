@@ -8,8 +8,6 @@ import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import dynamic from 'next/dynamic'
 
-import { ClientUser } from 'types/auth.types'
-
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -31,6 +29,8 @@ import { useToast } from '@/hooks/use-toast'
 
 import auth from '@/requests/auth'
 
+import getMe from '@/utilities/getMe'
+
 const ThemeToggleSection = dynamic(() => import('@/components/frontend/theme-toggle-section'), {
   ssr: false,
   loading: () => <Loader className="text-primary w-10 h-10" />,
@@ -43,13 +43,13 @@ const formSchema = z.object({
 
 interface Props {
   serverData: {
-    user: ClientUser['user'] | undefined
+    user: Awaited<ReturnType<typeof getMe>>
   }
 }
 
 export default function ProfileSettingsPageClient({ serverData: { user } }: Props) {
   const { toast } = useToast()
-  const { session, updateAuth } = useAuth()
+  const { setUser } = useAuth()
   const t = useTranslations('settingsPage.userSettingsPage')
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -64,25 +64,28 @@ export default function ProfileSettingsPageClient({ serverData: { user } }: Prop
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      if (session?.auth.accessToken && user?.id) {
+      if (user?.id) {
         setIsLoading(true)
 
         const response = await auth.updateUser({
           id: user?.id,
-          accessToken: session?.auth?.accessToken,
           body: {
             fullname: data.fullname,
             personalPhoneNumber: data.phoneNumber,
           },
         })
 
-        // update the user data from next-auth session data
-        await updateAuth({
-          user: {
-            fullname: response?.fullname,
-            personalPhoneNumber: response?.personalPhoneNumber,
-          },
-        } as { user: Partial<ClientUser['user']> })
+        setUser((prev: any) => {
+          if (typeof prev === 'object') {
+            return {
+              ...prev,
+              fullname: response?.fullname,
+              personalPhoneNumber: response?.personalPhoneNumber,
+            }
+          }
+
+          return prev
+        })
 
         toast({
           title: 'Settings updated',
@@ -113,90 +116,118 @@ export default function ProfileSettingsPageClient({ serverData: { user } }: Prop
     user?.personalPhoneNumber === form.watch('phoneNumber')
 
   return (
-    <div className="space-y-5">
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('profileInformationSection.title')}</CardTitle>
+    <div className="space-y-6 max-w-4xl mx-auto">
+      <Card className="border-none shadow-md bg-gradient-to-r from-card/50 to-card">
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-2xl font-bold bg-gradient-to-r from-primary/90 to-primary bg-clip-text text-transparent">
+            {t('profileInformationSection.title')}
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center gap-3 mb-3">
-            <Mail />
+          <div className="flex items-center gap-4 p-4 bg-muted/50 rounded-lg">
+            <div className="p-3 bg-primary/10 rounded-full">
+              <Mail className="w-5 h-5 text-primary" />
+            </div>
             <div>
-              <label className="text-sm font-medium">{t('profileInformationSection.email')}</label>
-              <p className="font-semibold text-sm">{user?.email || 'No data'}</p>
+              <label className="text-sm font-medium text-muted-foreground">
+                {t('profileInformationSection.email')}
+              </label>
+              <p className="font-semibold">{user?.email || 'No data'}</p>
             </div>
           </div>
         </CardContent>
       </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('preferencesSection.title')}</CardTitle>
+
+      <Card className="border-none shadow-md">
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-2xl font-bold">{t('preferencesSection.title')}</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="space-y-2">
-            <div>
-              <label className="text-sm font-medium">{t('preferencesSection.theme')}</label>
-              <p className="text-sm text-muted-foreground">
-                {t('preferencesSection.themeDescription')}
-              </p>
+        <CardContent className="space-y-8">
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="space-y-4">
+              <div>
+                <h3 className="font-medium mb-1">{t('preferencesSection.theme')}</h3>
+                <p className="text-sm text-muted-foreground">
+                  {t('preferencesSection.themeDescription')}
+                </p>
+              </div>
+              <div className="flex gap-2 items-center">
+                <ThemeToggleSection />
+              </div>
             </div>
-            <div className="flex gap-2 items-center">
-              <ThemeToggleSection />
-            </div>
-          </div>
-          <div className="space-y-2">
-            <div>
-              <label className="text-sm font-medium">{t('preferencesSection.language')}</label>
-              <p className="text-sm text-muted-foreground">
-                {t('preferencesSection.languageDescription')}
-              </p>
-            </div>
-            <div className="flex gap-2 items-center">
-              <LocaleSwitcher />
+
+            <div className="space-y-4">
+              <div>
+                <h3 className="font-medium mb-1">{t('preferencesSection.language')}</h3>
+                <p className="text-sm text-muted-foreground">
+                  {t('preferencesSection.languageDescription')}
+                </p>
+              </div>
+              <div className="flex gap-2 items-center">
+                <LocaleSwitcher />
+              </div>
             </div>
           </div>
         </CardContent>
       </Card>
-      <Card className={isLoading ? 'pointer-events-none opacity-50' : ''}>
-        <CardHeader>
-          <CardTitle>{t('editProfileSection.title')}</CardTitle>
+
+      <Card
+        className={`border-none shadow-md ${isLoading ? 'pointer-events-none opacity-50' : ''}`}
+      >
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-2xl font-bold">{t('editProfileSection.title')}</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="fullname"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('editProfileSection.fullname')}</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormDescription>{t('editProfileSection.fullnameDescription')}</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="phoneNumber"
-                render={({ field }) => {
-                  return (
+              <div className="grid gap-6 md:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="fullname"
+                  render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t('editProfileSection.phone')}</FormLabel>
+                      <FormLabel className="text-base">
+                        {t('editProfileSection.fullname')}
+                      </FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input {...field} className="h-11" />
                       </FormControl>
-                      <FormDescription>{t('editProfileSection.phoneDescription')}</FormDescription>
+                      <FormDescription>
+                        {t('editProfileSection.fullnameDescription')}
+                      </FormDescription>
                       <FormMessage />
                     </FormItem>
-                  )
-                }}
-              />
-              <Button type="submit" disabled={notChanged} loading={isLoading}>
-                {t('editProfileSection.saveChanges')}
-              </Button>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="phoneNumber"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel className="text-base">{t('editProfileSection.phone')}</FormLabel>
+                        <FormControl>
+                          <Input {...field} className="h-11" />
+                        </FormControl>
+                        <FormDescription>
+                          {t('editProfileSection.phoneDescription')}
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )
+                  }}
+                />
+              </div>
+              <div className="flex justify-end">
+                <Button
+                  type="submit"
+                  disabled={notChanged}
+                  loading={isLoading}
+                  className="min-w-[150px]"
+                >
+                  {t('editProfileSection.saveChanges')}
+                </Button>
+              </div>
             </form>
           </Form>
         </CardContent>

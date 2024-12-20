@@ -39,7 +39,6 @@ interface Props {
 
 export default function CompanySettingsPageClient({ serverData: { company } }: Props) {
   const { toast } = useToast()
-  const { session } = useAuth()
   const t = useTranslations('settingsPage.companySettingsPage')
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -54,15 +53,12 @@ export default function CompanySettingsPageClient({ serverData: { company } }: P
   const [isLoading, setIsLoading] = useState(false)
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    console.log('data: ', data)
-
     try {
-      if (session?.auth.accessToken && company?.id) {
-        setIsLoading(true)
+      setIsLoading(true)
 
-        const response = await companyRequest.updateCompany({
+      if (company?.id) {
+        await companyRequest.updateCompany({
           id: company.id,
-          accessToken: session?.auth?.accessToken,
           body: {
             companyName: data.name.trim(),
             phoneNumber: data.phoneNumber.trim(),
@@ -70,16 +66,13 @@ export default function CompanySettingsPageClient({ serverData: { company } }: P
           },
         })
 
-        console.log('response: ', response)
-
         toast({
           title: 'Company information updated',
           description: 'Your user settings have been saved successfully.',
         })
       } else {
         toast({
-          title: 'Credentials could not be verified',
-          description: 'Please you try to log in again',
+          title: 'Company not found',
         })
       }
     } catch (error) {
@@ -102,53 +95,59 @@ export default function CompanySettingsPageClient({ serverData: { company } }: P
     company.address === form.watch('address')
 
   return (
-    <>
-      <Card className={isLoading ? 'pointer-events-none opacity-50' : ''}>
-        <CardHeader>
-          <CardTitle>{t('title')}</CardTitle>
+    <div className="max-w-4xl mx-auto">
+      <Card
+        className={`border-none shadow-md ${isLoading ? 'pointer-events-none opacity-50' : ''}`}
+      >
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-2xl font-bold bg-gradient-to-r from-primary/90 to-primary bg-clip-text text-transparent">
+            {t('title')}
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('companyName')}</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormDescription>{t('companyNameDescription')}</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="phoneNumber"
-                render={({ field }) => {
-                  return (
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <div className="grid gap-6 md:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t('phone')}</FormLabel>
+                      <FormLabel className="text-base">{t('companyName')}</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input {...field} className="h-11" />
                       </FormControl>
-                      <FormDescription>{t('phoneDescription')}</FormDescription>
+                      <FormDescription>{t('companyNameDescription')}</FormDescription>
                       <FormMessage />
                     </FormItem>
-                  )
-                }}
-              />
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="phoneNumber"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel className="text-base">{t('phone')}</FormLabel>
+                        <FormControl>
+                          <Input {...field} className="h-11" />
+                        </FormControl>
+                        <FormDescription>{t('phoneDescription')}</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )
+                  }}
+                />
+              </div>
               <FormField
                 control={form.control}
                 name="address"
                 render={({ field }) => {
                   return (
                     <FormItem>
-                      <FormLabel>{t('address')}</FormLabel>
+                      <FormLabel className="text-base">{t('address')}</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input {...field} className="h-11" />
                       </FormControl>
                       <FormDescription>{t('addressDescription')}</FormDescription>
                       <FormMessage />
@@ -156,13 +155,20 @@ export default function CompanySettingsPageClient({ serverData: { company } }: P
                   )
                 }}
               />
-              <Button type="submit" disabled={notChanged} loading={isLoading}>
-                {t('saveChanges')}
-              </Button>
+              <div className="flex justify-end">
+                <Button
+                  type="submit"
+                  disabled={notChanged}
+                  loading={isLoading}
+                  className="min-w-[150px]"
+                >
+                  {t('saveChanges')}
+                </Button>
+              </div>
             </form>
           </Form>
         </CardContent>
       </Card>
-    </>
+    </div>
   )
 }

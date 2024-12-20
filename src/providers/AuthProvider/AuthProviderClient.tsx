@@ -1,78 +1,46 @@
 'use client'
 
-import { Company } from '@/payload-types'
-import { Session } from 'next-auth'
-import {
-  getSession,
-  type SessionContextValue,
-  SessionProvider,
-  signIn,
-  signOut,
-  useSession,
-} from 'next-auth/react'
 import { PaginatedDocs } from 'payload'
-import React, { createContext, useEffect, useMemo } from 'react'
+import React, { createContext, useState } from 'react'
 
-export type UseAuth = {
-  session: SessionContextValue['data']
-  updateAuth: SessionContextValue['update']
-  status: SessionContextValue['status']
-  user?: Session['user']
-  userCompany: PaginatedDocs<Company>['docs'][0] | null
-}
-
-export const AuthProviderClientContext = createContext<null | UseAuth>(null)
+import { Company } from '@/payload-types'
+import authHelper from '@/utilities/authHelper'
+import getMe from '@/utilities/getMe'
 
 interface ServerSideData {
   serverSideData: {
     userCompany: PaginatedDocs<Company>['docs'][0] | null
+    user: Awaited<ReturnType<typeof getMe>> | null | undefined
+    tokens: Awaited<ReturnType<typeof authHelper.getTokens>> | null | undefined
   }
 }
 
-export default function AuthProviderClient({
-  children,
-  session,
-  ...rest
-}: { children: React.ReactNode; session: Session | null } & ServerSideData) {
-  return (
-    <SessionProvider refetchOnWindowFocus={false} session={session}>
-      <AuthInit {...rest}>{children}</AuthInit>
-    </SessionProvider>
-  )
+type SetState<T> = React.Dispatch<React.SetStateAction<T>>
+
+export type UseAuth = {
+  user?: ServerSideData['serverSideData']['user']
+  userCompany: ServerSideData['serverSideData']['userCompany']
+  tokens?: ServerSideData['serverSideData']['tokens']
+  setUser: SetState<UseAuth['user']>
+  setUserCompany: SetState<UseAuth['userCompany']>
+  setTokens: SetState<UseAuth['tokens']>
 }
 
-function AuthInit({ children, serverSideData }: { children: React.ReactNode } & ServerSideData) {
-  const sessionData = useSession()
-  const { data: session, status, update } = sessionData
+export const AuthProviderClientContext = createContext<null | UseAuth>(null)
 
-  const user = session?.user
-  const { userCompany } = serverSideData
-
-  const value = useMemo(
-    () => ({
-      user,
-      userCompany,
-      session,
-      status,
-      updateAuth: update,
-    }),
-    [session, status, update, user, userCompany],
-  )
-
-  useEffect(() => {
-    if (session?.error === 'RefreshTokenExpired') {
-      alert('Your session is expired. Please sign in again.')
-      signOut()
-    }
-    if (session?.error === 'RefreshTokenError') {
-      alert('Your session could not be verified.')
-      signOut()
-    }
-  }, [session?.error])
+export function AuthInit({
+  children,
+  serverSideData,
+}: { children: React.ReactNode } & ServerSideData) {
+  const [user, setUser] = useState(serverSideData.user)
+  const [userCompany, setUserCompany] = useState(serverSideData.userCompany)
+  const [tokens, setTokens] = useState(serverSideData.tokens)
 
   return (
-    <AuthProviderClientContext.Provider value={value}>
+    <AuthProviderClientContext
+      value={{ user, userCompany, tokens, setUser, setUserCompany, setTokens }}
+    >
       {children}
-    </AuthProviderClientContext.Provider>
+    </AuthProviderClientContext>
   )
 }

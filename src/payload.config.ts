@@ -2,7 +2,6 @@ import dotenv from 'dotenv'
 
 // storage-adapter-import-placeholder
 import { postgresAdapter } from '@payloadcms/db-postgres'
-import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'
 
 import { tr } from 'payload/i18n/tr'
 import { en } from 'payload/i18n/en'

@@ -1,8 +1,9 @@
-import getAuthSession from '@/utilities/getAuthSession'
+import { DataFromCollectionSlug } from 'payload'
+
+import getPayloadCMS from '@/utilities/getPayloadCMS'
+import getMe from '@/utilities/getMe'
 
 import CompanySettingsPageClient from './page.client'
-import { DataFromCollectionSlug } from 'payload'
-import getPayloadCMS from '@/utilities/getPayloadCMS'
 
 export const dynamic = 'force-dynamic'
 
@@ -11,13 +12,13 @@ export default async function ProfileSettingsPage() {
 
   try {
     const payload = await getPayloadCMS()
-    const session = await getAuthSession()
+    const user = await getMe()
 
     company =
-      typeof session?.user.company === 'number'
+      typeof user?.company === 'number'
         ? await payload.findByID({
             collection: 'companies',
-            id: session?.user.company,
+            id: user.company,
             depth: 0,
           })
         : undefined

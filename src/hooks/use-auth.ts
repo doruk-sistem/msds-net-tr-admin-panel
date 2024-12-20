@@ -1,6 +1,6 @@
 import { AuthProviderClientContext, UseAuth } from '@/providers/AuthProvider/AuthProviderClient'
-import { useContext } from 'react'
+import { use } from 'react'
 
-const useAuth = (): UseAuth => useContext(AuthProviderClientContext) as any
+const useAuth = (): UseAuth => use(AuthProviderClientContext) as any
 
 export default useAuth

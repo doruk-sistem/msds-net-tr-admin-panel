@@ -13,7 +13,8 @@
     }
   },
   "loginPage": {
-    "title": "Giriş Yap",
+    "title": "<span class='text-primary'>Yönetim Panelinize</span><br /> Güvenli Giriş Yapın",
+    "description": "Doruksistem Mühendislik, Teknoloji ve Danışmanlık hizmetleri yönetim panelinize güvenli giriş yapın.",
     "email": "E-posta",
     "password": "Parola",
     "loginButton": "Giriş",
@@ -27,11 +28,11 @@
     }
   },
   "dashboardPage": {
-    "title": "Kontrol Panel,",
+    "title": "Kontrol Paneli",
     "msdsContent": "MSDS İçeriği",
     "totalMSDS": "Toplam MSDS",
     "filtered": "Filtrelenmiş",
-    "activeCompanyUsers": "Aktif Şirket Kullanıcıs",
+    "activeCompanyUsers": "Aktif Şirket Kullanıcıları",
     "msdsContentDataTable": {
       "searchByMSDSName": "MSDS ismine göre ara",
       "openTheContent": "İçeriği Aç",
@@ -39,15 +40,16 @@
       "previous": "Önceki"
     },
     "openTheContentDialog": {
-      "dialogTitle": "{name} - Msds İçerikleri (Tüm Dillerde)",
+      "dialogTitle": "{name} - MSDS İçerikleri (Tüm Dillerde)",
       "dialogDescription": "Tüm MSDS içerikleri buradadır.",
       "downloadTheMSDS": "MSDS'i İndir",
-      "showQRCode": "QR Code'u Gör",
+      "openTheMSDS": "MSDS'i Aç",
+      "showQRCode": "QR Kod'u Gör",
       "moreOptions": "Daha Fazla Seçenek",
       "copyPDFLink": "PDF Link'ini Kopyala",
       "showQRCodeDialog": {
         "title": "{name} - QR Kod",
-        "description": "Bu qr kodunu yazdırabilsiniz.",
+        "description": "Bu QR kodunu yazdırabilirsiniz.",
         "print": "Yazdır / PDF Olarak Kaydet"
       }
     }
