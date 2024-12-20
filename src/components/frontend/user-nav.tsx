@@ -39,50 +39,66 @@ export function UserNav() {
   if (!mounted)
     return (
       <div className="border-b flex justify-center py-2">
-        <Loader className="text-primary w-10 h-10" />{' '}
+        <Loader className="text-primary w-10 h-10" />
       </div>
     )
 
   return (
-    <div className="border-b">
-      <div className="flex h-16 items-center px-4">
+    <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="flex h-16 items-center px-4 md:px-6">
         <DynamicLogo />
-        <div className="ml-auto flex items-center space-x-4">
-          <p className="text-sm font-semibold">{t('userNav.welcome', { name: user?.fullname })}</p>
+        <div className="ml-auto flex items-center gap-4">
+          <p className="text-sm font-medium hidden md:block">
+            {t('userNav.welcome', { name: user?.fullname })}
+          </p>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src="/avatars/01.png" alt="@username" />
-                  <AvatarFallback>
-                    <User className="w-4 h-4" />
+              <Button
+                variant="ghost"
+                className="relative h-9 w-9 rounded-full transition-opacity hover:opacity-80"
+              >
+                <Avatar className="h-9 w-9 border-2 border-primary/10">
+                  <AvatarImage src="/avatars/01.png" alt={user?.fullname || 'User avatar'} />
+                  <AvatarFallback className="bg-primary/5">
+                    <User className="w-4 h-4 text-primary/70" />
                   </AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
+            <DropdownMenuContent className="w-64 mt-2" align="end" forceMount sideOffset={8}>
               <DropdownMenuLabel className="font-normal">
-                <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">{user?.fullname}</p>
-                  <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
+                <div className="flex flex-col space-y-1.5 p-1">
+                  <p className="text-sm font-semibold leading-none">{user?.fullname}</p>
+                  <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <DropdownMenuLabel>{t('userNav.settings')}</DropdownMenuLabel>
-                <DropdownMenuItem onClick={() => router.push('/dashboard/settings/profile')}>
-                  <User />
-                  {t('userNav.profile')}
+                <DropdownMenuLabel className="text-xs font-medium text-muted-foreground">
+                  {t('userNav.settings')}
+                </DropdownMenuLabel>
+                <DropdownMenuItem
+                  onClick={() => router.push('/dashboard/settings/profile')}
+                  className="gap-3 p-3 cursor-pointer"
+                >
+                  <User className="w-4 h-4" />
+                  <span className="text-sm">{t('userNav.profile')}</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push('/dashboard/settings/company')}>
-                  <Building2 />
-                  {t('userNav.company')}
+                <DropdownMenuItem
+                  onClick={() => router.push('/dashboard/settings/company')}
+                  className="gap-3 p-3 cursor-pointer"
+                >
+                  <Building2 className="w-4 h-4" />
+                  <span className="text-sm">{t('userNav.company')}</span>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleSignOut}>
-                <LogOut />
-                {t('userNav.logout')}
+              <DropdownMenuItem
+                onClick={handleSignOut}
+                className="gap-3 p-3 cursor-pointer text-red-500 focus:text-red-500"
+              >
+                <LogOut className="w-4 h-4" />
+                <span className="text-sm">{t('userNav.logout')}</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
