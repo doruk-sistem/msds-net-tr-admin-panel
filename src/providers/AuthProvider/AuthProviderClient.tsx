@@ -1,7 +1,5 @@
 'use client'
 
-import { Session } from 'next-auth'
-import { SessionProvider } from 'next-auth/react'
 import { PaginatedDocs } from 'payload'
 import React, { createContext, useState } from 'react'
 
@@ -29,18 +27,6 @@ export type UseAuth = {
 }
 
 export const AuthProviderClientContext = createContext<null | UseAuth>(null)
-
-export default function AuthProviderClient({
-  children,
-  session,
-  ...rest
-}: { children: React.ReactNode; session: Session | null } & ServerSideData) {
-  return (
-    <SessionProvider refetchOnWindowFocus={false} session={session}>
-      <AuthInit {...rest}>{children}</AuthInit>
-    </SessionProvider>
-  )
-}
 
 export function AuthInit({
   children,
