@@ -8,8 +8,6 @@ import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import dynamic from 'next/dynamic'
 
-import { ClientUser } from 'types/auth.types'
-
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -31,6 +29,8 @@ import { useToast } from '@/hooks/use-toast'
 
 import auth from '@/requests/auth'
 
+import getMe from '@/utilities/getMe'
+
 const ThemeToggleSection = dynamic(() => import('@/components/frontend/theme-toggle-section'), {
   ssr: false,
   loading: () => <Loader className="text-primary w-10 h-10" />,
@@ -43,13 +43,13 @@ const formSchema = z.object({
 
 interface Props {
   serverData: {
-    user: ClientUser['user'] | undefined
+    user: Awaited<ReturnType<typeof getMe>>
   }
 }
 
 export default function ProfileSettingsPageClient({ serverData: { user } }: Props) {
   const { toast } = useToast()
-  const { session, updateAuth } = useAuth()
+  const { setUser } = useAuth()
   const t = useTranslations('settingsPage.userSettingsPage')
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -64,25 +64,28 @@ export default function ProfileSettingsPageClient({ serverData: { user } }: Prop
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      if (session?.auth.accessToken && user?.id) {
+      if (user?.id) {
         setIsLoading(true)
 
         const response = await auth.updateUser({
           id: user?.id,
-          accessToken: session?.auth?.accessToken,
           body: {
             fullname: data.fullname,
             personalPhoneNumber: data.phoneNumber,
           },
         })
 
-        // update the user data from next-auth session data
-        await updateAuth({
-          user: {
-            fullname: response?.fullname,
-            personalPhoneNumber: response?.personalPhoneNumber,
-          },
-        } as { user: Partial<ClientUser['user']> })
+        setUser((prev: any) => {
+          if (typeof prev === 'object') {
+            return {
+              ...prev,
+              fullname: response?.fullname,
+              personalPhoneNumber: response?.personalPhoneNumber,
+            }
+          }
+
+          return prev
+        })
 
         toast({
           title: 'Settings updated',

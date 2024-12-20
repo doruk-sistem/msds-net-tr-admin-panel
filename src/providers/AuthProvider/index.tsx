@@ -1,28 +1,33 @@
 import { Company } from '@/payload-types'
 import { type PaginatedDocs } from 'payload'
 
-import getAuthSession from '@/utilities/getAuthSession'
 import getPayloadCMS from '@/utilities/getPayloadCMS'
+import authHelper from '@/utilities/authHelper'
+import getMe from '@/utilities/getMe'
 
-import AuthProviderClient from './AuthProviderClient'
-import { Session } from 'next-auth'
+import { AuthInit } from './AuthProviderClient'
 
 export default async function AuthProvider({ children }: { children: React.ReactNode }) {
   let userCompany: PaginatedDocs<Company>['docs'][0] | null = null
-  let session: Session | null = null
+  let user: Awaited<ReturnType<typeof getMe>> = null
+  let tokens: Awaited<ReturnType<typeof authHelper.getTokens>> = {
+    accessToken: undefined,
+    refreshToken: undefined,
+  }
 
   try {
-    session = await getAuthSession()
+    tokens = await authHelper.getTokens()
+    user = await getMe()
     const payload = await getPayloadCMS()
 
-    if (session?.user?.company) {
+    if (user && user?.company) {
       const companyResponse = await payload.find({
         collection: 'companies',
         limit: 1,
         depth: 0,
         where: {
           id: {
-            equals: session?.user?.company,
+            equals: user?.company,
           },
         },
       })
@@ -33,9 +38,5 @@ export default async function AuthProvider({ children }: { children: React.React
     console.log('AuthProviderError: ', error)
   }
 
-  return (
-    <AuthProviderClient serverSideData={{ userCompany }} session={session}>
-      {children}
-    </AuthProviderClient>
-  )
+  return <AuthInit serverSideData={{ userCompany, user, tokens }}>{children}</AuthInit>
 }

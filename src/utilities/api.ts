@@ -1,5 +1,6 @@
 import axios from 'axios'
-import { getSession } from 'next-auth/react'
+
+import authService from '@/services/auth.service'
 
 const api = axios.create({
   baseURL: '/api',
@@ -15,9 +16,9 @@ api.interceptors.response.use(
       error.response.status &&
       (error.response.status === 403 || error.response.status === 401)
     ) {
-      const session = await getSession()
+      const tokens = await authService.refreshToken()
 
-      originalRequest.headers.Authorization = session?.auth?.accessToken
+      originalRequest.headers.Authorization = tokens?.accessToken
 
       return api(originalRequest)
     }

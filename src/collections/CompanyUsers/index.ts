@@ -68,8 +68,6 @@ const CompanyUsers: CollectionConfig = {
             }
 
             if (operation === 'create' || operation === 'update') {
-              console.log('all values: ', { value, operation, originalDoc, data })
-
               try {
                 const isSameValue = originalDoc?.hashedPassword === value
 

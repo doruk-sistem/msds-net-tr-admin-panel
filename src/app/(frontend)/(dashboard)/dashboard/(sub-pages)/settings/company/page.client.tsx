@@ -39,7 +39,6 @@ interface Props {
 
 export default function CompanySettingsPageClient({ serverData: { company } }: Props) {
   const { toast } = useToast()
-  const { session } = useAuth()
   const t = useTranslations('settingsPage.companySettingsPage')
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -54,15 +53,12 @@ export default function CompanySettingsPageClient({ serverData: { company } }: P
   const [isLoading, setIsLoading] = useState(false)
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    console.log('data: ', data)
-
     try {
-      if (session?.auth.accessToken && company?.id) {
-        setIsLoading(true)
+      setIsLoading(true)
 
-        const response = await companyRequest.updateCompany({
+      if (company?.id) {
+        await companyRequest.updateCompany({
           id: company.id,
-          accessToken: session?.auth?.accessToken,
           body: {
             companyName: data.name.trim(),
             phoneNumber: data.phoneNumber.trim(),
@@ -70,16 +66,13 @@ export default function CompanySettingsPageClient({ serverData: { company } }: P
           },
         })
 
-        console.log('response: ', response)
-
         toast({
           title: 'Company information updated',
           description: 'Your user settings have been saved successfully.',
         })
       } else {
         toast({
-          title: 'Credentials could not be verified',
-          description: 'Please you try to log in again',
+          title: 'Company not found',
         })
       }
     } catch (error) {

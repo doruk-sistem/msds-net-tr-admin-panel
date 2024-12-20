@@ -1,25 +1,19 @@
-import getPayloadCMS from '@/utilities/getPayloadCMS'
-import { verifyJWT } from '@/utilities/jwt'
 import { NextRequest, NextResponse } from 'next/server'
+
+import getPayloadCMS from '@/utilities/getPayloadCMS'
+import validateAuthorization from '@/utilities/validate-authorization'
 
 export const PATCH = async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
   try {
+    const isInvalid = await validateAuthorization(req)
+    if (!!isInvalid) {
+      return isInvalid
+    }
+
     const { id } = await params
     const queryParams = Object.fromEntries(new URL(req.url).searchParams.entries())
 
     const body = await req.json()
-    const authorization = req.headers.get('Authorization')
-
-    if (!authorization) {
-      return NextResponse.json(
-        {
-          message: 'Invalid authorization token',
-        },
-        { status: 401, statusText: 'Unauthorized' },
-      )
-    }
-
-    verifyJWT(authorization)
 
     const payload = await getPayloadCMS()
 

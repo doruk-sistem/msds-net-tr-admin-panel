@@ -1,10 +1,11 @@
 'use client'
 
+import { useTransition } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { useTranslations } from 'next-intl'
-import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -16,12 +17,14 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { useRouter } from 'next/navigation'
-import { useToast } from '@/hooks/use-toast'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 import { ThemeToggle } from '@/components/frontend/theme-toggle'
 import DynamicLogo from '@/components/frontend/dynamic-logo'
+
+import authService from '@/services/auth.service'
+
+import { useToast } from '@/hooks/use-toast'
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -29,6 +32,8 @@ const formSchema = z.object({
 })
 
 export default function LoginClient() {
+  const [isPending, startTransition] = useTransition()
+
   const router = useRouter()
   const { toast } = useToast()
   const t = useTranslations('loginPage')
@@ -41,25 +46,26 @@ export default function LoginClient() {
     },
   })
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    const auth = await signIn('credentials', {
-      email: values.email,
-      password: values.password,
-      redirect: false,
-    })
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    startTransition(async () => {
+      const res = await authService.login({
+        email: values.email,
+        password: values.password,
+      })
 
-    if (auth?.ok) {
-      toast({
-        title: t('successToast.title'),
-        description: t('successToast.description'),
-      })
-      router.push('/dashboard')
-    } else {
-      toast({
-        title: t('invalidCredentialsToast.title'),
-        description: t('invalidCredentialsToast.description'),
-      })
-    }
+      if (res?.accessToken) {
+        toast({
+          title: t('successToast.title'),
+          description: t('successToast.description'),
+        })
+        router.push('/dashboard')
+      } else {
+        toast({
+          title: t('invalidCredentialsToast.title'),
+          description: t('invalidCredentialsToast.description'),
+        })
+      }
+    })
   }
 
   return (
@@ -103,7 +109,7 @@ export default function LoginClient() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full" loading={isPending}>
                 {t('loginButton')}
               </Button>
             </form>

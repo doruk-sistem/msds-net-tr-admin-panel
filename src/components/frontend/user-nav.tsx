@@ -1,11 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import Link from 'next/link'
 import { Building2, LogOut, User } from 'lucide-react'
-import { signOut } from 'next-auth/react'
-import { useTheme } from 'next-themes'
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -25,12 +21,20 @@ import useMounted from '@/hooks/use-mounted'
 
 import Loader from '../ui/loader'
 import DynamicLogo from './dynamic-logo'
+import authService from '@/services/auth.service'
 
 export function UserNav() {
   const mounted = useMounted()
   const router = useRouter()
   const { user } = useAuth()
   const t = useTranslations('common')
+
+  const handleSignOut = async () => {
+    try {
+      await authService.logout()
+      router.push('/login')
+    } catch {}
+  }
 
   if (!mounted)
     return (
@@ -76,7 +80,7 @@ export function UserNav() {
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => signOut({ callbackUrl: '/login' })}>
+              <DropdownMenuItem onClick={handleSignOut}>
                 <LogOut />
                 {t('userNav.logout')}
               </DropdownMenuItem>

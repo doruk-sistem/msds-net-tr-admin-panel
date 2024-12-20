@@ -1,42 +1,62 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import { getToken } from 'next-auth/jwt'
+import authHelper from './utilities/authHelper'
 
-const privatePages = ['/dashboard']
-const authPages = ['/login']
+export const PRIVATE_BASE_PATH = '/dashboard'
+export const AUTH_PATH = '/login'
 
-const isInPage = (currentPathname: string, pages: string[]) => {
-  return pages.some((page) => currentPathname.startsWith(page))
-}
+export async function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname
 
-export async function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl
+  const isRootPath = pathname === '/'
 
-  const isAuthPage = isInPage(pathname, authPages)
-  const isPrivatePage = isInPage(pathname, privatePages)
-  const atBlankPage = pathname === '/'
+  const token = request.cookies.get(authHelper.tokenCookieKey)?.value
+  const refreshToken = request.cookies.get(authHelper.refreshTokenCookieKey)?.value
 
-  const token = await getToken({
-    req,
-    secret: process.env.NEXTAUTH_SECRET,
-  })
-
-  if (!token && atBlankPage) return NextResponse.redirect(new URL('/login', req.url))
-  if (!token && isPrivatePage) return NextResponse.redirect(new URL('/login', req.url))
-  if (!token && isAuthPage) return NextResponse.next()
-  if (token) {
-    if (isPrivatePage) {
-      return NextResponse.next()
+  if (pathname.startsWith(AUTH_PATH) || isRootPath) {
+    if (token && refreshToken) {
+      return NextResponse.redirect(new URL(PRIVATE_BASE_PATH, request.url))
     }
-
-    if (isAuthPage || atBlankPage) {
-      return NextResponse.redirect(new URL('/dashboard', req.url))
+    if (isRootPath) {
+      return NextResponse.redirect(new URL(AUTH_PATH, request.url))
     }
-
     return NextResponse.next()
   }
 
-  return NextResponse.next()
+  // protected routes
+  if (!token && !refreshToken) {
+    return NextResponse.redirect(new URL(AUTH_PATH, request.url))
+  }
+
+  try {
+    const hasValidToken = token && (await authHelper.decrypt(token))
+
+    if (hasValidToken) {
+      return NextResponse.next()
+    }
+
+    // try to refresh the token
+    const session = await authHelper.updateSessionWithRequest(request)
+
+    if (session) {
+      return NextResponse.next({
+        headers: {
+          'Set-Cookie': [
+            `token=${session.accessToken}; Path=/; HttpOnly; SameSite=Strict`,
+            `refreshToken=${session.refreshToken}; Path=/; HttpOnly; SameSite=Strict`,
+          ].join(', '),
+        },
+      })
+    }
+
+    const response = NextResponse.redirect(new URL(AUTH_PATH, request.url))
+    authHelper.clearSessionFromResponse(response)
+
+    return response
+  } catch (error) {
+    console.log('token refresh error: ', error)
+    return NextResponse.redirect(new URL(AUTH_PATH, request.url))
+  }
 }
 
 /**

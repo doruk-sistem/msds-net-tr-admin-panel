@@ -1,6 +1,6 @@
 // node
-import { fileURLToPath } from 'node:url'
-import path from 'node:path'
+import { fileURLToPath } from 'url'
+import path from 'path'
 
 import dotenv from 'dotenv'
 import { AzureOpenAI } from 'openai'

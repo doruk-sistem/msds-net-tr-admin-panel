@@ -132,9 +132,6 @@ const MsdsDocs: CollectionConfig = {
 
             const jsonObject = JSON.parse(jsonString)
 
-            console.log('result: ', result)
-            console.log('json obj: ', jsonObject)
-
             return {
               ...data,
               preparation_date: jsonObject?.preparation_date,

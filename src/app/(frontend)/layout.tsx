@@ -10,7 +10,6 @@ import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { Providers } from '@/providers'
 
 import './globals.css'
-import AuthProvider from '@/providers/AuthProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -34,14 +33,12 @@ export default async function RootLayout({
     <html lang={locale} suppressHydrationWarning>
       <body className={inter.className}>
         <NextIntlClientProvider messages={messages}>
-          <AuthProvider>
-            <Providers>
-              <LivePreviewListener />
+          <Providers>
+            <LivePreviewListener />
 
-              {children}
-              <Toaster />
-            </Providers>
-          </AuthProvider>
+            {children}
+            <Toaster />
+          </Providers>
         </NextIntlClientProvider>
       </body>
     </html>
