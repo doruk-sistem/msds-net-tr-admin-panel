@@ -71,45 +71,10 @@ const MsdsContents: CollectionConfig = {
       },
       required: true,
       type: 'array',
-      hooks: {
-        beforeValidate: [
-          async ({ value, operation, req }) => {
-            if (operation === 'create' || operation === 'update') {
-              const docsIds = (value as MsdsContent['msdsContent']).map(
-                (msdsContent) => msdsContent?.msdsFile,
-              )
-
-              const msdsDocs = await req.payload.find({
-                collection: 'msdsDocs',
-                where: {
-                  and: docsIds.map((id) => ({
-                    id: {
-                      equals: id,
-                    },
-                  })),
-                },
-              })
-
-              msdsDocs.docs.forEach((msdsDoc: any) => {
-                const valueIndex = (value as MsdsContent['msdsContent']).findIndex(
-                  (item) => item?.msdsFile === msdsDoc?.id,
-                )
-
-                value[valueIndex].form_no = msdsDoc?.form_no
-                value[valueIndex].new_regulation_date = msdsDoc?.new_regulation_date
-                value[valueIndex].preparation_date = msdsDoc?.preparation_date
-                value[valueIndex].how_many_regulations = msdsDoc?.how_many_regulations
-              })
-
-              return value
-            }
-          },
-        ],
-      },
       fields: [
         {
           name: 'msdsFile',
-          type: 'upload',
+          type: 'relationship',
           relationTo: 'msdsDocs',
           required: true,
         },
@@ -152,65 +117,6 @@ const MsdsContents: CollectionConfig = {
               },
             ],
           },
-        },
-        {
-          type: 'collapsible',
-          label: {
-            tr: 'MSDS Dosyası Bilgileri',
-            en: 'MSDS File Information',
-          },
-          admin: {
-            description: {
-              tr: 'Bu bölüm seçtiğiniz MSDS dökümanına göre otomatik doldurulur.',
-              en: 'This section is automatically filled according to the MSDS document you have selected.',
-            },
-          },
-          fields: [
-            {
-              name: 'preparation_date',
-              label: {
-                tr: 'Hazırlama Tarihi',
-                en: 'Preparation Date',
-              },
-              type: 'text',
-              admin: {
-                readOnly: true,
-              },
-            },
-            {
-              name: 'form_no',
-              label: {
-                tr: 'Form No.',
-                en: 'Form No.',
-              },
-              type: 'text',
-              admin: {
-                readOnly: true,
-              },
-            },
-            {
-              name: 'new_regulation_date',
-              label: {
-                tr: 'Yeni Düzenleme Tarihi',
-                en: 'New Regulation Date',
-              },
-              type: 'text',
-              admin: {
-                readOnly: true,
-              },
-            },
-            {
-              name: 'how_many_regulations',
-              label: {
-                tr: 'Düzenlenme Sayısı',
-                en: 'How Many Regulations',
-              },
-              type: 'text',
-              admin: {
-                readOnly: true,
-              },
-            },
-          ],
         },
       ],
     },

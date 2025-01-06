@@ -67,7 +67,5 @@ export default async function DashboardPage({ searchParams: searchParamsPromise 
     console.error('DashboardPage error: ', error)
   }
 
-  console.log('msds', msds)
-
   return <DashboardClient serverData={{ msds, companyUsers }} />
 }
