@@ -92,6 +92,8 @@ export interface CompanyUserAuthOperations {
   };
 }
 /**
+ * Admin Users manage admin panel.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "adminUsers".
  */
@@ -418,6 +420,9 @@ export interface MsdsContent {
   id: number;
   name: string;
   company: number | Company;
+  /**
+   * You can add MSDS content for each language option.
+   */
   msdsContent: {
     msdsFile: number | MsdsDoc;
     msdsLanguage:
@@ -1249,10 +1254,16 @@ export interface MsdsContent {
       | 'dje-NE'
       | 'zu'
       | 'zu-ZA';
+    /**
+     * It is a unique id generated for the MSDS content you add. It is created according to these combinations: {msdsCompanyName}-{msdsId}-{msdsName}-{msdsContentId}-{msdsContentLanguage}. If any of these changes, the id will be updated.
+     */
     msdsUniuqeId?: string | null;
     id?: string | null;
   }[];
   publishedAt?: string | null;
+  /**
+   * Determine whether the content can currently be displayed.
+   */
   isPublished?: boolean | null;
   updatedAt: string;
   createdAt: string;
@@ -1263,9 +1274,21 @@ export interface MsdsContent {
  */
 export interface MsdsDoc {
   id: number;
+  /**
+   * Fills the document automaticlly after saving. (Ai scanning & filling)
+   */
   preparation_date?: string | null;
+  /**
+   * Fills the document automaticlly after saving. (Ai scanning & filling)
+   */
   form_no?: string | null;
+  /**
+   * Fills the document automaticlly after saving. (Ai scanning & filling)
+   */
   new_regulation_date?: string | null;
+  /**
+   * Fills the document automaticlly after saving. (Ai scanning & filling)
+   */
   how_many_regulations?: string | null;
   updatedAt: string;
   createdAt: string;
