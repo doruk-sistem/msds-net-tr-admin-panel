@@ -68,7 +68,6 @@ const plugins: any = [
 if (process.env.BLOB_READ_WRITE_TOKEN) {
   const vercelBlob = vercelBlobStorage({
     collections: {
-      media: true,
       msdsDocs: true,
     },
     token: process.env.BLOB_READ_WRITE_TOKEN || '',

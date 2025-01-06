@@ -5,13 +5,11 @@ import { CellContext } from '@tanstack/react-table'
 import QRCode from 'react-qr-code'
 import locale from 'locale-codes'
 import {
-  ArrowUpRight,
   Download,
   FileScan,
   FileStack,
   FileText,
   MoreHorizontal,
-  MoveUpRight,
   Printer,
   QrCode as QrCodeIcon,
   SquareArrowOutUpRight,
