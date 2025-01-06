@@ -33,6 +33,9 @@ export default async function DashboardPage({ searchParams: searchParamsPromise 
           company: {
             equals: companyId,
           },
+          isPublished: {
+            equals: true,
+          },
           ...(!!name
             ? {
                 name: {
@@ -63,6 +66,8 @@ export default async function DashboardPage({ searchParams: searchParamsPromise 
     msds = null
     console.error('DashboardPage error: ', error)
   }
+
+  console.log('msds', msds)
 
   return <DashboardClient serverData={{ msds, companyUsers }} />
 }
