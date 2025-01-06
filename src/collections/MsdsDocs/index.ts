@@ -40,8 +40,8 @@ const MsdsDocs: CollectionConfig = {
       type: 'text',
       admin: {
         description: {
-          tr: 'Döküman kaydedildikten sonra otomatik tanımlanır. (Ai scannig & filling)',
-          en: 'Fills the document automaticlly after saving. (Ai scannig & filling)',
+          tr: 'Döküman kaydedildikten sonra otomatik tanımlanır. (Ai scanning & filling)',
+          en: 'Fills the document automaticlly after saving. (Ai scanning & filling)',
         },
         readOnly: true,
       },
@@ -55,8 +55,8 @@ const MsdsDocs: CollectionConfig = {
       type: 'text',
       admin: {
         description: {
-          tr: 'Döküman kaydedildikten sonra otomatik tanımlanır. (Ai scannig & filling)',
-          en: 'Fills the document automaticlly after saving. (Ai scannig & filling)',
+          tr: 'Döküman kaydedildikten sonra otomatik tanımlanır. (Ai scanning & filling)',
+          en: 'Fills the document automaticlly after saving. (Ai scanning & filling)',
         },
         readOnly: true,
       },
@@ -70,8 +70,8 @@ const MsdsDocs: CollectionConfig = {
       type: 'text',
       admin: {
         description: {
-          tr: 'Döküman kaydedildikten sonra otomatik tanımlanır. (Ai scannig & filling)',
-          en: 'Fills the document automaticlly after saving. (Ai scannig & filling)',
+          tr: 'Döküman kaydedildikten sonra otomatik tanımlanır. (Ai scanning & filling)',
+          en: 'Fills the document automaticlly after saving. (Ai scanning & filling)',
         },
         readOnly: true,
       },
@@ -85,8 +85,8 @@ const MsdsDocs: CollectionConfig = {
       type: 'text',
       admin: {
         description: {
-          tr: 'Döküman kaydedildikten sonra otomatik tanımlanır. (Ai scannig & filling)',
-          en: 'Fills the document automaticlly after saving. (Ai scannig & filling)',
+          tr: 'Döküman kaydedildikten sonra otomatik tanımlanır. (Ai scanning & filling)',
+          en: 'Fills the document automaticlly after saving. (Ai scanning & filling)',
         },
         readOnly: true,
       },
