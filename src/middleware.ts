@@ -2,14 +2,12 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import authHelper from './utilities/authHelper'
 
-export const PRIVATE_BASE_PATH = '/dashboard'
-export const AUTH_PATH = '/login'
-export const ADMIN_PATH = '/admin'
+const PRIVATE_BASE_PATH = '/dashboard'
+const AUTH_BASE_PATH = '/'
+const ADMIN_PATH = '/admin'
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
-
-  const isRootPath = pathname === '/'
 
   if (pathname.startsWith(ADMIN_PATH)) {
     return NextResponse.next()
@@ -18,19 +16,17 @@ export async function middleware(request: NextRequest) {
   const token = request.cookies.get(authHelper.tokenCookieKey)?.value
   const refreshToken = request.cookies.get(authHelper.refreshTokenCookieKey)?.value
 
-  if (pathname.startsWith(AUTH_PATH) || isRootPath) {
+  if (pathname.startsWith(AUTH_BASE_PATH)) {
     if (token && refreshToken) {
       return NextResponse.redirect(new URL(PRIVATE_BASE_PATH, request.url))
     }
-    if (isRootPath) {
-      return NextResponse.redirect(new URL(AUTH_PATH, request.url))
-    }
+
     return NextResponse.next()
   }
 
   // protected routes
   if (!token && !refreshToken) {
-    return NextResponse.redirect(new URL(AUTH_PATH, request.url))
+    return NextResponse.redirect(new URL(AUTH_BASE_PATH, request.url))
   }
 
   try {
@@ -54,13 +50,13 @@ export async function middleware(request: NextRequest) {
       })
     }
 
-    const response = NextResponse.redirect(new URL(AUTH_PATH, request.url))
+    const response = NextResponse.redirect(new URL(AUTH_BASE_PATH, request.url))
     authHelper.clearSessionFromResponse(response)
 
     return response
   } catch (error) {
     console.log('token refresh error: ', error)
-    return NextResponse.redirect(new URL(AUTH_PATH, request.url))
+    return NextResponse.redirect(new URL(AUTH_BASE_PATH, request.url))
   }
 }
 
