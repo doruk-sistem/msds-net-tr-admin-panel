@@ -3,8 +3,13 @@ import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
    ALTER TABLE "media" DISABLE ROW LEVEL SECURITY;
-  DROP TABLE "media" CASCADE;
-  ALTER TABLE "payload_locked_documents_rels" DROP CONSTRAINT "payload_locked_documents_rels_media_fk";
+  DROP TABLE IF EXISTS "media" CASCADE;
+  
+  DO $$ BEGIN
+    ALTER TABLE "payload_locked_documents_rels" DROP CONSTRAINT IF EXISTS "payload_locked_documents_rels_media_fk";
+  EXCEPTION
+    WHEN undefined_object THEN null;
+  END $$;
   
   DROP INDEX IF EXISTS "payload_locked_documents_rels_media_id_idx";
   ALTER TABLE "msds_contents_msds_content" DROP COLUMN IF EXISTS "preparation_date";
