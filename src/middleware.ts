@@ -16,7 +16,7 @@ export async function middleware(request: NextRequest) {
   const token = request.cookies.get(authHelper.tokenCookieKey)?.value
   const refreshToken = request.cookies.get(authHelper.refreshTokenCookieKey)?.value
 
-  if (pathname.startsWith(AUTH_BASE_PATH)) {
+  if (pathname === AUTH_BASE_PATH) {
     if (token && refreshToken) {
       return NextResponse.redirect(new URL(PRIVATE_BASE_PATH, request.url))
     }
