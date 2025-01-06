@@ -17,10 +17,10 @@ export type Row = {
     msdsUniuqeId: DataFromCollectionSlug<'msdsContents'>['msdsContent'][0]['msdsUniuqeId']
     id: DataFromCollectionSlug<'msdsContents'>['msdsContent'][0]['id']
     msdsLanguage: DataFromCollectionSlug<'msdsContents'>['msdsContent'][0]['msdsLanguage']
-    preparationDate: DataFromCollectionSlug<'msdsContents'>['msdsContent'][0]['preparation_date']
-    formNo: DataFromCollectionSlug<'msdsContents'>['msdsContent'][0]['form_no']
-    newRegulationDate: DataFromCollectionSlug<'msdsContents'>['msdsContent'][0]['new_regulation_date']
-    howManyRegulations: DataFromCollectionSlug<'msdsContents'>['msdsContent'][0]['how_many_regulations']
+    preparationDate: string
+    formNo: string
+    newRegulationDate: string
+    howManyRegulations: string
   }>
   publishedAt: DataFromCollectionSlug<'msdsContents'>['publishedAt']
 }

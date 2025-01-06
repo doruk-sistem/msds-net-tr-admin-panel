@@ -5,18 +5,16 @@ import { CellContext } from '@tanstack/react-table'
 import QRCode from 'react-qr-code'
 import locale from 'locale-codes'
 import {
-  ArrowUpRight,
   Download,
   FileScan,
   FileStack,
   FileText,
   MoreHorizontal,
-  MoveUpRight,
   Printer,
   QrCode as QrCodeIcon,
   SquareArrowOutUpRight,
 } from 'lucide-react'
-
+import { useTranslations } from 'next-intl'
 import { useReactToPrint } from 'react-to-print'
 
 import { Button } from '@/components/ui/button'
@@ -30,9 +28,11 @@ import {
 import Tooltip from '@/components/ui/tooltip-basic'
 
 import downloadFile from '@/utilities/downloadFile'
+
 import { useToast } from '@/hooks/use-toast'
+
 import { Row } from './columns'
-import { useTranslations } from 'next-intl'
+
 import {
   Dialog,
   DialogContent,
@@ -64,9 +64,9 @@ export default function ActionsCell({ row }: CellContext<Row, unknown>): React.J
             <DialogTitle className="flex items-center gap-3 text-xl">
               <FileScan className="h-6 w-6 text-primary" />
               <div className="flex flex-col">
-                <span>{msds.name}</span>
+                <span>{msds?.name}</span>
                 <span className="text-sm font-normal text-muted-foreground">
-                  {t('openTheContentDialog.dialogTitle', { name: msds.name })}
+                  {t('openTheContentDialog.dialogTitle', { name: msds?.name })}
                 </span>
               </div>
             </DialogTitle>
@@ -91,12 +91,12 @@ export default function ActionsCell({ row }: CellContext<Row, unknown>): React.J
                   contentUrl={item.contentUrl}
                   filename={item.fileName}
                   msdsLanguage={item.msdsLanguage}
-                  msdsName={msds.name}
+                  msdsName={msds?.name}
                   msdsDetails={{
-                    preparationDate: item.preparationDate,
-                    formNo: item.formNo,
-                    newRegulationDate: item.newRegulationDate,
-                    howManyRegulations: item.howManyRegulations,
+                    preparationDate: item?.preparationDate,
+                    formNo: item?.formNo,
+                    newRegulationDate: item?.newRegulationDate,
+                    howManyRegulations: item?.howManyRegulations,
                   }}
                 />
               </div>
@@ -267,7 +267,7 @@ function MsdsContent({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 rounded-lg bg-muted/50 p-3 text-sm">
+      <div className="grid grid-cols-3 gap-4 rounded-lg bg-muted/50 p-3 text-sm">
         <div className="space-y-1">
           <div className="text-muted-foreground">Preparation Date</div>
           <div className="font-medium">{msdsDetails.preparationDate ?? 'Not specified'}</div>
@@ -275,6 +275,10 @@ function MsdsContent({
         <div className="space-y-1">
           <div className="text-muted-foreground">New Regulation Date</div>
           <div className="font-medium">{msdsDetails.newRegulationDate ?? 'Not specified'}</div>
+        </div>
+        <div className="space-y-1">
+          <div className="text-muted-foreground">Edit Count</div>
+          <div className="font-medium">{msdsDetails.howManyRegulations ?? 'Not specified'}</div>
         </div>
       </div>
     </div>

@@ -12,7 +12,6 @@ export interface Config {
     companyUsers: CompanyUserAuthOperations;
   };
   collections: {
-    media: Media;
     adminUsers: AdminUser;
     companyUsers: CompanyUser;
     companies: Company;
@@ -29,7 +28,6 @@ export interface Config {
     };
   };
   collectionsSelect: {
-    media: MediaSelect<false> | MediaSelect<true>;
     adminUsers: AdminUsersSelect<false> | AdminUsersSelect<true>;
     companyUsers: CompanyUsersSelect<false> | CompanyUsersSelect<true>;
     companies: CompaniesSelect<false> | CompaniesSelect<true>;
@@ -94,90 +92,8 @@ export interface CompanyUserAuthOperations {
   };
 }
 /**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: number;
-  alt: string;
-  caption?: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
-  sizes?: {
-    thumbnail?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    square?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    small?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    medium?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    large?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    xlarge?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-  };
-}
-/**
+ * Admin Users manage admin panel.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "adminUsers".
  */
@@ -504,6 +420,9 @@ export interface MsdsContent {
   id: number;
   name: string;
   company: number | Company;
+  /**
+   * You can add MSDS content for each language option.
+   */
   msdsContent: {
     msdsFile: number | MsdsDoc;
     msdsLanguage:
@@ -1335,14 +1254,16 @@ export interface MsdsContent {
       | 'dje-NE'
       | 'zu'
       | 'zu-ZA';
+    /**
+     * It is a unique id generated for the MSDS content you add. It is created according to these combinations: {msdsCompanyName}-{msdsId}-{msdsName}-{msdsContentId}-{msdsContentLanguage}. If any of these changes, the id will be updated.
+     */
     msdsUniuqeId?: string | null;
-    preparation_date?: string | null;
-    form_no?: string | null;
-    new_regulation_date?: string | null;
-    how_many_regulations?: string | null;
     id?: string | null;
   }[];
   publishedAt?: string | null;
+  /**
+   * Determine whether the content can currently be displayed.
+   */
   isPublished?: boolean | null;
   updatedAt: string;
   createdAt: string;
@@ -1353,9 +1274,21 @@ export interface MsdsContent {
  */
 export interface MsdsDoc {
   id: number;
+  /**
+   * Fills the document automaticlly after saving. (Ai scanning & filling)
+   */
   preparation_date?: string | null;
+  /**
+   * Fills the document automaticlly after saving. (Ai scanning & filling)
+   */
   form_no?: string | null;
+  /**
+   * Fills the document automaticlly after saving. (Ai scanning & filling)
+   */
   new_regulation_date?: string | null;
+  /**
+   * Fills the document automaticlly after saving. (Ai scanning & filling)
+   */
   how_many_regulations?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -1376,10 +1309,6 @@ export interface MsdsDoc {
 export interface PayloadLockedDocument {
   id: number;
   document?:
-    | ({
-        relationTo: 'media';
-        value: number | Media;
-      } | null)
     | ({
         relationTo: 'adminUsers';
         value: number | AdminUser;
@@ -1451,89 +1380,6 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media_select".
- */
-export interface MediaSelect<T extends boolean = true> {
-  alt?: T;
-  caption?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  url?: T;
-  thumbnailURL?: T;
-  filename?: T;
-  mimeType?: T;
-  filesize?: T;
-  width?: T;
-  height?: T;
-  focalX?: T;
-  focalY?: T;
-  sizes?:
-    | T
-    | {
-        thumbnail?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        square?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        small?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        medium?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        large?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        xlarge?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1625,10 +1471,6 @@ export interface MsdsContentsSelect<T extends boolean = true> {
         msdsFile?: T;
         msdsLanguage?: T;
         msdsUniuqeId?: T;
-        preparation_date?: T;
-        form_no?: T;
-        new_regulation_date?: T;
-        how_many_regulations?: T;
         id?: T;
       };
   publishedAt?: T;

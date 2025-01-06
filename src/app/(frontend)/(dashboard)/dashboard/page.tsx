@@ -33,6 +33,9 @@ export default async function DashboardPage({ searchParams: searchParamsPromise 
           company: {
             equals: companyId,
           },
+          isPublished: {
+            equals: true,
+          },
           ...(!!name
             ? {
                 name: {
