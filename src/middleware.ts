@@ -26,7 +26,11 @@ export async function middleware(request: NextRequest) {
 
   // protected routes
   if (!token && !refreshToken) {
-    return NextResponse.redirect(new URL(AUTH_BASE_PATH, request.url))
+    if (pathname.startsWith(PRIVATE_BASE_PATH)) {
+      return NextResponse.redirect(new URL(AUTH_BASE_PATH, request.url))
+    }
+
+    return NextResponse.next()
   }
 
   try {
