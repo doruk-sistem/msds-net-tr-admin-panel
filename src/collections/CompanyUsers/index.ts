@@ -2,8 +2,10 @@ import type { CollectionConfig } from 'payload'
 
 import bcrypt from 'bcryptjs'
 
-import { authenticated } from '../../access/authenticated'
 import generateRandomPassword from '@/utilities/generatePassword'
+import { getServerSideURL } from '@/utilities/getURL'
+
+import { authenticated } from '../../access/authenticated'
 
 const CompanyUsers: CollectionConfig = {
   slug: 'companyUsers',
@@ -62,8 +64,18 @@ const CompanyUsers: CollectionConfig = {
       },
       hooks: {
         beforeValidate: [
-          async ({ value, operation, originalDoc, req, data }) => {
+          async (params) => {
+            const { value, operation, originalDoc, req, data } = params
+
+            /**
+             * This check is done to prevent the password from being randomly generated
+             * during an update from the payload api and to check if there is a password change.
+             */
             if (req.payloadAPI === 'local' && operation === 'update') {
+              const isSameValue = originalDoc?.hashedPassword === value || !value
+
+              if (!isSameValue) return value
+
               return originalDoc?.hashedPassword
             }
 
@@ -74,6 +86,23 @@ const CompanyUsers: CollectionConfig = {
                 if (operation === 'update' && isSameValue) return value
 
                 const newPassword = !value ? generateRandomPassword() : value
+
+                if (data?.sendEmail && operation === 'create') {
+                  await req.payload.email.sendEmail({
+                    from: '"MSDS System" <info@doruksistem.com.tr>',
+                    to: data?.email,
+                    subject: 'MSDS System - Create Password',
+                    text: `${data?.fullname}, please complete your registration.`,
+                    html: `
+                      <b>Hello ${data?.fullname}, please complete your registration.</b>
+                      <br />
+                      <p>We have created an account for you on msds.net.tr. Please create a password to log in.</p>
+                      <br />
+                      <br />
+                      <a href="${getServerSideURL()}/complate-registration?email=${data?.email}" target="_blank">Click here to complete your registration.</a>
+                    `,
+                  })
+                }
 
                 const hashedPassword = await bcrypt.hash(newPassword, 10)
 
@@ -87,6 +116,29 @@ const CompanyUsers: CollectionConfig = {
             return value
           },
         ],
+      },
+    },
+    {
+      name: 'sendEmail',
+      type: 'checkbox',
+      defaultValue: true,
+      label: {
+        tr: 'Oluşturma sonrası email gönder',
+        en: 'Send email after creation',
+      },
+      admin: {
+        description: {
+          tr: 'Oluşturma işlemi sonrasında kullanıcının e-posta adresine hesap oluşturma işlemini tamamlaması için gerekli bilgiler gönderilir.',
+          en: "The information required to complete the account creation process is sent to the user's email address after the creation process.",
+        },
+      },
+    },
+    {
+      name: 'registrationCompleted',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        hidden: true,
       },
     },
     {

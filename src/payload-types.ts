@@ -120,6 +120,11 @@ export interface CompanyUser {
   id: number;
   email: string;
   hashedPassword?: string | null;
+  /**
+   * The information required to complete the account creation process is sent to the user's email address after the creation process.
+   */
+  sendEmail?: boolean | null;
+  registrationCompleted?: boolean | null;
   fullname: string;
   personalPhoneNumber: string;
   position?: string | null;
@@ -1405,6 +1410,8 @@ export interface AdminUsersSelect<T extends boolean = true> {
 export interface CompanyUsersSelect<T extends boolean = true> {
   email?: T;
   hashedPassword?: T;
+  sendEmail?: T;
+  registrationCompleted?: T;
   fullname?: T;
   personalPhoneNumber?: T;
   position?: T;
