@@ -26,6 +26,12 @@ class AuthService {
 
     return res.data
   }
+
+  public async complateRegistration(body: { email: string; password: string }) {
+    const res = await axios.post(`${this.BASE_PATH}/complate-registration`, body)
+
+    return res.data
+  }
 }
 
 const authService = new AuthService()

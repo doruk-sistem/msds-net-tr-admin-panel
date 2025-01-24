@@ -10,7 +10,9 @@
     "dashboardNav": {
       "dashboard": "Kontrol Paneli",
       "settings": "Ayarlar"
-    }
+    },
+    "complate": "Tamamla",
+    "confirmPassword": "Parola Tekrarı"
   },
   "loginPage": {
     "title": "<span class='text-primary'>Yönetim Panelinize</span><br /> Güvenli Giriş Yapın",
@@ -25,6 +27,18 @@
     "invalidCredentialsToast": {
       "title": "Geçersiz kimlik bilgileri!",
       "description": "Geçersiz e-posta veya parola. Lütfen bilgilerinizi tekrar kontrol edin."
+    }
+  },
+  "complateRegistrationPage": {
+    "title": "Kayıt Tamamla",
+    "description": "Kayıt tamamlamak için parolanızı tekrar giriniz.",
+    "successToast": {
+      "title": "Kayıt Tamamlandı!",
+      "description": "Kayıt işleminiz başarıyla tamamlandı. Lütfen kontrol paneline giriş yapınız."
+    },
+    "invalidUserToast": {
+      "title": "Geçersiz Kullanıcı!",
+      "description": "Geçersiz kullanıcı. Lütfen bilgilerinizi tekrar kontrol edin."
     }
   },
   "dashboardPage": {

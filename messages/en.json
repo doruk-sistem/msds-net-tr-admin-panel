@@ -10,7 +10,9 @@
     "dashboardNav": {
       "dashboard": "Dashboard",
       "settings": "Settings"
-    }
+    },
+    "complate": "Complate",
+    "confirmPassword": "Confirm Password"
   },
   "loginPage": {
     "title": "Secure Login to <br /><span class='text-primary'>Management Panel</span>",
@@ -25,6 +27,18 @@
     "invalidCredentialsToast": {
       "title": "Invalid credentials!",
       "description": "Incorrect email or password. Please check again your information"
+    }
+  },
+  "complateRegistrationPage": {
+    "title": "Complete Registration",
+    "description": "Complete your registration by entering your password again.",
+    "successToast": {
+      "title": "Registration Completed!",
+      "description": "You have successfully completed your registration. Please login to the dashboard."
+    },
+    "invalidUserToast": {
+      "title": "Invalid User!",
+      "description": "Invalid user. Please check again your information"
     }
   },
   "dashboardPage": {

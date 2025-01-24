@@ -16,6 +16,9 @@ import {
 import sharp from 'sharp' // editor-import
 import { UnderlineFeature } from '@payloadcms/richtext-lexical'
 import { buildConfig } from 'payload'
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
+
+import nodemailer from 'nodemailer'
 
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -34,6 +37,38 @@ dotenv.config({
 })
 
 export default buildConfig({
+  serverURL: process.env.NEXT_PUBLIC_SERVER_URL,
+  email: nodemailerAdapter({
+    skipVerify: true,
+    defaultFromAddress: 'info@doruksistem.com.tr',
+    defaultFromName: '"Sender Name" <info@doruksistem.com.tr>',
+    transport: nodemailer.createTransport({
+      service: 'outlook',
+      host: process.env.SMTP_HOST,
+      port: parseInt(process.env.SMTP_PORT || '587'),
+      secure: false,
+      requireTLS: true,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    }),
+    // transportOptions: {
+    //   host: process.env.SMTP_HOST,
+    //   port: parseInt(process.env.SMTP_PORT || '587'),
+    //   secure: false,
+    //   requireTLS: true,
+    //   auth: {
+    //     user: process.env.SMTP_USER,
+    //     pass: process.env.SMTP_PASS,
+    //   },
+    // },
+  }),
+  // email: resendAdapter({
+  //   defaultFromAddress: 'info@doruksistem.com.tr',
+  //   defaultFromName: 'MSDS',
+  //   apiKey: process.env.RESEND_API_KEY || '',
+  // }),
   localization: {
     locales: [
       {

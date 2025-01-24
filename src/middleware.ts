@@ -9,6 +9,8 @@ const ADMIN_PATH = '/admin'
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
 
+  const isLoginPage = pathname.startsWith('/login')
+
   if (pathname.startsWith(ADMIN_PATH)) {
     return NextResponse.next()
   }
@@ -16,9 +18,12 @@ export async function middleware(request: NextRequest) {
   const token = request.cookies.get(authHelper.tokenCookieKey)?.value
   const refreshToken = request.cookies.get(authHelper.refreshTokenCookieKey)?.value
 
-  if (pathname === AUTH_BASE_PATH) {
+  if (pathname === AUTH_BASE_PATH || isLoginPage) {
     if (token && refreshToken) {
       return NextResponse.redirect(new URL(PRIVATE_BASE_PATH, request.url))
+    }
+    if (isLoginPage) {
+      return NextResponse.redirect(new URL(AUTH_BASE_PATH, request.url))
     }
 
     return NextResponse.next()
@@ -26,7 +31,11 @@ export async function middleware(request: NextRequest) {
 
   // protected routes
   if (!token && !refreshToken) {
-    return NextResponse.redirect(new URL(AUTH_BASE_PATH, request.url))
+    if (pathname.startsWith(PRIVATE_BASE_PATH) || pathname.startsWith('/login')) {
+      return NextResponse.redirect(new URL(AUTH_BASE_PATH, request.url))
+    }
+
+    return NextResponse.next()
   }
 
   try {
