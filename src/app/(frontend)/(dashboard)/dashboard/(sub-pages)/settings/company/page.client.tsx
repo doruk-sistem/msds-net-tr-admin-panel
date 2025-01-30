@@ -19,10 +19,9 @@ import {
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
-import useAuth from '@/hooks/use-auth'
 import { useToast } from '@/hooks/use-toast'
 
-import companyRequest from '@/requests/company'
+import companyService from '@/services/company.service'
 import { useTranslations } from 'next-intl'
 
 const formSchema = z.object({
@@ -57,7 +56,7 @@ export default function CompanySettingsPageClient({ serverData: { company } }: P
       setIsLoading(true)
 
       if (company?.id) {
-        await companyRequest.updateCompany({
+        await companyService.updateCompany({
           id: company.id,
           body: {
             companyName: data.name.trim(),

@@ -6,17 +6,19 @@ type UpdateCompany = {
   body: Partial<DataFromCollectionSlug<'companies'>>
 }
 
-const company = {
-  updateCompany: async ({
+class CompanyService {
+  public async updateCompany({
     body,
     id,
-  }: UpdateCompany): Promise<DataFromCollectionSlug<'companyUsers'>> => {
+  }: UpdateCompany): Promise<DataFromCollectionSlug<'companyUsers'>> {
     const url = `/update-company/${id}`
 
     const response = await api.patch(url, body)
 
     return response.data
-  },
+  }
 }
 
-export default company
+const companyService = new CompanyService()
+
+export default companyService

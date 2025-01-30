@@ -12,7 +12,9 @@
       "settings": "Settings"
     },
     "complate": "Complate",
-    "confirmPassword": "Confirm Password"
+    "confirmPassword": "Confirm Password",
+    "resetPassword": "Reset Password",
+    "newPassword": "New Password"
   },
   "loginPage": {
     "title": "Secure Login to <br /><span class='text-primary'>Management Panel</span>",
@@ -35,6 +37,18 @@
     "successToast": {
       "title": "Registration Completed!",
       "description": "You have successfully completed your registration. Please login to the dashboard."
+    },
+    "invalidUserToast": {
+      "title": "Invalid User!",
+      "description": "Invalid user. Please check again your information"
+    }
+  },
+  "adminResetPasswordPage": {
+    "title": "Reset Password",
+    "description": "Reset your password by entering your password again.",
+    "successToast": {
+      "title": "Password Reset!",
+      "description": "Your password has been successfully reset. Please login to the dashboard."
     },
     "invalidUserToast": {
       "title": "Invalid User!",
