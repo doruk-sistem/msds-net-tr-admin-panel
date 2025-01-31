@@ -46,6 +46,18 @@ class AuthService {
     return res.data
   }
 
+  public async resetPasswordEmail(body: { email: string }) {
+    const res = await axios.post(`${this.BASE_PATH}/reset-password-email`, body)
+
+    return res.data
+  }
+
+  public async resetPassword(body: { password: string; token: string }) {
+    const res = await axios.post(`${this.BASE_PATH}/reset-password`, body)
+
+    return res.data
+  }
+
   public async updateUser({
     body,
     id,

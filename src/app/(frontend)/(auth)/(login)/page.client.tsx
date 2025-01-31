@@ -6,6 +6,8 @@ import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import axios from 'axios'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -36,7 +38,7 @@ export default function LoginClient() {
 
   const router = useRouter()
   const { toast } = useToast()
-  const t = useTranslations('loginPage')
+  const t = useTranslations()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -48,21 +50,36 @@ export default function LoginClient() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     startTransition(async () => {
-      const res = await authService.login({
-        email: values.email,
-        password: values.password,
-      })
-
-      if (res?.accessToken) {
-        toast({
-          title: t('successToast.title'),
-          description: t('successToast.description'),
+      try {
+        const res = await authService.login({
+          email: values.email,
+          password: values.password,
         })
-        router.push('/dashboard')
-      } else {
-        toast({
-          title: t('invalidCredentialsToast.title'),
-          description: t('invalidCredentialsToast.description'),
+
+        if (res?.accessToken) {
+          toast({
+            title: t('loginPage.successToast.title'),
+            description: t('loginPage.successToast.description'),
+          })
+          router.push('/dashboard')
+        } else {
+          toast({
+            title: t('loginPage.invalidCredentialsToast.title'),
+            description: t('loginPage.invalidCredentialsToast.description'),
+          })
+        }
+      } catch (error: any) {
+        console.log('ERROR: ', error)
+
+        if (axios.isAxiosError(error)) {
+          form.setError('root', {
+            message: error?.response?.data?.error?.message,
+          })
+          return
+        }
+
+        form.setError('root', {
+          message: 'Something went wrong. Please try again later.',
         })
       }
     })
@@ -80,13 +97,10 @@ export default function LoginClient() {
       <div className="container max-w-6xl relative z-10 flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12">
         <div className="flex-1 text-center lg:text-left order-2 lg:order-1">
           <h2 className="text-3xl lg:text-4xl font-bold mb-4 lg:mb-6">
-            <div dangerouslySetInnerHTML={{ __html: t.raw('title') }} />
-            {/* {t('title')}
-            <br />
-            <span className="text-primary">Güvenli Giriş</span> Yapın */}
+            <div dangerouslySetInnerHTML={{ __html: t.raw('loginPage.title') }} />
           </h2>
           <p className="text-muted-foreground text-base lg:text-lg max-w-md mx-auto lg:mx-0">
-            {t('description')}
+            {t('loginPage.description')}
           </p>
         </div>
 
@@ -104,7 +118,7 @@ export default function LoginClient() {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-sm font-medium">{t('email')}</FormLabel>
+                        <FormLabel className="text-sm font-medium">{t('common.email')}</FormLabel>
                         <FormControl>
                           <Input
                             placeholder="name@company.com"
@@ -121,7 +135,9 @@ export default function LoginClient() {
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-sm font-medium">{t('password')}</FormLabel>
+                        <FormLabel className="text-sm font-medium">
+                          {t('common.password')}
+                        </FormLabel>
                         <FormControl>
                           <Input
                             type="password"
@@ -134,13 +150,26 @@ export default function LoginClient() {
                       </FormItem>
                     )}
                   />
+                  {form.formState.errors.root?.message ? (
+                    <p className="text-sm text-destructive">
+                      {form.formState.errors.root?.message}
+                    </p>
+                  ) : null}
                   <Button
                     type="submit"
                     className="w-full h-12 mt-4 font-medium shadow-sm hover:shadow-lg transition-shadow"
                     loading={isPending}
                   >
-                    {t('loginButton')}
+                    {t('loginPage.loginButton')}
                   </Button>
+                  <div className="text-center mt-4">
+                    <Link
+                      href="/auth/reset-password-email"
+                      className="text-sm text-primary hover:underline"
+                    >
+                      {t('common.forgotPassword')}
+                    </Link>
+                  </div>
                 </form>
               </Form>
             </CardContent>

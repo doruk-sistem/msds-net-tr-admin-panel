@@ -99,7 +99,7 @@ const CompanyUsers: CollectionConfig = {
                       <p>We have created an account for you on msds.net.tr. Please create a password to log in.</p>
                       <br />
                       <br />
-                      <a href="${getServerSideURL()}/complate-registration?email=${data?.email}" target="_blank">Click here to complete your registration.</a>
+                      <a href="${getServerSideURL()}/auth/complate-registration?email=${data?.email}" target="_blank">Click here to complete your registration.</a>
                     `,
                   })
                 }
