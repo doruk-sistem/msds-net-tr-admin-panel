@@ -12,7 +12,13 @@
       "settings": "Ayarlar"
     },
     "complate": "Tamamla",
-    "confirmPassword": "Parola Tekrarı"
+    "confirmPassword": "Parola Tekrarı",
+    "resetPassword": "Parola Sıfırla",
+    "password": "Parola",
+    "newPassword": "Yeni Parola",
+    "email": "E-posta",
+    "forgotPassword": "Parola Unuttum?",
+    "backToLogin": "Giriş Yap"
   },
   "loginPage": {
     "title": "<span class='text-primary'>Yönetim Panelinize</span><br /> Güvenli Giriş Yapın",
@@ -35,6 +41,45 @@
     "successToast": {
       "title": "Kayıt Tamamlandı!",
       "description": "Kayıt işleminiz başarıyla tamamlandı. Lütfen kontrol paneline giriş yapınız."
+    },
+    "invalidUserToast": {
+      "title": "Geçersiz Kullanıcı!",
+      "description": "Geçersiz kullanıcı. Lütfen bilgilerinizi tekrar kontrol edin."
+    }
+  },
+  "adminResetPasswordPage": {
+    "title": "Yönetici Parolası Sıfırla",
+    "description": "Yönetici parolanızı sıfırlamak için parolanızı tekrar giriniz.",
+    "successToast": {
+      "title": "Yönetici Parolası Sıfırlandı!",
+      "description": "Yönetici parolanız başarıyla sıfırlandı. Lütfen kontrol paneline giriş yapınız."
+    },
+    "invalidUserToast": {
+      "title": "Geçersiz Kullanıcı!",
+      "description": "Geçersiz kullanıcı. Lütfen bilgilerinizi tekrar kontrol edin."
+    }
+  },
+  "resetPasswordEmailPage": {
+    "title": "Parola Unuttum?",
+    "description": "Parolanızı unuttunuz mu? E-posta adresinizi giriniz ve parolanızı sıfırlamak için bir bağlantı alacaksınız.",
+    "submit": "Gönder",
+    "successToast": {
+      "title": "Email Gönderildi!",
+      "description": "Parolanızı sıfırlamak için bir bağlantı gönderildi. Lütfen e-postanızı kontrol edin."
+    },
+    "invalidUserToast": {
+      "title": "Geçersiz E-posta!",
+      "description": "Geçersiz e-posta. Lütfen bilgilerinizi tekrar kontrol edin."
+    }
+  },
+  "resetPasswordPage": {
+    "title": "Parola Sıfırla",
+    "description": "Parolanızı sıfırlamak için parolanızı tekrar giriniz.",
+    "hasExpiredTitle": "Bağlantı Süresi Doldu!",
+    "hasExpiredDescription": "Bu bağlantının süresi dolmuştur. Lütfen tekrar deneyiniz.",
+    "successToast": {
+      "title": "Parola Sıfırlandı!",
+      "description": "Parolanız başarıyla sıfırlandı. Lütfen kontrol paneline giriş yapınız."
     },
     "invalidUserToast": {
       "title": "Geçersiz Kullanıcı!",

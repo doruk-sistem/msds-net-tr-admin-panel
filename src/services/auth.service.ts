@@ -1,4 +1,11 @@
+import api from '@/utilities/api'
 import axios from 'axios'
+import { DataFromCollectionSlug } from 'payload'
+
+type UpdateUser = {
+  id: string | number
+  body: Partial<DataFromCollectionSlug<'companyUsers'>>
+}
 
 class AuthService {
   private BASE_PATH = '/api/auth'
@@ -31,6 +38,35 @@ class AuthService {
     const res = await axios.post(`${this.BASE_PATH}/complate-registration`, body)
 
     return res.data
+  }
+
+  public async adminResetPassword(body: { token: string; password: string }) {
+    const res = await axios.post(`/api/adminUsers/reset-password`, body)
+
+    return res.data
+  }
+
+  public async resetPasswordEmail(body: { email: string }) {
+    const res = await axios.post(`${this.BASE_PATH}/reset-password-email`, body)
+
+    return res.data
+  }
+
+  public async resetPassword(body: { password: string; token: string }) {
+    const res = await axios.post(`${this.BASE_PATH}/reset-password`, body)
+
+    return res.data
+  }
+
+  public async updateUser({
+    body,
+    id,
+  }: UpdateUser): Promise<DataFromCollectionSlug<'companyUsers'>> {
+    const url = `/update-user/${id}`
+
+    const response = await api.patch(url, body)
+
+    return response.data
   }
 }
 

@@ -27,9 +27,8 @@ import LocaleSwitcher from '@/components/frontend/locale-switcher'
 import useAuth from '@/hooks/use-auth'
 import { useToast } from '@/hooks/use-toast'
 
-import auth from '@/requests/auth'
-
 import getMe from '@/utilities/getMe'
+import authService from '@/services/auth.service'
 
 const ThemeToggleSection = dynamic(() => import('@/components/frontend/theme-toggle-section'), {
   ssr: false,
@@ -67,7 +66,7 @@ export default function ProfileSettingsPageClient({ serverData: { user } }: Prop
       if (user?.id) {
         setIsLoading(true)
 
-        const response = await auth.updateUser({
+        const response = await authService.updateUser({
           id: user?.id,
           body: {
             fullname: data.fullname,

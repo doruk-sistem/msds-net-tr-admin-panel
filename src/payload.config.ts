@@ -41,7 +41,7 @@ export default buildConfig({
   email: nodemailerAdapter({
     skipVerify: true,
     defaultFromAddress: 'info@doruksistem.com.tr',
-    defaultFromName: '"Sender Name" <info@doruksistem.com.tr>',
+    defaultFromName: '"MSDS System" <info@doruksistem.com.tr>',
     transport: nodemailer.createTransport({
       service: 'outlook',
       host: process.env.SMTP_HOST,
@@ -53,22 +53,7 @@ export default buildConfig({
         pass: process.env.SMTP_PASS,
       },
     }),
-    // transportOptions: {
-    //   host: process.env.SMTP_HOST,
-    //   port: parseInt(process.env.SMTP_PORT || '587'),
-    //   secure: false,
-    //   requireTLS: true,
-    //   auth: {
-    //     user: process.env.SMTP_USER,
-    //     pass: process.env.SMTP_PASS,
-    //   },
-    // },
   }),
-  // email: resendAdapter({
-  //   defaultFromAddress: 'info@doruksistem.com.tr',
-  //   defaultFromName: 'MSDS',
-  //   apiKey: process.env.RESEND_API_KEY || '',
-  // }),
   localization: {
     locales: [
       {

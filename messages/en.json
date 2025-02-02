@@ -12,7 +12,13 @@
       "settings": "Settings"
     },
     "complate": "Complate",
-    "confirmPassword": "Confirm Password"
+    "confirmPassword": "Confirm Password",
+    "resetPassword": "Reset Password",
+    "password": "Password",
+    "newPassword": "New Password",
+    "email": "Email",
+    "forgotPassword": "Forgot Password?",
+    "backToLogin": "Back to Login"
   },
   "loginPage": {
     "title": "Secure Login to <br /><span class='text-primary'>Management Panel</span>",
@@ -35,6 +41,45 @@
     "successToast": {
       "title": "Registration Completed!",
       "description": "You have successfully completed your registration. Please login to the dashboard."
+    },
+    "invalidUserToast": {
+      "title": "Invalid User!",
+      "description": "Invalid user. Please check again your information"
+    }
+  },
+  "adminResetPasswordPage": {
+    "title": "Reset Admin Password",
+    "description": "Reset your admin password by entering your password again.",
+    "successToast": {
+      "title": "Admin Password Reset!",
+      "description": "Your admin password has been successfully reset. Please login to the dashboard."
+    },
+    "invalidUserToast": {
+      "title": "Invalid User!",
+      "description": "Invalid user. Please check again your information"
+    }
+  },
+  "resetPasswordEmailPage": {
+    "title": "Forgot Password",
+    "description": "Forgot your password? Enter your email address and we will send you a link to reset your password.",
+    "submit": "Submit",
+    "successToast": {
+      "title": "Email Sent!",
+      "description": "We have sent you an email to reset your password. Please check your email."
+    },
+    "invalidUserToast": {
+      "title": "Invalid Email!",
+      "description": "Invalid email. Please check again your information"
+    }
+  },
+  "resetPasswordPage": {
+    "title": "Reset Password",
+    "description": "Reset your password by entering your password again.",
+    "hasExpiredTitle": "Link Expired!",
+    "hasExpiredDescription": "This link has expired. Please try again.",
+    "successToast": {
+      "title": "Password Reset!",
+      "description": "Your password has been successfully reset. Please login to the dashboard."
     },
     "invalidUserToast": {
       "title": "Invalid User!",

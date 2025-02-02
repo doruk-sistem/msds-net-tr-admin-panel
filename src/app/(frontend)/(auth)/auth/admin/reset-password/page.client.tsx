@@ -5,9 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
 import { useTranslations } from 'next-intl'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import axios from 'axios'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -29,11 +27,13 @@ import authService from '@/services/auth.service'
 import { useToast } from '@/hooks/use-toast'
 
 const formSchema = z.object({
-  email: z.string().email(),
   password: z.string().min(3),
 })
 
-export default function LoginClient() {
+export default function ResetPasswordPageClient() {
+  const searchParams = useSearchParams()
+  const token = searchParams.get('token')
+
   const [isPending, startTransition] = useTransition()
 
   const router = useRouter()
@@ -43,7 +43,6 @@ export default function LoginClient() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: '',
       password: '',
     },
   })
@@ -51,35 +50,20 @@ export default function LoginClient() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     startTransition(async () => {
       try {
-        const res = await authService.login({
-          email: values.email,
+        await authService.adminResetPassword({
+          token: token!,
           password: values.password,
         })
 
-        if (res?.accessToken) {
-          toast({
-            title: t('loginPage.successToast.title'),
-            description: t('loginPage.successToast.description'),
-          })
-          router.push('/dashboard')
-        } else {
-          toast({
-            title: t('loginPage.invalidCredentialsToast.title'),
-            description: t('loginPage.invalidCredentialsToast.description'),
-          })
-        }
-      } catch (error: any) {
-        console.log('ERROR: ', error)
-
-        if (axios.isAxiosError(error)) {
-          form.setError('root', {
-            message: error?.response?.data?.error?.message,
-          })
-          return
-        }
-
-        form.setError('root', {
-          message: 'Something went wrong. Please try again later.',
+        toast({
+          title: t('adminResetPasswordPage.successToast.title'),
+          description: t('adminResetPasswordPage.successToast.description'),
+        })
+        router.push('/admin')
+      } catch {
+        toast({
+          title: t('adminResetPasswordPage.invalidUserToast.title'),
+          description: t('adminResetPasswordPage.invalidUserToast.description'),
         })
       }
     })
@@ -95,18 +79,15 @@ export default function LoginClient() {
       </div>
 
       <div className="container max-w-6xl relative z-10 flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12">
-        <div className="flex-1 text-center lg:text-left order-2 lg:order-1">
-          <h2 className="text-3xl lg:text-4xl font-bold mb-4 lg:mb-6">
-            <div dangerouslySetInnerHTML={{ __html: t.raw('loginPage.title') }} />
-          </h2>
-          <p className="text-muted-foreground text-base lg:text-lg max-w-md mx-auto lg:mx-0">
-            {t('loginPage.description')}
-          </p>
-        </div>
-
         <div className="w-full max-w-[400px] order-1 lg:order-2">
-          <div className="mb-6 lg:mb-8 text-center lg:text-left">
+          <div className="w-full flex flex-col items-center mb-6 lg:mb-8 space-y-7">
             <DynamicLogo imageClassName="w-[160px] lg:w-[180px] mx-auto lg:mx-0 hover:opacity-90 transition-all" />
+            <div className="flex flex-col gap-2 text-center">
+              <h3 className="text-2xl font-bold">{t('adminResetPasswordPage.title')}</h3>
+              <p className="text-muted-foreground text-base lg:text-lg max-w-md mx-auto lg:mx-0">
+                {t('adminResetPasswordPage.description')}
+              </p>
+            </div>
           </div>
 
           <Card className="border-0 shadow-xl bg-card/50 dark:bg-card/50 backdrop-blur-sm">
@@ -115,33 +96,15 @@ export default function LoginClient() {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
                   <FormField
                     control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-sm font-medium">{t('common.email')}</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="name@company.com"
-                            {...field}
-                            className="h-12 bg-background/50 dark:bg-background/50 border-border/30 dark:border-border/20 focus:border-primary/50 focus:ring-0"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
                     name="password"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm font-medium">
-                          {t('common.password')}
+                          {t('common.newPassword')}
                         </FormLabel>
                         <FormControl>
                           <Input
-                            type="password"
-                            placeholder="••••••••"
+                            placeholder={t('common.newPassword')}
                             {...field}
                             className="h-12 bg-background/50 dark:bg-background/50 border-border/30 dark:border-border/20 focus:border-primary/50 focus:ring-0"
                           />
@@ -150,26 +113,13 @@ export default function LoginClient() {
                       </FormItem>
                     )}
                   />
-                  {form.formState.errors.root?.message ? (
-                    <p className="text-sm text-destructive">
-                      {form.formState.errors.root?.message}
-                    </p>
-                  ) : null}
                   <Button
                     type="submit"
                     className="w-full h-12 mt-4 font-medium shadow-sm hover:shadow-lg transition-shadow"
                     loading={isPending}
                   >
-                    {t('loginPage.loginButton')}
+                    {t('common.resetPassword')}
                   </Button>
-                  <div className="text-center mt-4">
-                    <Link
-                      href="/auth/reset-password-email"
-                      className="text-sm text-primary hover:underline"
-                    >
-                      {t('common.forgotPassword')}
-                    </Link>
-                  </div>
                 </form>
               </Form>
             </CardContent>
