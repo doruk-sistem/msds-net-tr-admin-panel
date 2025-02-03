@@ -17,6 +17,8 @@ export interface Config {
     companies: Company;
     msdsDocs: MsdsDoc;
     msdsContents: MsdsContent;
+    contentLanguages: ContentLanguage;
+    msdsV2: MsdsV2;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -24,6 +26,7 @@ export interface Config {
   collectionsJoins: {
     companies: {
       companyUsers: 'companyUsers';
+      msdsV2: 'msdsV2';
       msdsContent: 'msdsContents';
     };
   };
@@ -33,6 +36,8 @@ export interface Config {
     companies: CompaniesSelect<false> | CompaniesSelect<true>;
     msdsDocs: MsdsDocsSelect<false> | MsdsDocsSelect<true>;
     msdsContents: MsdsContentsSelect<false> | MsdsContentsSelect<true>;
+    contentLanguages: ContentLanguagesSelect<false> | ContentLanguagesSelect<true>;
+    msdsV2: MsdsV2Select<false> | MsdsV2Select<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -410,10 +415,68 @@ export interface Company {
     docs?: (number | CompanyUser)[] | null;
     hasNextPage?: boolean | null;
   } | null;
+  msdsV2?: {
+    docs?: (number | MsdsV2)[] | null;
+    hasNextPage?: boolean | null;
+  } | null;
+  /**
+   * This field will be deprecated. Use MSDS v2 instead.
+   */
   msdsContent?: {
     docs?: (number | MsdsContent)[] | null;
     hasNextPage?: boolean | null;
   } | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Use this to manage MSDS contents. "MSDS Files" and "MSDS Records" will be deprecated soon. Use MSDS v2 instead.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "msdsV2".
+ */
+export interface MsdsV2 {
+  id: number;
+  /**
+   * If not filled, it takes the name of the uploaded file.
+   */
+  name?: string | null;
+  /**
+   * Automatically generated after saving the document. (It is defined as: {company}-{name}-{id}-{contentLanguage})
+   */
+  uniqueId?: string | null;
+  company: number | Company;
+  /**
+   * If there are fields that are not filled, it will read them from the pdf file and fill them automatically.
+   */
+  aiScanning?: boolean | null;
+  msdsCreatedAt?: string | null;
+  formNo?: string | null;
+  msdsUpdatedAt?: string | null;
+  updatedCount?: number | null;
+  author?: string | null;
+  certificateDate?: string | null;
+  contentLanguage?: (number | null) | ContentLanguage;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contentLanguages".
+ */
+export interface ContentLanguage {
+  id: number;
+  name: string;
+  code: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -1333,6 +1396,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'msdsContents';
         value: number | MsdsContent;
+      } | null)
+    | ({
+        relationTo: 'contentLanguages';
+        value: number | ContentLanguage;
+      } | null)
+    | ({
+        relationTo: 'msdsV2';
+        value: number | MsdsV2;
       } | null);
   globalSlug?: string | null;
   user:
@@ -1440,6 +1511,7 @@ export interface CompaniesSelect<T extends boolean = true> {
   state?: T;
   city?: T;
   companyUsers?: T;
+  msdsV2?: T;
   msdsContent?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -1484,6 +1556,44 @@ export interface MsdsContentsSelect<T extends boolean = true> {
   isPublished?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contentLanguages_select".
+ */
+export interface ContentLanguagesSelect<T extends boolean = true> {
+  name?: T;
+  code?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "msdsV2_select".
+ */
+export interface MsdsV2Select<T extends boolean = true> {
+  name?: T;
+  uniqueId?: T;
+  company?: T;
+  aiScanning?: T;
+  msdsCreatedAt?: T;
+  formNo?: T;
+  msdsUpdatedAt?: T;
+  updatedCount?: T;
+  author?: T;
+  certificateDate?: T;
+  contentLanguage?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

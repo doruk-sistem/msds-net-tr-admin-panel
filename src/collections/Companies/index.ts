@@ -201,6 +201,16 @@ const Companies: CollectionConfig = {
           },
           fields: [
             {
+              name: 'msdsV2',
+              label: {
+                tr: 'MSDS v2',
+                en: 'MSDS v2',
+              },
+              type: 'join',
+              collection: 'msdsV2',
+              on: 'company',
+            },
+            {
               name: 'msdsContent',
               label: {
                 tr: 'Güvenlik Bilgi Formları',
@@ -209,6 +219,12 @@ const Companies: CollectionConfig = {
               type: 'join',
               collection: 'msdsContents',
               on: 'company',
+              admin: {
+                description: {
+                  tr: 'Bu alan kullanımdan kaldırılacaktır. MSDS v2 kullanınız.',
+                  en: 'This field will be deprecated. Use MSDS v2 instead.',
+                },
+              },
             },
           ],
         },
