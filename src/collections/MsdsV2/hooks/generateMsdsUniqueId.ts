@@ -17,10 +17,13 @@ export const generateMsdsUniqueId: FieldHook = async ({ req, originalDoc, siblin
     depth: 0,
   })
 
-  const msdsCompany = slugify(company.companyName, { strict: true })
+  const msdsCompany = company.companyName
   const msdsId = originalDoc?.id
-  const msdsName = slugify(originalDoc?.name, { strict: true })
+  const msdsName = originalDoc?.name
   const msdsLanguage = contentLanguage.code
 
-  return `${msdsCompany}-${msdsName}-${msdsId}-${msdsLanguage}`
+  return slugify(`${msdsCompany}-${msdsName}-${msdsId}-${msdsLanguage}`, {
+    strict: true,
+    lower: true,
+  })
 }

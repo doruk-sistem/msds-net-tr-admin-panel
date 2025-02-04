@@ -98,12 +98,6 @@ const MsdsV2: CollectionConfig = {
         tr: 'Diğer Bilgiler',
         en: 'Other Information',
       },
-      admin: {
-        description: {
-          tr: 'Döküman kaydedildikten sonra otomatik olarak tanımlanır. (Ai scanning & filling)',
-          en: 'Fills the document automaticlly after saving. (Ai scanning & filling)',
-        },
-      },
       fields: [
         {
           name: 'aiScanning',
