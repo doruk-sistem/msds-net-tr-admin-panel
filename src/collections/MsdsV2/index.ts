@@ -81,7 +81,6 @@ const MsdsV2: CollectionConfig = {
         },
       },
     },
-
     {
       name: 'company',
       label: {
@@ -91,6 +90,22 @@ const MsdsV2: CollectionConfig = {
       type: 'relationship',
       relationTo: 'companies',
       required: true,
+    },
+    {
+      name: 'isPublished',
+      label: {
+        tr: 'Yayında',
+        en: 'Published',
+      },
+      admin: {
+        position: 'sidebar',
+        description: {
+          tr: 'İçeriğin şu anda müşteriye görünüp görünmeyeceğini belirleyin.',
+          en: 'Determine whether the content can currently be displayed to the customer.',
+        },
+      },
+      defaultValue: true,
+      type: 'checkbox',
     },
     {
       type: 'collapsible',

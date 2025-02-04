@@ -18,7 +18,8 @@
     "newPassword": "New Password",
     "email": "Email",
     "forgotPassword": "Forgot Password?",
-    "backToLogin": "Back to Login"
+    "backToLogin": "Back to Login",
+    "details": "Details"
   },
   "loginPage": {
     "title": "Secure Login to <br /><span class='text-primary'>Management Panel</span>",
@@ -99,7 +100,7 @@
       "previous": "Previous"
     },
     "openTheContentDialog": {
-      "dialogTitle": "{name} - MSDS Contents (All Languages)",
+      "dialogTitle": "{name} - MSDS Contents",
       "dialogDescription": "MSDS contents are available here.",
       "downloadTheMSDS": "Download the MSDS",
       "openTheMSDS": "Open the MSDS",

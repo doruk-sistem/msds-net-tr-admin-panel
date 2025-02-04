@@ -447,6 +447,10 @@ export interface MsdsV2 {
   uniqueId?: string | null;
   company: number | Company;
   /**
+   * Determine whether the content can currently be displayed to the customer.
+   */
+  isPublished?: boolean | null;
+  /**
    * If there are fields that are not filled, it will read them from the pdf file and fill them automatically.
    */
   aiScanning?: boolean | null;
@@ -1575,6 +1579,7 @@ export interface MsdsV2Select<T extends boolean = true> {
   name?: T;
   uniqueId?: T;
   company?: T;
+  isPublished?: T;
   aiScanning?: T;
   msdsCreatedAt?: T;
   formNo?: T;

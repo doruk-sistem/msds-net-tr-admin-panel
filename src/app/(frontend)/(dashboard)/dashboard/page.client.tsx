@@ -3,7 +3,7 @@
 import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { PaginatedDocs } from 'payload'
-import { CompanyUser, MsdsContent } from '@/payload-types'
+import type { CompanyUser, MsdsV2 } from '@/payload-types'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
@@ -14,34 +14,31 @@ import TablePagination from './components/table-pagination'
 
 interface Props {
   serverData: {
-    msds: PaginatedDocs<MsdsContent> | null
     companyUsers: PaginatedDocs<CompanyUser> | null
+    msdsV2: PaginatedDocs<MsdsV2> | null
   }
 }
 
-export default function DashboardClient({ serverData: { msds, companyUsers } }: Props) {
+export default function DashboardClient({ serverData: { companyUsers, msdsV2 } }: Props) {
   const searchParams = useSearchParams()
   const t = useTranslations('dashboardPage')
 
   const msdsSearchParam = searchParams.get('name')
 
-  const msdsContent = msds?.docs
+  const msdsContent = msdsV2?.docs
 
   const data: Row[] | null = Array.isArray(msdsContent)
     ? msdsContent?.map((item) => ({
         name: item?.name,
-        publishedAt: item.publishedAt,
-        msdsContents: item?.msdsContent?.map((msds: any) => ({
-          fileName: msds?.msdsFile?.filename,
-          contentUrl: msds?.msdsFile?.url,
-          msdsUniuqeId: msds?.msdsUniuqeId,
-          id: msds?.id,
-          msdsLanguage: msds?.msdsLanguage,
-          preparationDate: msds?.msdsFile?.preparation_date,
-          formNo: msds?.msdsFile?.form_no,
-          newRegulationDate: msds?.msdsFile?.new_regulation_date,
-          howManyRegulations: msds?.msdsFile?.how_many_regulations,
-        })),
+        msdsCreatedAt: item?.createdAt,
+        msdsUpdatedAt: item?.updatedAt,
+        formNo: item?.formNo,
+        updatedCount: item?.updatedCount,
+        author: item?.author,
+        certificateDate: item?.certificateDate,
+        url: item?.url,
+        createdAt: item?.createdAt,
+        contentLanguage: item?.contentLanguage,
       }))
     : null
 
@@ -57,7 +54,7 @@ export default function DashboardClient({ serverData: { msds, companyUsers } }: 
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{msds?.totalDocs}</div>
+            <div className="text-2xl font-bold">{msdsV2?.totalDocs}</div>
           </CardContent>
         </Card>
         <Card>
@@ -80,7 +77,7 @@ export default function DashboardClient({ serverData: { msds, companyUsers } }: 
           {Array.isArray(data) ? (
             <>
               <DataTable columns={columns} data={data} />
-              <TablePagination totalPages={msds?.totalPages || 1} />
+              <TablePagination totalPages={msdsV2?.totalPages || 1} />
             </>
           ) : null}
         </CardContent>
