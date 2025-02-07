@@ -18,7 +18,8 @@
     "newPassword": "Yeni Parola",
     "email": "E-posta",
     "forgotPassword": "Parola Unuttum?",
-    "backToLogin": "Giriş Yap"
+    "backToLogin": "Giriş Yap",
+    "details": "Detaylar"
   },
   "loginPage": {
     "title": "<span class='text-primary'>Yönetim Panelinize</span><br /> Güvenli Giriş Yapın",
@@ -99,7 +100,7 @@
       "previous": "Önceki"
     },
     "openTheContentDialog": {
-      "dialogTitle": "{name} - MSDS İçerikleri (Tüm Dillerde)",
+      "dialogTitle": "{name} - MSDS İçerikleri",
       "dialogDescription": "Tüm MSDS içerikleri buradadır.",
       "downloadTheMSDS": "MSDS'i İndir",
       "openTheMSDS": "MSDS'i Aç",

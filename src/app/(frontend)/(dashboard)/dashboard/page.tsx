@@ -1,6 +1,6 @@
 import { PaginatedDocs } from 'payload'
 
-import type { CompanyUser, MsdsContent } from '@/payload-types'
+import type { CompanyUser, MsdsV2 } from '@/payload-types'
 
 import getPayloadCMS from '@/utilities/getPayloadCMS'
 import getMe from '@/utilities/getMe'
@@ -12,8 +12,8 @@ export const dynamic = 'force-dynamic'
 export default async function DashboardPage({ searchParams: searchParamsPromise }) {
   const { name, page } = await searchParamsPromise
 
-  let msds: PaginatedDocs<MsdsContent> | null = null
   let companyUsers: PaginatedDocs<CompanyUser> | null = null
+  let msdsV2: PaginatedDocs<MsdsV2> | null = null
 
   try {
     const user = await getMe()
@@ -23,9 +23,9 @@ export default async function DashboardPage({ searchParams: searchParamsPromise 
     const payload = await getPayloadCMS()
 
     if (companyId) {
-      const msdsResponse = await payload.find({
+      const msdsV2Response = await payload.find({
+        collection: 'msdsV2',
         depth: 2,
-        collection: 'msdsContents',
         sort: '-publishedAt',
         limit: 10,
         page: Number(page) || 1,
@@ -59,13 +59,12 @@ export default async function DashboardPage({ searchParams: searchParamsPromise 
         },
       })
 
-      msds = msdsResponse as any
+      msdsV2 = msdsV2Response
       companyUsers = companyUsersResponse as any
     }
   } catch (error) {
-    msds = null
     console.error('DashboardPage error: ', error)
   }
 
-  return <DashboardClient serverData={{ msds, companyUsers }} />
+  return <DashboardClient serverData={{ companyUsers, msdsV2 }} />
 }
