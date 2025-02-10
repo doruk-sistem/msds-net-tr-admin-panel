@@ -12,9 +12,9 @@ const collections: CollectionConfig[] = [
   AdminUsers,
   CompanyUsers,
   Companies,
+  ContentLanguages,
   MsdsDocs,
   MsdsContents,
-  ContentLanguages,
   MsdsV2,
 ]
 
