@@ -22,12 +22,12 @@ const MsdsDocs: CollectionConfig = {
   },
   labels: {
     plural: {
-      tr: 'MSDS Dosyaları',
-      en: 'MSDS Files',
+      tr: 'MSDS Dosyaları (Eski Sürüm)',
+      en: 'MSDS Files (Old Version)',
     },
     singular: {
-      tr: 'MSDS Dosyası',
-      en: 'MSDS File',
+      tr: 'MSDS Dosyası (Eski Sürüm)',
+      en: 'MSDS File (Old Version)',
     },
   },
   fields: [

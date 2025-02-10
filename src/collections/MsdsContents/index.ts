@@ -29,12 +29,12 @@ const MsdsContents: CollectionConfig = {
   },
   labels: {
     plural: {
-      tr: 'MSDS Kayıtları',
-      en: 'MSDS Contents',
+      tr: 'MSDS Kayıtları (Eski Sürüm)',
+      en: 'MSDS Contents (Old Version)',
     },
     singular: {
-      tr: 'MSDS Kaydı',
-      en: 'MSDS Content',
+      tr: 'MSDS Kaydı (Eski Sürüm)',
+      en: 'MSDS Content (Old Version)',
     },
   },
   fields: [

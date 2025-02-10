@@ -15,9 +15,9 @@ export interface Config {
     adminUsers: AdminUser;
     companyUsers: CompanyUser;
     companies: Company;
+    contentLanguages: ContentLanguage;
     msdsDocs: MsdsDoc;
     msdsContents: MsdsContent;
-    contentLanguages: ContentLanguage;
     msdsV2: MsdsV2;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -34,9 +34,9 @@ export interface Config {
     adminUsers: AdminUsersSelect<false> | AdminUsersSelect<true>;
     companyUsers: CompanyUsersSelect<false> | CompanyUsersSelect<true>;
     companies: CompaniesSelect<false> | CompaniesSelect<true>;
+    contentLanguages: ContentLanguagesSelect<false> | ContentLanguagesSelect<true>;
     msdsDocs: MsdsDocsSelect<false> | MsdsDocsSelect<true>;
     msdsContents: MsdsContentsSelect<false> | MsdsContentsSelect<true>;
-    contentLanguages: ContentLanguagesSelect<false> | ContentLanguagesSelect<true>;
     msdsV2: MsdsV2Select<false> | MsdsV2Select<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -1394,16 +1394,16 @@ export interface PayloadLockedDocument {
         value: number | Company;
       } | null)
     | ({
+        relationTo: 'contentLanguages';
+        value: number | ContentLanguage;
+      } | null)
+    | ({
         relationTo: 'msdsDocs';
         value: number | MsdsDoc;
       } | null)
     | ({
         relationTo: 'msdsContents';
         value: number | MsdsContent;
-      } | null)
-    | ({
-        relationTo: 'contentLanguages';
-        value: number | ContentLanguage;
       } | null)
     | ({
         relationTo: 'msdsV2';
@@ -1522,6 +1522,16 @@ export interface CompaniesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contentLanguages_select".
+ */
+export interface ContentLanguagesSelect<T extends boolean = true> {
+  name?: T;
+  code?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "msdsDocs_select".
  */
 export interface MsdsDocsSelect<T extends boolean = true> {
@@ -1558,16 +1568,6 @@ export interface MsdsContentsSelect<T extends boolean = true> {
       };
   publishedAt?: T;
   isPublished?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "contentLanguages_select".
- */
-export interface ContentLanguagesSelect<T extends boolean = true> {
-  name?: T;
-  code?: T;
   updatedAt?: T;
   createdAt?: T;
 }

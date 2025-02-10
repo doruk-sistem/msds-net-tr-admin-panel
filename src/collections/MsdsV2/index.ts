@@ -195,7 +195,7 @@ const MsdsV2: CollectionConfig = {
   ],
   upload: {
     // Upload to the public/msds directory in Next.js making them publicly accessible even outside of Payload
-    staticDir: path.resolve(dirname, '../../assets/msdsFiles'),
+    staticDir: path.resolve(dirname, '../../files/msdsFiles'),
     bulkUpload: true,
     mimeTypes: ['application/pdf'],
   },

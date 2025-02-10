@@ -108,8 +108,6 @@ export const aiScanning: BeforeChangeHook = async ({ req, operation, data }) => 
       // Parse the jsonString to a json object
       const jsonObject = JSON.parse(jsonString) as Record<keyof typeof promptKeys, any>
 
-      console.log('jsonObject: ', jsonObject)
-
       const processedData = await Promise.all(
         promptKeysToProcess.map(async (key) => {
           const value = promptKeys[key].afterScanning
@@ -123,8 +121,6 @@ export const aiScanning: BeforeChangeHook = async ({ req, operation, data }) => 
         ...data,
         ...processedData.reduce((acc, item) => ({ ...acc, ...item }), {}),
       }
-
-      console.log('newData: ', newData)
 
       return newData
     }
