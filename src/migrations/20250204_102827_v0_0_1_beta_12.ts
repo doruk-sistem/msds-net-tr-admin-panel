@@ -40,7 +40,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "content_languages_id" integer;
   ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "msds_v2_id" integer;
   DO $$ BEGIN
-   ALTER TABLE "msds_v2" ADD CONSTRAINT "msds_v2_company_id_companies_id_fk" FOREIGN KEY ("company_id") REFERENCES "public"."companies"("id") ON DELETE set null ON UPDATE no action;
+   ALTER TABLE "msds_v2" ADD CONSTRAINT "msds_v2_company_id_companies_id_fk" FOREIGN KEY ("company_id") REFERENCES "public"."companies"("id") ON DELETE RESTRICT ON UPDATE no action;
   EXCEPTION
    WHEN duplicate_object THEN null;
   END $$;
