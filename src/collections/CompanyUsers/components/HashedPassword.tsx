@@ -21,10 +21,6 @@ const text = {
     tr: 'Auto-Generation için alanı boş bırakın.',
     en: 'Leave this field blank for Auto-Generation.',
   },
-  passwordDescription2: {
-    tr: 'Şifreyi güncellediğinizde ya da hesabı oluşturup kaydettiğinizde yeni şifre kullanıcının e-posta adresine gönderilir.',
-    en: "When you update the password or create and save the account, the new password is sent to the user's email address.",
-  },
   hashadPasswordDescription: {
     tr: 'Şifrelenmiş parola, hesap şifresinin açığa çıkmaması için güvenlik amacıyla oluşturulmuş bir halidir. Hesap girişi esnasında bu şifre kullanılmaz. Sistem tarafından güvenlik amacıyla kullanılır.',
     en: 'Hashed password is a version of the account password created for security purposes to prevent its disclosure. This password is not used during account login. It just use by system for security.',
@@ -84,7 +80,6 @@ export default function HashedPassword({ path }: TextFieldClientProps) {
             </div>
           </div>
           <div className="field-description">{text.passwordDescription[lang]}</div>
-          <div className="field-description">{text.passwordDescription2[lang]}</div>
         </div>
       </div>
     </>

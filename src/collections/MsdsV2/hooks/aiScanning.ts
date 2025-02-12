@@ -12,7 +12,8 @@ export const aiScanning: BeforeChangeHook = async ({ req, operation, data }) => 
       msdsCreatedAt: {
         type: 'Date',
         description: `Hazırlama Tarihi`,
-        afterScanning: async (value: string) => new Date(value),
+        afterScanning: async (value: string) =>
+          typeof value === 'string' ? new Date(value) : undefined,
       },
       formNo: {
         type: 'string',
@@ -21,12 +22,14 @@ export const aiScanning: BeforeChangeHook = async ({ req, operation, data }) => 
       msdsUpdatedAt: {
         type: 'Date',
         description: `Yeniden Düzenleme Tarihi ("Yeni Düzenleme Tarihi" olarak da belirtilmiş olabilir.)`,
-        afterScanning: async (value: string) => new Date(value),
+        afterScanning: async (value: string) =>
+          typeof value === 'string' ? new Date(value) : undefined,
       },
       updatedCount: {
         type: 'number',
         description: `Integer olmalı. Kaçıncı düzenleme olduğu ya da Düzenleme Sayısı`,
-        afterScanning: async (value: string) => parseInt(value),
+        afterScanning: async (value: string) =>
+          typeof value === 'string' ? parseInt(value) : undefined,
       },
       author: {
         type: 'string',
@@ -35,7 +38,8 @@ export const aiScanning: BeforeChangeHook = async ({ req, operation, data }) => 
       certificateDate: {
         type: 'Date',
         description: `Sertifika Tarihi (Bu bilgi direkt olarak "Sertifika Tarihi" olarak belirtilmemiş olabilir. Eğer belirtilmemişse 16.2 numaralı bölümdeki KDU numarasından sonraki tarih bilgilerini kullan.)`,
-        afterScanning: async (value: string) => new Date(value),
+        afterScanning: async (value: string) =>
+          typeof value === 'string' ? new Date(value) : undefined,
       },
       contentLanguage: {
         type: {
@@ -43,9 +47,9 @@ export const aiScanning: BeforeChangeHook = async ({ req, operation, data }) => 
           code: 'string',
         },
         description: `İçerik Dili. "code" değeri Türkçe ise "tr", İngilizce ise "en" gibi olmalı. "name" değeri kendi dilinde yazılmalıdır. (Örneğin Türkçe için "Türkçe", İngilizce için "English" gibi...)`,
-        afterScanning: async (value: { code: string; name: string }) => {
+        afterScanning: async (value?: { code: string; name: string }) => {
           // If the content_language is not undefined, find the content language in the content-languages collection
-          let contentLanguage: number | undefined
+          let contentLanguage: number | undefined = undefined
 
           if (value) {
             const response = await req.payload.find({
@@ -60,7 +64,7 @@ export const aiScanning: BeforeChangeHook = async ({ req, operation, data }) => 
             contentLanguage = response.docs[0].id
           }
 
-          if (!contentLanguage) {
+          if (!contentLanguage && value?.code && value?.name) {
             const response = await req.payload.create({
               collection: 'contentLanguages',
               data: {
