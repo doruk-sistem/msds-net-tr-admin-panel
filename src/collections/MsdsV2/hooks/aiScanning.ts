@@ -48,32 +48,40 @@ export const aiScanning: BeforeChangeHook = async ({ req, operation, data }) => 
         },
         description: `İçerik Dili. "code" değeri Türkçe ise "tr", İngilizce ise "en" gibi olmalı. "name" değeri kendi dilinde yazılmalıdır. (Örneğin Türkçe için "Türkçe", İngilizce için "English" gibi...)`,
         afterScanning: async (value?: { code: string; name: string }) => {
+          if (!value || !value?.code) {
+            return undefined
+          }
+
           // If the content_language is not undefined, find the content language in the content-languages collection
           let contentLanguage: number | undefined = undefined
 
-          if (value) {
+          try {
             const response = await req.payload.find({
               collection: 'contentLanguages',
               where: {
                 code: {
-                  equals: value.code,
+                  equals: value?.code,
                 },
               },
             })
 
             contentLanguage = response.docs[0].id
-          }
+          } catch {
+            try {
+              if (value?.code && value?.name) {
+                const response = await req.payload.create({
+                  collection: 'contentLanguages',
+                  data: {
+                    name: value.name,
+                    code: value.code,
+                  },
+                })
 
-          if (!contentLanguage && value?.code && value?.name) {
-            const response = await req.payload.create({
-              collection: 'contentLanguages',
-              data: {
-                name: value.name,
-                code: value.code,
-              },
-            })
-
-            contentLanguage = response.id
+                contentLanguage = response.id
+              }
+            } catch (error) {
+              console.error('aiScanning contentLanguage create error: ', error)
+            }
           }
 
           return contentLanguage
