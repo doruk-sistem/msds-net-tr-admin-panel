@@ -1,4 +1,4 @@
-# MSDS Web Site   
+# MSDS Web Site    
 
 This is the official MSDS Web site [Payload Website Template](https://github.com/payloadcms/payload/blob/main/templates/website). Use it to power websites, blogs, or portfolios from small to enterprise. This repo includes a fully-working backend, enterprise-grade admin panel, and a beautifully designed, production-ready website.
 
