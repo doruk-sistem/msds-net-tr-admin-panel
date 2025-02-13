@@ -3,27 +3,43 @@ import { type FieldHook } from 'payload'
 import slugify from 'slugify'
 
 export const generateMsdsUniqueId: FieldHook = async ({ req, originalDoc, siblingData }) => {
-  const company = await req.payload.findByID({
-    id: originalDoc?.company,
-    collection: 'companies',
-    depth: 0,
-  })
+  if (
+    !originalDoc?.company ||
+    !originalDoc?.id ||
+    !originalDoc?.name ||
+    !siblingData?.contentLanguage
+  ) {
+    return ''
+  }
 
-  const contentLanguageId = siblingData?.contentLanguage
+  try {
+    const company = await req.payload.findByID({
+      id: originalDoc.company,
+      collection: 'companies',
+      depth: 0,
+    })
 
-  const contentLanguage = await req.payload.findByID({
-    id: contentLanguageId,
-    collection: 'contentLanguages',
-    depth: 0,
-  })
+    const contentLanguage = await req.payload.findByID({
+      id: siblingData.contentLanguage,
+      collection: 'contentLanguages',
+      depth: 0,
+    })
 
-  const msdsCompany = company.companyName
-  const msdsId = originalDoc?.id
-  const msdsName = originalDoc?.name
-  const msdsLanguage = contentLanguage.code
+    if (!company?.companyName || !contentLanguage?.code) {
+      return ''
+    }
 
-  return slugify(`${msdsCompany}-${msdsName}-${msdsId}-${msdsLanguage}`, {
-    strict: true,
-    lower: true,
-  })
+    const msdsCompany = company.companyName
+    const msdsId = originalDoc.id
+    const msdsName = originalDoc.name
+    const msdsLanguage = contentLanguage.code
+
+    return slugify(`${msdsCompany}-${msdsName}-${msdsId}-${msdsLanguage}`, {
+      strict: true,
+      lower: true,
+    })
+  } catch (error) {
+    console.error('generateMsdsUniqueId hook error:', error)
+    return ''
+  }
 }
