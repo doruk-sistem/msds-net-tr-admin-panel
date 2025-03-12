@@ -115,6 +115,16 @@ const MsdsV2: CollectionConfig = {
       },
       fields: [
         {
+          name: 'id',
+          type: 'number',
+          required: true,
+          unique: true,
+          admin: {
+            readOnly: true,
+            position: 'sidebar',
+          },
+        },
+        {
           name: 'aiScanning',
           type: 'checkbox',
           defaultValue: true,
@@ -139,6 +149,7 @@ const MsdsV2: CollectionConfig = {
           },
           type: 'date',
         },
+        
         {
           name: 'formNo',
           label: {
@@ -182,6 +193,32 @@ const MsdsV2: CollectionConfig = {
           type: 'date',
         },
         {
+          name: 'expiryDate',
+          label: {
+            tr: 'Geçerlilik Tarihi',
+            en: 'Expiry Date',
+          },
+          type: 'date',
+          admin: {
+            description: {
+              tr: 'MSDS belgesinin geçerlilik süresi sonu (Sertifika tarihinden 5 yıl sonra)',
+              en: 'End of validity period for MSDS document (5 years after certificate date)'
+            }
+          },
+          hooks: {
+            beforeChange: [
+              ({ value, data }) => {
+                if (!value && data?.certificateDate) {
+                  const certDate = new Date(data.certificateDate);
+                  certDate.setFullYear(certDate.getFullYear() + 5);
+                  return certDate.toISOString();
+                }
+                return value;
+              }
+            ]
+          }
+        },
+        {
           name: 'contentLanguage',
           label: {
             tr: 'İçerik Dili',
@@ -212,7 +249,20 @@ const MsdsV2: CollectionConfig = {
         }
       },
     ],
-    beforeChange: [aiScanning],
+    beforeChange: [
+      aiScanning,
+      async ({ req, data }) => {
+        if (!data.id) {
+          const lastDoc = await req.payload.find({
+            collection: 'msdsV2',
+            sort: '-id',
+            limit: 1,
+          })
+          data.id = (lastDoc.docs[0]?.id || 0) + 1
+        }
+        return data
+      },
+    ],
   },
 }
 
