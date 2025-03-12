@@ -149,6 +149,7 @@ const MsdsV2: CollectionConfig = {
           },
           type: 'date',
         },
+        
         {
           name: 'formNo',
           label: {
@@ -190,6 +191,32 @@ const MsdsV2: CollectionConfig = {
             en: 'Certificate Date',
           },
           type: 'date',
+        },
+        {
+          name: 'expiryDate',
+          label: {
+            tr: 'Geçerlilik Tarihi',
+            en: 'Expiry Date',
+          },
+          type: 'date',
+          admin: {
+            description: {
+              tr: 'MSDS belgesinin geçerlilik süresi sonu (Sertifika tarihinden 5 yıl sonra)',
+              en: 'End of validity period for MSDS document (5 years after certificate date)'
+            }
+          },
+          hooks: {
+            beforeChange: [
+              ({ value, data }) => {
+                if (!value && data?.certificateDate) {
+                  const certDate = new Date(data.certificateDate);
+                  certDate.setFullYear(certDate.getFullYear() + 5);
+                  return certDate.toISOString();
+                }
+                return value;
+              }
+            ]
+          }
         },
         {
           name: 'contentLanguage',

@@ -210,22 +210,6 @@ const Companies: CollectionConfig = {
               collection: 'msdsV2',
               on: 'company',
             },
-            {
-              name: 'msdsContent',
-              label: {
-                tr: 'Güvenlik Bilgi Formları',
-                en: 'Safety Data Sheets',
-              },
-              type: 'join',
-              collection: 'msdsContents',
-              on: 'company',
-              admin: {
-                description: {
-                  tr: 'Bu alan kullanımdan kaldırılacaktır. MSDS v2 kullanınız.',
-                  en: 'This field will be deprecated. Use MSDS v2 instead.',
-                },
-              },
-            },
           ],
         },
       ],
