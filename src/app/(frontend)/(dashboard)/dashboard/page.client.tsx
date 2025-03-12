@@ -26,19 +26,35 @@ export default function DashboardClient({ serverData: { companyUsers, msdsV2 } }
   const msdsSearchParam = searchParams.get('name')
 
   const msdsContent = msdsV2?.docs
-
+ 
   const data: Row[] | null = Array.isArray(msdsContent)
     ? msdsContent?.map((item) => ({
-        name: item?.name,
-        msdsCreatedAt: item?.createdAt,
-        msdsUpdatedAt: item?.updatedAt,
-        formNo: item?.formNo,
-        updatedCount: item?.updatedCount,
-        author: item?.author,
-        certificateDate: item?.certificateDate,
-        url: item?.url,
-        createdAt: item?.createdAt,
-        contentLanguage: item?.contentLanguage,
+        name: item?.name || '',
+        msdsCreatedAt: item?.createdAt || '',
+        msdsUpdatedAt: item?.updatedAt || '',
+        formNo: item?.formNo || '',
+        updatedCount: item?.updatedCount || 0,
+        author: item?.author || '',
+        certificateDate: item?.certificateDate || '',
+        url: item?.url || '',
+        createdAt: item?.createdAt || '',
+        contentLanguage: {
+          id: typeof item?.contentLanguage === 'object' 
+            ? (item?.contentLanguage?.id ?? 0) 
+            : (Number(item?.contentLanguage) || 0), 
+          code: typeof item?.contentLanguage === 'object' 
+            ? (item?.contentLanguage?.code ?? '') 
+            : '',
+          name: typeof item?.contentLanguage === 'object' 
+            ? (item?.contentLanguage?.name ?? '') 
+            : '',
+          createdAt: typeof item?.contentLanguage === 'object' 
+            ? (item?.contentLanguage?.createdAt ?? '') 
+            : '',
+          updatedAt: typeof item?.contentLanguage === 'object' 
+            ? (item?.contentLanguage?.updatedAt ?? '') 
+            : ''
+        }
       }))
     : null
 

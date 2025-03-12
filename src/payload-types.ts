@@ -436,7 +436,6 @@ export interface Company {
  * via the `definition` "msdsV2".
  */
 export interface MsdsV2 {
-  id: number;
   /**
    * If not filled, it takes the name of the uploaded file.
    */
@@ -450,6 +449,7 @@ export interface MsdsV2 {
    * Determine whether the content can currently be displayed to the customer.
    */
   isPublished?: boolean | null;
+  id: number;
   /**
    * If there are fields that are not filled, it will read them from the pdf file and fill them automatically.
    */
@@ -1580,6 +1580,7 @@ export interface MsdsV2Select<T extends boolean = true> {
   uniqueId?: T;
   company?: T;
   isPublished?: T;
+  id?: T;
   aiScanning?: T;
   msdsCreatedAt?: T;
   formNo?: T;

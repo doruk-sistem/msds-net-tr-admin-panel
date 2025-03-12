@@ -43,7 +43,7 @@ export default function HashedPassword({ path }: TextFieldClientProps) {
 
   useEffect(() => {
     setValue(isLocked ? initialData?.hashedPassword : '')
-  }, [isLocked])
+  }, [isLocked,setValue, initialData?.hashedPassword])
 
   return (
     <>

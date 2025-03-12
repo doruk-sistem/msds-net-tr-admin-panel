@@ -19,8 +19,12 @@ export const generateMsdsUniqueId: FieldHook = async ({ req, originalDoc, siblin
       depth: 0,
     })
 
+    const contentLanguageId = typeof siblingData.contentLanguage === 'object' 
+    ? siblingData.contentLanguage.id 
+    : siblingData.contentLanguage
+
     const contentLanguage = await req.payload.findByID({
-      id: siblingData.contentLanguage,
+      id: contentLanguageId,
       collection: 'contentLanguages',
       depth: 0,
     })

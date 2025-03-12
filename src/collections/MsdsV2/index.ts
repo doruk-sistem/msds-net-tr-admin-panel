@@ -115,6 +115,16 @@ const MsdsV2: CollectionConfig = {
       },
       fields: [
         {
+          name: 'id',
+          type: 'number',
+          required: true,
+          unique: true,
+          admin: {
+            readOnly: true,
+            position: 'sidebar',
+          },
+        },
+        {
           name: 'aiScanning',
           type: 'checkbox',
           defaultValue: true,
@@ -212,7 +222,20 @@ const MsdsV2: CollectionConfig = {
         }
       },
     ],
-    beforeChange: [aiScanning],
+    beforeChange: [
+      aiScanning,
+      async ({ req, data }) => {
+        if (!data.id) {
+          const lastDoc = await req.payload.find({
+            collection: 'msdsV2',
+            sort: '-id',
+            limit: 1,
+          })
+          data.id = (lastDoc.docs[0]?.id || 0) + 1
+        }
+        return data
+      },
+    ],
   },
 }
 
