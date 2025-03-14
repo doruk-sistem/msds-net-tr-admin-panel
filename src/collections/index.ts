@@ -5,6 +5,8 @@ import CompanyUsers from './CompanyUsers'
 import Companies from './Companies'
 import ContentLanguages from './ContentLanguages'
 import MsdsV2 from './MsdsV2'
+import MsdsRequests from './MsdsRequests'
+import FileMedia from '../components/Media/FileMedia'  // default import kullanıyoruz
 
 const collections: CollectionConfig[] = [
   AdminUsers,
@@ -12,6 +14,8 @@ const collections: CollectionConfig[] = [
   Companies,
   ContentLanguages,
   MsdsV2,
+  MsdsRequests,
+  FileMedia,
 ]
 
 export default collections

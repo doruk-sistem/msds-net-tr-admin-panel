@@ -17,6 +17,8 @@ export interface Config {
     companies: Company;
     contentLanguages: ContentLanguage;
     msdsV2: MsdsV2;
+    msdsRequests: MsdsRequest;
+    fileMedia: FileMedia;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -33,6 +35,8 @@ export interface Config {
     companies: CompaniesSelect<false> | CompaniesSelect<true>;
     contentLanguages: ContentLanguagesSelect<false> | ContentLanguagesSelect<true>;
     msdsV2: MsdsV2Select<false> | MsdsV2Select<true>;
+    msdsRequests: MsdsRequestsSelect<false> | MsdsRequestsSelect<true>;
+    fileMedia: FileMediaSelect<false> | FileMediaSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -477,6 +481,54 @@ export interface ContentLanguage {
   createdAt: string;
 }
 /**
+ * Used to manage MSDS requests.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "msdsRequests".
+ */
+export interface MsdsRequest {
+  id: number;
+  productName: string;
+  company: number | Company;
+  status: 'pending' | 'inProgress' | 'completed';
+  /**
+   * Upload SDS file (PDF, DOC, DOCX)
+   */
+  sdsFile?: (number | null) | FileMedia;
+  requestedBy: number | CompanyUser;
+  responses?:
+    | {
+        message: string;
+        respondedBy: number | AdminUser;
+        respondedAt?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  description?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+/**
+ * SDS File Storage
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "fileMedia".
+ */
+export interface FileMedia {
+  id: number;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename: string;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
@@ -502,6 +554,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'msdsV2';
         value: number | MsdsV2;
+      } | null)
+    | ({
+        relationTo: 'msdsRequests';
+        value: number | MsdsRequest;
+      } | null)
+    | ({
+        relationTo: 'fileMedia';
+        value: number | FileMedia;
       } | null);
   globalSlug?: string | null;
   user:
@@ -642,6 +702,45 @@ export interface MsdsV2Select<T extends boolean = true> {
   certificateDate?: T;
   expiryDate?: T;
   contentLanguage?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "msdsRequests_select".
+ */
+export interface MsdsRequestsSelect<T extends boolean = true> {
+  productName?: T;
+  company?: T;
+  status?: T;
+  sdsFile?: T;
+  requestedBy?: T;
+  responses?:
+    | T
+    | {
+        message?: T;
+        respondedBy?: T;
+        respondedAt?: T;
+        id?: T;
+      };
+  description?: T;
+  createdAt?: T;
+  updatedAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "fileMedia_select".
+ */
+export interface FileMediaSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   url?: T;

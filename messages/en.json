@@ -9,7 +9,9 @@
     },
     "dashboardNav": {
       "dashboard": "Dashboard",
-      "settings": "Settings"
+      "settings": "Settings",
+      "msds": "MSDS Request",
+      "msdsList": "MSDS Requests"
     },
     "complate": "Complate",
     "confirmPassword": "Confirm Password",

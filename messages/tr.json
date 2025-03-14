@@ -9,7 +9,9 @@
     },
     "dashboardNav": {
       "dashboard": "Kontrol Paneli",
-      "settings": "Ayarlar"
+      "settings": "Ayarlar",
+      "msds": "MSDS Talebi",
+      "msdsList": "MSDS Taleplerim"
     },
     "complate": "Tamamla",
     "confirmPassword": "Parola Tekrarı",
