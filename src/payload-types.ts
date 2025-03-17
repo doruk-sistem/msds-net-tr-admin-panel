@@ -491,9 +491,6 @@ export interface MsdsRequest {
   productName: string;
   company: number | Company;
   status: 'pending' | 'inProgress' | 'completed';
-  /**
-   * Upload SDS file (PDF, DOC, DOCX)
-   */
   sdsFile?: (number | null) | FileMedia;
   requestedBy: number | CompanyUser;
   responses?:
@@ -509,18 +506,20 @@ export interface MsdsRequest {
   updatedAt: string;
 }
 /**
- * SDS File Storage
+ * Upload and manage SDS files
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "fileMedia".
  */
 export interface FileMedia {
   id: number;
+  alt?: string | null;
+  caption?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
   thumbnailURL?: string | null;
-  filename: string;
+  filename?: string | null;
   mimeType?: string | null;
   filesize?: number | null;
   width?: number | null;
@@ -741,6 +740,8 @@ export interface MsdsRequestsSelect<T extends boolean = true> {
  * via the `definition` "fileMedia_select".
  */
 export interface FileMediaSelect<T extends boolean = true> {
+  alt?: T;
+  caption?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;

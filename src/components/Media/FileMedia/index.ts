@@ -12,13 +12,15 @@ const FileMedia: CollectionConfig = {
     }
   },
   upload: {
-    staticDir: path.resolve(__dirname, '../../../../public/files'),
+    staticDir: path.resolve(process.cwd(), 'public/uploads/files'),
     adminThumbnail: 'thumbnail',
     mimeTypes: [
       'application/pdf',
       'application/msword',
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     ],
+    filesRequiredOnCreate: true,
+    disableLocalStorage: false,
   },
   fields: [
     {
@@ -39,10 +41,10 @@ const FileMedia: CollectionConfig = {
     }
   ],
   access: {
-    read: () => true,    // Herkes okuyabilir
-    create: () => true,  // Herkes yükleyebilir
-    update: () => true,  // Herkes güncelleyebilir
-    delete: () => true,  // Herkes silebilir
+    read: () => true,
+    create: () => true,
+    update: () => true,
+    delete: () => true,
   }
 }
 

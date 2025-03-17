@@ -252,15 +252,64 @@ export const MsdsRequestsList = () => {
           </TableCell>
           <TableCell className="max-w-xs truncate">{request.description}</TableCell>
           <TableCell className="text-right">
-  {request.sdsFile && request.sdsFile.url ? (
+  {request.sdsFile ? (
     <Button
       variant="outline"
       size="sm"
-      onClick={() => {
-        if (request.sdsFile?.url) {
-          window.open(request.sdsFile.url, '_blank');
-        } else {
-          console.error('Dosya URLsi bulunamadı');
+      onClick={async () => {
+        try {
+          // Önce dosya bilgilerini kontrol edelim
+          console.log('Tam dosya bilgileri:', {
+            file: request.sdsFile,
+            url: request.sdsFile?.url,
+            filename: request.sdsFile?.filename
+          });
+
+          if (!request.sdsFile?.filename) {
+            toast.error('Dosya adı bulunamadı');
+            return;
+          }
+
+          // Payload'un verdiği URL'yi kullan
+          const fileUrl = request.sdsFile.url;
+          
+          if (!fileUrl) {
+            toast.error('Dosya URL\'si bulunamadı');
+            return;
+          }
+
+          console.log('İndirme deneniyor:', fileUrl);
+
+          const response = await fetch(fileUrl, {
+            method: 'GET',
+            credentials: 'include'
+          });
+
+          if (!response.ok) {
+            console.error('İndirme başarısız:', {
+              status: response.status,
+              statusText: response.statusText,
+              url: fileUrl,
+              headers: Object.fromEntries(response.headers.entries())
+            });
+            throw new Error(`İndirme başarısız: ${response.status}`);
+          }
+
+          const blob = await response.blob();
+          const downloadUrl = window.URL.createObjectURL(blob);
+          
+          const a = document.createElement('a');
+          a.href = downloadUrl;
+          a.download = request.sdsFile.filename;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          
+          window.URL.revokeObjectURL(downloadUrl);
+          toast.success('Dosya indiriliyor...');
+        } catch (error) {
+          console.error('İndirme hatası:', error);
+          toast.error('Dosya indirilemedi');
         }
       }}
     >
