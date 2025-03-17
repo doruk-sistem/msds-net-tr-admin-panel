@@ -35,13 +35,7 @@ export const sendNotifications = async ({ req, doc, operation }: {
   operation: 'create' | 'update'
 }) => {
   try {
-    console.log('Starting notification process...')
-    console.log('Operation:', operation)
-
-    // Sadece yeni talep oluşturulduğunda mail gönder
     if (operation === 'create') {
-      console.log('New MSDS request created, notifying admins...')
-
       // Admin kullanıcıları al
       const admins = await req.payload.find({
         collection: 'adminUsers',
@@ -68,8 +62,6 @@ export const sendNotifications = async ({ req, doc, operation }: {
 
       // Her admin için mail gönder
       for (const admin of admins.docs as AdminUser[]) {
-        console.log('Preparing email for admin:', admin.email)
-
         const emailText = `
           Dear Admin,
 
@@ -95,11 +87,8 @@ export const sendNotifications = async ({ req, doc, operation }: {
           text: emailText
         }
 
-        console.log('Sending email to admin:', admin.email)
-
         try {
           await sendEmail(emailConfig)
-          console.log('Email sent successfully to:', admin.email)
         } catch (error) {
           console.error('Error sending email:', error)
         }

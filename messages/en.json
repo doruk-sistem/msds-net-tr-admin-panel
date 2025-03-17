@@ -114,6 +114,11 @@
         "description": "You can print this QR code",
         "print": "Print / Save as PDF"
       }
+    },
+    "msdsRequestButton": {
+      "title": "MSDS Request",
+      "dialogTitle": "MSDS Request",
+      "newRequest": "New Request"
     }
   },
   "settingsPage": {

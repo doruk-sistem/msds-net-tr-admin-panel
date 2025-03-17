@@ -114,6 +114,11 @@
         "description": "Bu QR kodunu yazdırabilirsiniz.",
         "print": "Yazdır / PDF Olarak Kaydet"
       }
+    },
+    "msdsRequestButton": {
+      "title": "MSDS Talebi Oluştur",
+      "dialogTitle": "MSDS Talebi Oluştur",
+      "newRequest": "Yeni Talep"
     }
   },
   "settingsPage": {
