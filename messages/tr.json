@@ -9,7 +9,9 @@
     },
     "dashboardNav": {
       "dashboard": "Kontrol Paneli",
-      "settings": "Ayarlar"
+      "settings": "Ayarlar",
+      "msds": "MSDS Talebi",
+      "msdsList": "MSDS Taleplerim"
     },
     "complate": "Tamamla",
     "confirmPassword": "Parola Tekrarı",
@@ -112,6 +114,34 @@
         "description": "Bu QR kodunu yazdırabilirsiniz.",
         "print": "Yazdır / PDF Olarak Kaydet"
       }
+    },
+    "msdsRequestButton": {
+      "title": "MSDS Talebi Oluştur",
+      "dialogTitle": "MSDS Talebi Oluştur",
+      "newRequest": "Yeni Talep"
+    },
+    "msdsRequestForm": {
+      "title": "Yeni MSDS Talebi",
+      "description": "Ürün güvenlik bilgi formu talebinizi oluşturun.",
+      "productName": {
+        "title": "Ürün Adı",
+        "placeholder": "Örn: Kozmetik Ürünü",
+        "error": "Ürün adı en az 3 karakter uzunluğunda olmalıdır."
+      },
+      "formDescription": {
+        "title": "Açıklama",
+        "placeholder": "MSDS talebi hakkında detaylı bilgi verin",
+        "error": "Açıklama en az 10 karakter uzunluğunda olmalıdır."
+      },
+      "formFile": {
+        "title": "SDS Dosyası",
+        "description": "Ürün güvenlik bilgi formunu PDF veya Word formatında yükleyebilirsiniz.",
+        "error": "Lütfen bir dosya seçiniz.",
+        "selectedFile": "Seçilen dosya:"
+      },
+      "footer": "Talebiniz oluşturulduktan sonra durumunu izleyebilirsiniz.",
+      "requestButton": "Talep Oluştur",
+      "requestButtonLoading": "Talep Oluşturuluyor..."
     }
   },
   "settingsPage": {
