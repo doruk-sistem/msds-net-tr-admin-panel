@@ -22,12 +22,13 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import { useTranslations } from 'next-intl'
 // Özel dosya yükleyici import'unu kaldırdık
 
 // Form şema doğrulaması
 const formSchema = z.object({
-  productName: z.string().min(3, 'Ürün adı en az 3 karakter olmalıdır'),
-  description: z.string().min(10, 'Açıklama en az 10 karakter olmalıdır'),
+  productName: z.string().min(3, 'Product name must be at least 3 characters long'),
+  description: z.string().min(10, 'Description must be at least 10 characters long'),
 })
 
 type MsdsRequestFormProps = {
@@ -38,6 +39,7 @@ export const MsdsRequestForm = ({ onSuccess }: MsdsRequestFormProps) => {
   const { user } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const t = useTranslations()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -53,80 +55,80 @@ export const MsdsRequestForm = ({ onSuccess }: MsdsRequestFormProps) => {
     setSelectedFile(file)
   }
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (!user) {
-      toast.error('Oturum bulunamadı')
-      return
-    }
-
+  // Dosya yükleme işlemi
+  const uploadFile = async (file: File): Promise<string | null> => {
     try {
-      setIsLoading(true)
-      let fileId = null
+      toast.info('File is being uploaded...')
 
-      // Dosya yükleme kısmı
-      if (selectedFile) {
-        try {
-          toast.info('Dosya yükleniyor...')
+      const formData = new FormData()
+      formData.append('file', file)
 
-          const formData = new FormData()
-          formData.append('file', selectedFile)
+      console.log('File details:', {
+        name: file.name,
+        type: file.type,
+        size: file.size,
+      })
 
-          console.log('Dosya bilgileri:', {
-            name: selectedFile.name,
-            type: selectedFile.type,
-            size: selectedFile.size,
-          })
+      // API isteği - dosya yükleme
+      const uploadResponse = await fetch('/api/fileMedia', {
+        method: 'POST',
+        credentials: 'include',
+        body: formData,
+      })
 
-          // API isteği - dosya yükleme
-          const uploadResponse = await fetch('/api/fileMedia', {
-            method: 'POST',
-            credentials: 'include',
-            body: formData,
-          })
+      console.log('Upload response status:', uploadResponse.status)
 
-          console.log('Yükleme yanıt durumu:', uploadResponse.status)
+      const responseText = await uploadResponse.text()
+      console.log('Upload raw response:', responseText)
 
-          const responseText = await uploadResponse.text()
-          console.log('Yükleme ham yanıtı:', responseText)
-
-          if (!uploadResponse.ok) {
-            throw new Error(`Dosya yüklenemedi: ${uploadResponse.status} ${responseText}`)
-          }
-
-          // Yanıt boş değilse ve geçerli JSON ise işle
-          if (responseText && responseText.trim()) {
-            try {
-              const uploadResult = JSON.parse(responseText)
-              console.log('Yükleme sonucu:', uploadResult)
-
-              // ID'yi bulmaya çalış
-              if (uploadResult && uploadResult.id) {
-                fileId = uploadResult.id
-                console.log("Dosya ID'si alındı:", fileId)
-              } else if (uploadResult.doc && uploadResult.doc.id) {
-                fileId = uploadResult.doc.id
-                console.log("Dosya ID'si doc.id'den alındı:", fileId)
-              } else {
-                console.error("Geçerli dosya ID'si bulunamadı:", uploadResult)
-              }
-            } catch (jsonError) {
-              console.error('API yanıtı geçerli JSON değil:', jsonError)
-            }
-          }
-        } catch (uploadError) {
-          console.error('Dosya yükleme hatası:', uploadError)
-          toast.error('Dosya yüklenirken bir hata oluştu. Talebiniz dosyasız oluşturulacak.')
-          // Hata olsa bile işlemi devam ettir, dosyasız gönder
-        }
+      if (!uploadResponse.ok) {
+        throw new Error(`File is not uploaded: ${uploadResponse.status} ${responseText}`)
       }
 
-      // MSDS talebi oluşturma
+      // Response is not empty and valid JSON
+      if (responseText && responseText.trim()) {
+        try {
+          const uploadResult = JSON.parse(responseText)
+          console.log('Upload result:', uploadResult)
+
+          // ID'yi bulmaya çalış
+          if (uploadResult && uploadResult.id) {
+            console.log('File ID is found:', uploadResult.id)
+            return uploadResult.id
+          } else if (uploadResult.doc && uploadResult.doc.id) {
+            console.log('File ID is found from doc.id:', uploadResult.doc.id)
+            return uploadResult.doc.id
+          } else {
+            console.error('Valid file ID not found:', uploadResult)
+            return null
+          }
+        } catch (jsonError) {
+          console.error('API response is not valid JSON:', jsonError)
+          return null
+        }
+      }
+      return null
+    } catch (error) {
+      console.error('File upload error:', error)
+      toast.error('File upload failed. Your request will be created without a file.')
+      return null
+    }
+  }
+
+  // MSDS talebi oluşturma
+  const createMsdsRequest = async (
+    values: z.infer<typeof formSchema>,
+    fileId: string | null,
+    userData: any,
+  ): Promise<boolean> => {
+    try {
+      // MSDS request creation
       const requestData: Record<string, any> = {
         productName: values.productName,
         description: values.description,
         status: 'pending',
-        company: user.company,
-        requestedBy: user.id,
+        company: userData.company,
+        requestedBy: userData.id,
       }
 
       // Dosya ID'si varsa ekle
@@ -134,7 +136,7 @@ export const MsdsRequestForm = ({ onSuccess }: MsdsRequestFormProps) => {
         requestData.sdsFile = fileId
       }
 
-      console.log('MSDS talebi gönderiliyor:', requestData)
+      console.log('MSDS request is sending:', requestData)
 
       // Talep oluştur
       const msdsResponse = await fetch('/api/msdsRequests', {
@@ -145,27 +147,56 @@ export const MsdsRequestForm = ({ onSuccess }: MsdsRequestFormProps) => {
       })
 
       const msdsResponseText = await msdsResponse.text()
-      console.log('MSDS talebi yanıtı:', msdsResponseText)
+      console.log('MSDS request response:', msdsResponseText)
 
       if (!msdsResponse.ok) {
-        throw new Error(`Talep oluşturulamadı: ${msdsResponse.status} ${msdsResponseText}`)
+        throw new Error(`Request could not be created: ${msdsResponse.status} ${msdsResponseText}`)
       }
 
-      // Başarılı
-      toast.success('MSDS talebi başarıyla oluşturuldu')
-
-      if (fileId) {
-        toast.success('Dosya başarıyla yüklendi')
-      } else if (selectedFile) {
-        toast.warning('Dosya yüklenemedi, talep dosyasız oluşturuldu')
-      }
-
-      onSuccess?.()
-      form.reset()
-      setSelectedFile(null)
+      return true
     } catch (error) {
-      console.error('Talep oluşturma hatası:', error)
-      toast.error(`Talep oluşturulurken bir hata oluştu: ${error.message || error}`)
+      console.error('MSDS request creation error:', error)
+      throw error
+    }
+  }
+
+  // Form gönderimi ana fonksiyonu
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (!user) {
+      toast.error('Oturum bulunamadı')
+      return
+    }
+
+    try {
+      setIsLoading(true)
+
+      // 1. Dosya yükleme (varsa)
+      let fileId: string | null = null
+      if (selectedFile) {
+        fileId = await uploadFile(selectedFile)
+      }
+
+      // 2. MSDS talebi oluşturma
+      const success = await createMsdsRequest(values, fileId, user)
+
+      // 3. Sonuç bildirimi
+      if (success) {
+        toast.success('MSDS request has been created successfully')
+
+        if (fileId) {
+          toast.success('File has been uploaded successfully')
+        } else if (selectedFile) {
+          toast.warning('File could not be uploaded, request created without a file')
+        }
+
+        // 4. Form sıfırlama
+        onSuccess?.()
+        form.reset()
+        setSelectedFile(null)
+      }
+    } catch (error) {
+      console.error('Request creation error:', error)
+      toast.error(`Request creation failed: ${error.message || error}`)
     } finally {
       setIsLoading(false)
     }
@@ -174,8 +205,8 @@ export const MsdsRequestForm = ({ onSuccess }: MsdsRequestFormProps) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Yeni MSDS Talebi</CardTitle>
-        <CardDescription>Ürün güvenlik bilgi formu talebinizi oluşturun.</CardDescription>
+        <CardTitle>{t('dashboardPage.msdsRequestForm.title')}</CardTitle>
+        <CardDescription>{t('dashboardPage.msdsRequestForm.description')}</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -185,9 +216,12 @@ export const MsdsRequestForm = ({ onSuccess }: MsdsRequestFormProps) => {
               name="productName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Ürün Adı</FormLabel>
+                  <FormLabel>{t('dashboardPage.msdsRequestForm.productName.title')}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Örn: Kozmetik Ürünü" {...field} />
+                    <Input
+                      placeholder={t('dashboardPage.msdsRequestForm.productName.placeholder')}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -198,10 +232,10 @@ export const MsdsRequestForm = ({ onSuccess }: MsdsRequestFormProps) => {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Açıklama</FormLabel>
+                  <FormLabel>{t('dashboardPage.msdsRequestForm.formDescription.title')}</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="MSDS talebi hakkında detaylı bilgi verin"
+                      placeholder={t('dashboardPage.msdsRequestForm.formDescription.placeholder')}
                       className="resize-none"
                       {...field}
                     />
@@ -211,17 +245,18 @@ export const MsdsRequestForm = ({ onSuccess }: MsdsRequestFormProps) => {
               )}
             />
             <FormItem>
-              <FormLabel>SDS Dosyası (İsteğe Bağlı)</FormLabel>
+              <FormLabel>{t('dashboardPage.msdsRequestForm.formFile.title')}</FormLabel>
               <FormControl>
                 <Input type="file" onChange={handleFileChange} accept=".pdf,.doc,.docx" />
               </FormControl>
               <FormDescription>
-                Ürün güvenlik bilgi formunu PDF veya Word formatında yükleyebilirsiniz.
+                {t('dashboardPage.msdsRequestForm.formFile.description')}
               </FormDescription>
-              {/* Dosya bilgisini FormDescription dışında gösterelim */}
               {selectedFile && (
                 <div className="mt-2 text-sm">
-                  <span className="font-medium">Seçilen dosya: </span>
+                  <span className="font-medium">
+                    {t('dashboardPage.msdsRequestForm.formFile.selectedFile')}:{' '}
+                  </span>
                   <span>{selectedFile.name} </span>
                   <span className="text-xs text-gray-500">
                     ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
@@ -230,13 +265,15 @@ export const MsdsRequestForm = ({ onSuccess }: MsdsRequestFormProps) => {
               )}
             </FormItem>
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? 'Talep Oluşturuluyor...' : 'Talep Oluştur'}
+              {isLoading
+                ? t('dashboardPage.msdsRequestForm.requestButtonLoading')
+                : t('dashboardPage.msdsRequestForm.requestButton')}
             </Button>
           </form>
         </Form>
       </CardContent>
       <CardFooter className="text-sm text-muted-foreground">
-        Talebiniz oluşturulduktan sonra durumunu izleyebilirsiniz.
+        {t('dashboardPage.msdsRequestForm.footer')}
       </CardFooter>
     </Card>
   )

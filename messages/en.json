@@ -119,6 +119,29 @@
       "title": "MSDS Request",
       "dialogTitle": "MSDS Request",
       "newRequest": "New Request"
+    },
+    "msdsRequestForm": {
+      "title": "New MSDS Request",
+      "description": "Create a new MSDS request.",
+      "productName": {
+        "title": "Product Name",
+        "placeholder": "Örn: Kozmetik Ürünü",
+        "error": "Product name must be at least 3 characters long."
+      },
+      "formDescription": {
+        "title": "Description",
+        "placeholder": "MSDS talebi hakkında detaylı bilgi verin",
+        "error": "Description must be at least 10 characters long."
+      },
+      "formFile": {
+        "title": "SDS File",
+        "description": "Upload the product safety information form in PDF or Word format.",
+        "error": "Please select a file.",
+        "selectedFile": "Selected file:"
+      },
+      "footer": "You can track the status of your request after it is created.",
+      "requestButton": "Create Request",
+      "requestButtonLoading": "Creating Request..."
     }
   },
   "settingsPage": {
