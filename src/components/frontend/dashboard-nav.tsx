@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { FileText, LayoutDashboard, Settings } from 'lucide-react'
 import { cn } from '@/utilities/cn'
 import { useTranslations } from 'next-intl'
-import { MsdsRequestButton } from '../msds-request'
+import { MsdsRequestButton } from '../MsdsRequest'
 import { FC } from 'react'
 
 
@@ -27,7 +27,7 @@ const items: DashboardNavItem[] = [
   //   icon: FileText,
   // },
   {
-    title: 'dashboardNav.msdsList', 
+    title: 'dashboardNav.msdsList',
     href: '/dashboard/msds-requests',
     icon: FileText,
   },
@@ -44,7 +44,7 @@ export function DashboardNav({ className, ...props }: React.HTMLAttributes<HTMLD
   return (
     <nav className={cn('space-y-2 p-4', className)} {...props}>
       {items.map((item) => {
-        
+
         if ('component' in item && item.component) {
           const Component = item.component
           return (
@@ -59,7 +59,7 @@ export function DashboardNav({ className, ...props }: React.HTMLAttributes<HTMLD
           return (
             <Link
               key={item.href}
-              href={item.href}  
+              href={item.href}
               className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-accent hover:text-accent-foreground"
             >
               {item.icon && <item.icon className="h-4 w-4" />}
@@ -67,8 +67,8 @@ export function DashboardNav({ className, ...props }: React.HTMLAttributes<HTMLD
             </Link>
           )
         }
-  
-        return null 
+
+        return null
       })}
     </nav>
   )

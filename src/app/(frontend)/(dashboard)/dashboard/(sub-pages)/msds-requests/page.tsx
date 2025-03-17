@@ -1,5 +1,5 @@
-import { MsdsRequestsList } from '@/components/msds-request/MsdsRequestsList'
-import { MsdsRequestButton } from '@/components/msds-request/MsdsRequestButton'
+import { MsdsRequestsList } from '@/components/MsdsRequest/MsdsRequestsList'
+import { MsdsRequestButton } from '@/components/MsdsRequest/MsdsRequestButton'
 
 export default function MsdsRequestsPage() {
   return (
