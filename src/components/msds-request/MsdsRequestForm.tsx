@@ -116,7 +116,7 @@ export const MsdsRequestForm = ({ onSuccess }: MsdsRequestFormProps) => {
         } catch (uploadError) {
           console.error('Dosya yükleme hatası:', uploadError)
           toast.error('Dosya yüklenirken bir hata oluştu. Talebiniz dosyasız oluşturulacak.')
-          // Hata olsa bile işlemi devam ettir, dosyasız gönder
+          // Hata olsa bile işlemi devam ettir, dosyasız gönderr
         }
       }
 
