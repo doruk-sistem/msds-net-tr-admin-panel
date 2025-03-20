@@ -23,6 +23,8 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { useTranslations } from 'next-intl'
+import payload from 'payload'
+
 // Özel dosya yükleyici import'unu kaldırdık
 
 // Form şema doğrulaması
@@ -52,6 +54,7 @@ export const MsdsRequestForm = ({ onSuccess }: MsdsRequestFormProps) => {
   // Dosya seçim işleyicisi
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null
+
     setSelectedFile(file)
   }
 
@@ -123,35 +126,44 @@ export const MsdsRequestForm = ({ onSuccess }: MsdsRequestFormProps) => {
   ): Promise<boolean> => {
     try {
       // MSDS request creation
-      const requestData: Record<string, any> = {
-        productName: values.productName,
-        description: values.description,
-        status: 'pending',
-        company: userData.company,
-        requestedBy: userData.id,
-      }
+      const msdsRequest = await payload.create({
+        collection: 'msdsRequests',
+        data: {
+          productName: values.productName,
+          description: values.description,
+          status: 'pending',
+          company: userData.company,
+          requestedBy: userData.id,
+        },
+        file: {
+          data: selectedFile,
+          mimetype: selectedFile?.type || '',
+          name: selectedFile?.name || '',
+          size: selectedFile?.size || 0,
+        },
+      })
 
       // Dosya ID'si varsa ekle
-      if (fileId) {
-        requestData.sdsFile = fileId
-      }
+      // if (fileId) {
+      //   requestData.sdsFile = fileId
+      // }
 
       console.log('MSDS request is sending:', requestData)
 
       // Talep oluştur
-      const msdsResponse = await fetch('/api/msdsRequests', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(requestData),
-      })
+      // const msdsResponse = await fetch('/api/msdsRequests', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   credentials: 'include',
+      //   body: JSON.stringify(requestData),
+      // })
 
-      const msdsResponseText = await msdsResponse.text()
-      console.log('MSDS request response:', msdsResponseText)
+      // const msdsResponseText = await msdsResponse.text()
+      // console.log('MSDS request response:', msdsResponseText)
 
-      if (!msdsResponse.ok) {
-        throw new Error(`Request could not be created: ${msdsResponse.status} ${msdsResponseText}`)
-      }
+      // if (!msdsResponse.ok) {
+      //   throw new Error(`Request could not be created: ${msdsResponse.status} ${msdsResponseText}`)
+      // }
 
       return true
     } catch (error) {
@@ -172,9 +184,9 @@ export const MsdsRequestForm = ({ onSuccess }: MsdsRequestFormProps) => {
 
       // 1. Dosya yükleme (varsa)
       let fileId: string | null = null
-      if (selectedFile) {
-        fileId = await uploadFile(selectedFile)
-      }
+      // if (selectedFile) {
+      //   fileId = await uploadFile(selectedFile)
+      // }
 
       // 2. MSDS talebi oluşturma
       const success = await createMsdsRequest(values, fileId, user)
