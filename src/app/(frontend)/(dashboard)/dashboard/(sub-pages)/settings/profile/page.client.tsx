@@ -20,8 +20,6 @@ import {
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
-import LocaleSwitcher from '@/components/frontend/locale-switcher'
-
 import useAuth from '@/hooks/use-auth'
 import { useToast } from '@/hooks/use-toast'
 
@@ -125,25 +123,6 @@ export default function ProfileSettingsPageClient({ serverData: { user } }: Prop
                 {t('profileInformationSection.email')}
               </label>
               <p className="font-semibold">{user?.email || 'No data'}</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card className="border-none shadow-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">{t('preferencesSection.title')}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-8">
-          <div className="space-y-4">
-            <div>
-              <h3 className="font-medium mb-1">{t('preferencesSection.language')}</h3>
-              <p className="text-sm text-muted-foreground">
-                {t('preferencesSection.languageDescription')}
-              </p>
-            </div>
-            <div className="flex gap-2 items-center">
-              <LocaleSwitcher />
             </div>
           </div>
         </CardContent>

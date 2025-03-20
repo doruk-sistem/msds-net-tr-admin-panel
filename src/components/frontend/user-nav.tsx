@@ -23,6 +23,7 @@ import Loader from '../ui/loader'
 import DynamicLogo from './dynamic-logo'
 import { ThemeToggle } from './theme-toggle'
 import authService from '@/services/auth.service'
+import LocaleSwitcher from './locale-switcher'
 
 export function UserNav() {
   const mounted = useMounted()
@@ -54,7 +55,10 @@ export function UserNav() {
               {t('userNav.welcome', { name: user?.fullname })}
             </p>
             <div className="h-4 w-[1px] bg-border hidden md:block" />
-            <ThemeToggle />
+            <div className="flex items-center gap-2">
+              <LocaleSwitcher />
+              <ThemeToggle />
+            </div>
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
