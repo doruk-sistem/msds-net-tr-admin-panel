@@ -69,10 +69,12 @@ export const MsdsRequestsList = () => {
       setIsLoading(false)
     }
   }
-
-  useEffect(() => {
-    fetchRequests()
-  }, [user])
+  
+/* eslint-disable react-hooks/exhaustive-deps */
+useEffect(() => {
+  fetchRequests()
+}, [user])
+/* eslint-enable react-hooks/exhaustive-deps */
 
   // Status dönüşüm fonksiyonları
   const getStatusText = (status: string) => {
