@@ -21,6 +21,7 @@ import useMounted from '@/hooks/use-mounted'
 
 import Loader from '../ui/loader'
 import DynamicLogo from './dynamic-logo'
+import { ThemeToggle } from './theme-toggle'
 import authService from '@/services/auth.service'
 
 export function UserNav() {
@@ -33,7 +34,7 @@ export function UserNav() {
     try {
       await authService.logout()
       router.push('/login')
-    } catch {}
+    } catch { }
   }
 
   if (!mounted)
@@ -47,10 +48,14 @@ export function UserNav() {
     <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-16 items-center px-4 md:px-6">
         <DynamicLogo />
-        <div className="ml-auto flex items-center gap-4">
-          <p className="text-sm font-medium hidden md:block">
-            {t('userNav.welcome', { name: user?.fullname })}
-          </p>
+        <div className="ml-auto flex items-center gap-6">
+          <div className="flex items-center gap-3">
+            <p className="text-sm font-medium hidden md:block">
+              {t('userNav.welcome', { name: user?.fullname })}
+            </p>
+            <div className="h-4 w-[1px] bg-border hidden md:block" />
+            <ThemeToggle />
+          </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -65,7 +70,7 @@ export function UserNav() {
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-64 mt-2" align="end" forceMount sideOffset={8}>
+            <DropdownMenuContent>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1.5 p-1">
                   <p className="text-sm font-semibold leading-none">{user?.fullname}</p>

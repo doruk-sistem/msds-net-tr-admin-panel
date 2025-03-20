@@ -6,7 +6,6 @@ import { Mail } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
-import dynamic from 'next/dynamic'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -20,7 +19,6 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import Loader from '@/components/ui/loader'
 
 import LocaleSwitcher from '@/components/frontend/locale-switcher'
 
@@ -29,11 +27,6 @@ import { useToast } from '@/hooks/use-toast'
 
 import getMe from '@/utilities/getMe'
 import authService from '@/services/auth.service'
-
-const ThemeToggleSection = dynamic(() => import('@/components/frontend/theme-toggle-section'), {
-  ssr: false,
-  loading: () => <Loader className="text-primary w-10 h-10" />,
-})
 
 const formSchema = z.object({
   fullname: z.string().min(2).max(30),
@@ -142,29 +135,15 @@ export default function ProfileSettingsPageClient({ serverData: { user } }: Prop
           <CardTitle className="text-2xl font-bold">{t('preferencesSection.title')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-8">
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="space-y-4">
-              <div>
-                <h3 className="font-medium mb-1">{t('preferencesSection.theme')}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {t('preferencesSection.themeDescription')}
-                </p>
-              </div>
-              <div className="flex gap-2 items-center">
-                <ThemeToggleSection />
-              </div>
+          <div className="space-y-4">
+            <div>
+              <h3 className="font-medium mb-1">{t('preferencesSection.language')}</h3>
+              <p className="text-sm text-muted-foreground">
+                {t('preferencesSection.languageDescription')}
+              </p>
             </div>
-
-            <div className="space-y-4">
-              <div>
-                <h3 className="font-medium mb-1">{t('preferencesSection.language')}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {t('preferencesSection.languageDescription')}
-                </p>
-              </div>
-              <div className="flex gap-2 items-center">
-                <LocaleSwitcher />
-              </div>
+            <div className="flex gap-2 items-center">
+              <LocaleSwitcher />
             </div>
           </div>
         </CardContent>
