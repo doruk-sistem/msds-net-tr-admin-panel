@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
   }
 })
 
-export const sendEmail = async ({ to, subject, text }) => {
+export const sendEmail = async ({ to, subject, text, html }) => {
   try {
     console.log('Email gönderiliyor...', { to, subject })
 
@@ -19,7 +19,8 @@ export const sendEmail = async ({ to, subject, text }) => {
       from: process.env.SMTP_FROM,
       to,
       subject,
-      text
+      text,
+      html
     })
 
     console.log('Email başarıyla gönderildi:', info.response)

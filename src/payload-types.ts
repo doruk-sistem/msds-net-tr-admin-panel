@@ -17,6 +17,7 @@ export interface Config {
     companies: Company;
     contentLanguages: ContentLanguage;
     msdsV2: MsdsV2;
+    msdsRequestsV2: MsdsRequestsV2;
     msdsRequests: MsdsRequest;
     fileMedia: FileMedia;
     'payload-locked-documents': PayloadLockedDocument;
@@ -35,6 +36,7 @@ export interface Config {
     companies: CompaniesSelect<false> | CompaniesSelect<true>;
     contentLanguages: ContentLanguagesSelect<false> | ContentLanguagesSelect<true>;
     msdsV2: MsdsV2Select<false> | MsdsV2Select<true>;
+    msdsRequestsV2: MsdsRequestsV2Select<false> | MsdsRequestsV2Select<true>;
     msdsRequests: MsdsRequestsSelect<false> | MsdsRequestsSelect<true>;
     fileMedia: FileMediaSelect<false> | FileMediaSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -484,6 +486,31 @@ export interface ContentLanguage {
  * Used to manage MSDS requests.
  *
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "msdsRequestsV2".
+ */
+export interface MsdsRequestsV2 {
+  id: number;
+  productName: string;
+  company: number | Company;
+  status: 'pending' | 'inProgress' | 'completed';
+  requestedBy: number | CompanyUser;
+  description?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * Used to manage MSDS requests.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "msdsRequests".
  */
 export interface MsdsRequest {
@@ -553,6 +580,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'msdsV2';
         value: number | MsdsV2;
+      } | null)
+    | ({
+        relationTo: 'msdsRequestsV2';
+        value: number | MsdsRequestsV2;
       } | null)
     | ({
         relationTo: 'msdsRequests';
@@ -701,6 +732,28 @@ export interface MsdsV2Select<T extends boolean = true> {
   certificateDate?: T;
   expiryDate?: T;
   contentLanguage?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "msdsRequestsV2_select".
+ */
+export interface MsdsRequestsV2Select<T extends boolean = true> {
+  productName?: T;
+  company?: T;
+  status?: T;
+  requestedBy?: T;
+  description?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
