@@ -4,15 +4,9 @@ import { sendNotifications } from './hooks/sendNotifications'
 const MsdsRequests: CollectionConfig = {
   slug: 'msdsRequests',
   access: {
-    read: ({ req: { user } }) => {
-      return Boolean(user);
-    },
-    create: ({ req: { user } }) => {
-      return Boolean(user);
-    },
-    update: ({ req: { user } }) => {
-      return Boolean(user);
-    },
+    read: () => true, 
+    create: () => true,
+    update: () => true, 
   },
   labels: {
     singular: {

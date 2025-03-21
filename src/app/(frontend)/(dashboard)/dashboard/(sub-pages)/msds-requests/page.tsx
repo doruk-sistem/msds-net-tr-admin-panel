@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import { MsdsRequestsList } from '@/components/MsdsRequest/MsdsRequestsList'
 import { MsdsRequestButton } from '@/components/MsdsRequest/MsdsRequestButton'
 
