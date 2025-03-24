@@ -23,12 +23,14 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { useTranslations } from 'next-intl'
+
 // Özel dosya yükleyici import'unu kaldırdık
 
 // Form şema doğrulaması
 const formSchema = z.object({
   productName: z.string().min(3, 'Product name must be at least 3 characters long'),
   description: z.string().min(10, 'Description must be at least 10 characters long'),
+  // We'll validate the file separately since it's not part of the form state
 })
 
 type MsdsRequestFormProps = {
@@ -52,107 +54,48 @@ export const MsdsRequestForm = ({ onSuccess }: MsdsRequestFormProps) => {
   // Dosya seçim işleyicisi
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null
+
     setSelectedFile(file)
   }
 
-  // Dosya yükleme işlemi
-  const uploadFile = async (file: File): Promise<string | null> => {
+  // We no longer need a separate uploadFile function as we're handling the file upload
+  // directly in the createMsdsRequest function
+
+  // MSDS talebi oluşturma
+  const createMsdsRequest = async (
+    values: z.infer<typeof formSchema>,
+    userData: any,
+  ): Promise<boolean> => {
     try {
-      toast.info('File is being uploaded...')
+      if (!selectedFile) {
+        toast.error('Please select a file')
+        return false
+      }
+
+      toast.info('Creating request with file...')
 
       const formData = new FormData()
-      formData.append('file', file)
+      formData.append('file', selectedFile)
+      formData.append('productName', values.productName)
+      formData.append('description', values.description)
+      formData.append('status', 'pending')
+      formData.append('company', userData.company)
+      formData.append('requestedBy', userData.id)
 
-      console.log('File details:', {
-        name: file.name,
-        type: file.type,
-        size: file.size,
-      })
-
-      // API isteği - dosya yükleme
-      const uploadResponse = await fetch('/api/fileMedia', {
+      // Create MSDS request with file through API
+      const msdsResponse = await fetch('/api/msds-requests', {
         method: 'POST',
         credentials: 'include',
         body: formData,
       })
 
-      console.log('Upload response status:', uploadResponse.status)
-
-      const responseText = await uploadResponse.text()
-      console.log('Upload raw response:', responseText)
-
-      if (!uploadResponse.ok) {
-        throw new Error(`File is not uploaded: ${uploadResponse.status} ${responseText}`)
-      }
-
-      // Response is not empty and valid JSON
-      if (responseText && responseText.trim()) {
-        try {
-          const uploadResult = JSON.parse(responseText)
-          console.log('Upload result:', uploadResult)
-
-          // ID'yi bulmaya çalış
-          if (uploadResult && uploadResult.id) {
-            console.log('File ID is found:', uploadResult.id)
-            return uploadResult.id
-          } else if (uploadResult.doc && uploadResult.doc.id) {
-            console.log('File ID is found from doc.id:', uploadResult.doc.id)
-            return uploadResult.doc.id
-          } else {
-            console.error('Valid file ID not found:', uploadResult)
-            return null
-          }
-        } catch (jsonError) {
-          console.error('API response is not valid JSON:', jsonError)
-          return null
-        }
-      }
-      return null
-    } catch (error) {
-      console.error('File upload error:', error)
-      toast.error('File upload failed. Your request will be created without a file.')
-      return null
-    }
-  }
-
-  // MSDS talebi oluşturma
-  const createMsdsRequest = async (
-    values: z.infer<typeof formSchema>,
-    fileId: string | null,
-    userData: any,
-  ): Promise<boolean> => {
-    try {
-      // MSDS request creation
-      const requestData: Record<string, any> = {
-        productName: values.productName,
-        description: values.description,
-        status: 'pending',
-        company: userData.company,
-        requestedBy: userData.id,
-      }
-
-      // Dosya ID'si varsa ekle
-      if (fileId) {
-        requestData.sdsFile = fileId
-      }
-
-      console.log('MSDS request is sending:', requestData)
-
-      // Talep oluştur
-      const msdsResponse = await fetch('/api/msdsRequests', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(requestData),
-      })
-
-      const msdsResponseText = await msdsResponse.text()
-      console.log('MSDS request response:', msdsResponseText)
-
       if (!msdsResponse.ok) {
-        throw new Error(`Request could not be created: ${msdsResponse.status} ${msdsResponseText}`)
+        const errorText = await msdsResponse.text()
+        throw new Error(`Request could not be created: ${msdsResponse.status} ${errorText}`)
       }
 
+      const msdsResult = await msdsResponse.json()
+      console.log('MSDS request created with file:', msdsResult)
       return true
     } catch (error) {
       console.error('MSDS request creation error:', error)
@@ -167,29 +110,24 @@ export const MsdsRequestForm = ({ onSuccess }: MsdsRequestFormProps) => {
       return
     }
 
+    // Validate file is selected
+    if (!selectedFile) {
+      toast.error('Please select a file')
+      return
+    }
+
     try {
       setIsLoading(true)
 
-      // 1. Dosya yükleme (varsa)
-      let fileId: string | null = null
-      if (selectedFile) {
-        fileId = await uploadFile(selectedFile)
-      }
+      // Create MSDS request with file
+      const success = await createMsdsRequest(values, user)
 
-      // 2. MSDS talebi oluşturma
-      const success = await createMsdsRequest(values, fileId, user)
-
-      // 3. Sonuç bildirimi
+      // Show success message
       if (success) {
         toast.success('MSDS request has been created successfully')
+        toast.success('File has been uploaded successfully')
 
-        if (fileId) {
-          toast.success('File has been uploaded successfully')
-        } else if (selectedFile) {
-          toast.warning('File could not be uploaded, request created without a file')
-        }
-
-        // 4. Form sıfırlama
+        // Form sıfırlama
         onSuccess?.()
         form.reset()
         setSelectedFile(null)
@@ -245,9 +183,14 @@ export const MsdsRequestForm = ({ onSuccess }: MsdsRequestFormProps) => {
               )}
             />
             <FormItem>
-              <FormLabel>{t('dashboardPage.msdsRequestForm.formFile.title')}</FormLabel>
+              <FormLabel>{t('dashboardPage.msdsRequestForm.formFile.title')} *</FormLabel>
               <FormControl>
-                <Input type="file" onChange={handleFileChange} accept=".pdf,.doc,.docx" />
+                <Input
+                  type="file"
+                  onChange={handleFileChange}
+                  accept=".pdf,.doc,.docx"
+                  required
+                />
               </FormControl>
               <FormDescription>
                 {t('dashboardPage.msdsRequestForm.formFile.description')}
