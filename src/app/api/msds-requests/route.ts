@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import getPayloadCMS from '@/utilities/getPayloadCMS'
+import { put } from '@vercel/blob'  // Eklendi
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,6 +11,15 @@ export async function POST(req: NextRequest) {
     if (!file) {
       return NextResponse.json({ error: 'Dosya gerekli' }, { status: 400 })
     }
+
+    // Debug için token'ı kontrol edelim - BU KISMI EKLEYECEĞİZ
+    const token = process.env.BLOB_READ_WRITE_TOKEN
+    console.log('Token başlangıcı:', token?.substring(0, 20))
+
+    const blob = await put(file.name, file, {
+      access: 'public',
+      token: token || '' // Undefined olma ihtimaline karşı
+    })
 
     // Dosyayı buffer'a çevir
     const arrayBuffer = await file.arrayBuffer()
@@ -44,13 +54,23 @@ export async function POST(req: NextRequest) {
         status: 'pending',
         company: companyResponse,
         requestedBy: companyUserResponse,
+        url: blob.url,
       },
       file: payloadFile, // Direkt upload field'ına gönderiyoruz
     })
 
     return NextResponse.json(msdsRequest, { status: 201 })
   } catch (error) {
-    console.error('Upload error:', error)
-    return NextResponse.json({ error: 'Dosya yükleme hatası' }, { status: 500 })
+    console.error('Upload error details:', {
+      message: error.message,
+      stack: error.stack,
+      token: process.env.BLOB_READ_WRITE_TOKEN ? 'Token var' : 'Token yok'
+    })
+    
+    return NextResponse.json({ 
+      error: 'Dosya yükleme hatası',
+      details: error.message,
+      tokenExists: !!process.env.BLOB_READ_WRITE_TOKEN
+    }, { status: 500 })
   }
 }
