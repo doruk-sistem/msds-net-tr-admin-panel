@@ -32,9 +32,9 @@ export default function LocaleSwitcher() {
 
   return (
     <Select defaultValue={locale} onValueChange={changeLanguage}>
-      <SelectTrigger className="w-[100px] h-8">
+      <SelectTrigger className="w-[140px] h-8">
         <Languages className="h-4 w-4 mr-2" />
-        <SelectValue />
+        <span>{languageNames[locale]}</span>
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
