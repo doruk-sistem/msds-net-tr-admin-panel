@@ -43,7 +43,6 @@ export const MsdsRequestsList = () => {
 
   const fetchRequests = async () => {
     if (!user) return
-  
     try {
       setIsLoading(true)
     
