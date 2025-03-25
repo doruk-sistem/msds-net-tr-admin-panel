@@ -22,11 +22,6 @@ const items: DashboardNavItem[] = [
     href: '/dashboard',
     icon: LayoutDashboard,
   },
-  // {
-  //   title: 'dashboardNav.msds',  
-  //   component: MsdsRequestButton,  
-  //   icon: FileText,
-  // },
   {
     title: 'dashboardNav.msdsList',
     href: '/dashboard/msds-requests',

@@ -3,12 +3,22 @@ import getPayloadCMS from '@/utilities/getPayloadCMS'
 
 export async function POST(req: NextRequest) {
   try {
+    // Always handle as multipart/form-data request
+    const contentType = req.headers.get('content-type') || ''
+
+    if (!contentType.includes('multipart/form-data')) {
+      return NextResponse.json(
+        { error: 'Only multipart/form-data requests are supported' },
+        { status: 415 },
+      )
+    }
+
     const payload = await getPayloadCMS()
     const formData = await req.formData()
     const file = formData.get('file') as File
 
     if (!file) {
-      return NextResponse.json({ error: 'Dosya gerekli' }, { status: 400 })
+      return NextResponse.json({ error: 'File is required for MSDS request' }, { status: 400 })
     }
 
     // Dosyayı buffer'a çevir
@@ -51,6 +61,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(msdsRequest, { status: 201 })
   } catch (error) {
     console.error('Upload error:', error)
-    return NextResponse.json({ error: 'Dosya yükleme hatası' }, { status: 500 })
+    return NextResponse.json(
+      { error: error.message || 'Failed to create MSDS request' },
+      { status: 500 },
+    )
   }
 }

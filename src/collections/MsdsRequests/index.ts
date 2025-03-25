@@ -1,30 +1,32 @@
 import { CollectionConfig, Where } from 'payload'
-import { sendNotifications } from './hooks/sendNotifications'  
+import { sendNotifications } from './hooks/sendNotifications'
 
 const MsdsRequests: CollectionConfig = {
   slug: 'msdsRequests',
   access: {
-    read: () => true, 
-    create: () => true,
-    update: () => true, 
+    admin: ({ req }) => false,
+    create: ({ req }) => false,
+    delete: ({ req }) => false,
+    read: ({ req }) => false,
+    update: ({ req }) => false,
   },
   labels: {
     singular: {
       tr: 'MSDS Talebi',
-      en: 'MSDS Request'
+      en: 'MSDS Request',
     },
     plural: {
       tr: 'MSDS Talepleri',
-      en: 'MSDS Requests'
-    }
+      en: 'MSDS Requests',
+    },
   },
   admin: {
     useAsTitle: 'productName',
     defaultColumns: ['productName', 'company', 'status', 'createdAt'],
     description: {
       tr: 'MSDS taleplerini yönetmek için kullanılır.',
-      en: 'Used to manage MSDS requests.'
-    }
+      en: 'Used to manage MSDS requests.',
+    },
   },
   fields: [
     {
@@ -33,8 +35,8 @@ const MsdsRequests: CollectionConfig = {
       required: true,
       label: {
         tr: 'Ürün Adı',
-        en: 'Product Name'
-      }
+        en: 'Product Name',
+      },
     },
     {
       name: 'company',
@@ -43,138 +45,138 @@ const MsdsRequests: CollectionConfig = {
       required: true,
       label: {
         tr: 'Şirket',
-        en: 'Company'
+        en: 'Company',
       },
     },
     {
-        name: 'status',
-        type: 'select',
-        required: true,
-        defaultValue: 'pending',
-        label: {
-          en: 'Status',
-          tr: 'Durum'
-        },
-        options: [
-          {
-            label: {
-              en: 'Pending',
-              tr: 'Beklemede'
-            },
-            value: 'pending'
-          },
-          {
-            label: {
-              en: 'In Progress',
-              tr: 'İşleme Alındı'
-            },
-            value: 'inProgress'
-          },
-          {
-            label: {
-              en: 'Completed',
-              tr: 'Tamamlandı'
-            },
-            value: 'completed'
-          }
-        ]
+      name: 'status',
+      type: 'select',
+      required: true,
+      defaultValue: 'pending',
+      label: {
+        en: 'Status',
+        tr: 'Durum',
       },
-      {
-        name: 'sdsFile',
-        type: 'upload',
-        relationTo: 'fileMedia',
-        filterOptions: {
-          mimeType: { 
-            in: [
-              'application/pdf',
-              'application/msword',
-              'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-            ]
-          }
+      options: [
+        {
+          label: {
+            en: 'Pending',
+            tr: 'Beklemede',
+          },
+          value: 'pending',
         },
-        label: {
-          en: 'SDS File',
-          tr: 'SDS Dosyası'
-        }
-      },
+        {
+          label: {
+            en: 'In Progress',
+            tr: 'İşleme Alındı',
+          },
+          value: 'inProgress',
+        },
+        {
+          label: {
+            en: 'Completed',
+            tr: 'Tamamlandı',
+          },
+          value: 'completed',
+        },
+      ],
+    },
     {
-        name: 'requestedBy',
-        type: 'relationship',
-        relationTo: 'companyUsers',
-        required: true,
-        label: {
-          en: 'Requested By',
-          tr: 'Talep Eden'
+      name: 'sdsFile',
+      type: 'upload',
+      relationTo: 'fileMedia',
+      filterOptions: {
+        mimeType: {
+          in: [
+            'application/pdf',
+            'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          ],
         },
-        filterOptions: ({ data }): Where => ({
-          and: [
-            {
-              company: {
-                equals: data?.company || ''
-              }
-            }
-          ]
-        })
       },
-      
-{
-    name: 'responses',
-    type: 'array',
-    label: {
-      en: 'Responses',
-      tr: 'Cevaplar'
+      label: {
+        en: 'SDS File',
+        tr: 'SDS Dosyası',
+      },
     },
-    admin: {
-      initCollapsed: false
+    {
+      name: 'requestedBy',
+      type: 'relationship',
+      relationTo: 'companyUsers',
+      required: true,
+      label: {
+        en: 'Requested By',
+        tr: 'Talep Eden',
+      },
+      filterOptions: ({ data }): Where => ({
+        and: [
+          {
+            company: {
+              equals: data?.company || '',
+            },
+          },
+        ],
+      }),
     },
-    fields: [
-      {
-        name: 'message',
-        type: 'textarea',
-        label: {
-          en: 'Message',
-          tr: 'Mesaj'
+
+    {
+      name: 'responses',
+      type: 'array',
+      label: {
+        en: 'Responses',
+        tr: 'Cevaplar',
+      },
+      admin: {
+        initCollapsed: false,
+      },
+      fields: [
+        {
+          name: 'message',
+          type: 'textarea',
+          label: {
+            en: 'Message',
+            tr: 'Mesaj',
+          },
+          required: true,
         },
-        required: true
-      },
-      {
-        name: 'respondedBy',
-        type: 'relationship',
-        relationTo: 'adminUsers',
-        required: true,
-        admin: {
-          readOnly: true,
-          position: 'sidebar'
-        }
-      },
-      {
-        name: 'respondedAt',
-        type: 'date',
-        admin: {
-          readOnly: true,
-          position: 'sidebar'
-        }
-      }
-    ]
-  },
+        {
+          name: 'respondedBy',
+          type: 'relationship',
+          relationTo: 'adminUsers',
+          required: true,
+          admin: {
+            readOnly: true,
+            position: 'sidebar',
+          },
+        },
+        {
+          name: 'respondedAt',
+          type: 'date',
+          admin: {
+            readOnly: true,
+            position: 'sidebar',
+          },
+        },
+      ],
+    },
     {
       name: 'description',
       type: 'textarea',
       label: {
         tr: 'Açıklama',
-        en: 'Description'
-      }
+        en: 'Description',
+      },
     },
     {
       name: 'createdAt',
       type: 'date',
       admin: {
         readOnly: true,
-        position: 'sidebar'
+        position: 'sidebar',
       },
       label: {
         tr: 'Oluşturulma Tarihi',
-        en: 'Created At'
+        en: 'Created At',
       },
       hooks: {
         beforeChange: [
@@ -182,10 +184,10 @@ const MsdsRequests: CollectionConfig = {
             if (operation === 'create') {
               return new Date().toISOString()
             }
-          }
+          },
         ],
-      }
-    }
+      },
+    },
   ],
   hooks: {
     beforeChange: [
@@ -198,11 +200,10 @@ const MsdsRequests: CollectionConfig = {
           }
         }
         return data
-      }
+      },
     ],
-    afterChange: [sendNotifications]
-  }
+    afterChange: [sendNotifications],
+  },
 }
-
 
 export default MsdsRequests

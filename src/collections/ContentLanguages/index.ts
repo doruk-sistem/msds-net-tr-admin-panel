@@ -8,6 +8,13 @@ const ContentLanguages: CollectionConfig = {
     useAsTitle: 'name',
     defaultColumns: ['name', 'code'],
   },
+  access: {
+    admin: ({ req }) => false,
+    create: ({ req }) => false,
+    delete: ({ req }) => false,
+    read: ({ req }) => false,
+    update: ({ req }) => false,
+  },
   fields: [
     {
       name: 'name',

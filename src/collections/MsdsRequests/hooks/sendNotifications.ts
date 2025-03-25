@@ -1,15 +1,6 @@
-import { Company } from '@/payload-types'
-import { FileMedia } from '@/payload-types'
 import { sendEmail } from '../../../lib/email'
 import { PayloadRequest } from 'payload'
-import { CompanyUser, AdminUser } from '../../../payload-types'
-
-interface Response {
-  message: string
-  respondedBy: string | number | AdminUser
-  respondedAt: string | null
-  id?: string | null
-}
+import { AdminUser } from '../../../payload-types'
 
 interface EmailConfig {
   to: string
@@ -25,11 +16,14 @@ interface EmailConfig {
 const statusMap = {
   pending: { en: 'Pending', tr: 'Beklemede' },
   inProgress: { en: 'In Progress', tr: 'İşleme Alındı' },
-  completed: { en: 'Completed', tr: 'Tamamlandı' }
+  completed: { en: 'Completed', tr: 'Tamamlandı' },
 }
 
-
-export const sendNotifications = async ({ req, doc, operation }: { 
+export const sendNotifications = async ({
+  req,
+  doc,
+  operation,
+}: {
   req: PayloadRequest
   doc: any
   operation: 'create' | 'update'
@@ -39,7 +33,7 @@ export const sendNotifications = async ({ req, doc, operation }: {
       // Admin kullanıcıları al
       const admins = await req.payload.find({
         collection: 'adminUsers',
-        depth: 0
+        depth: 0,
       })
 
       // Şirket ve kullanıcı bilgilerini al
@@ -84,7 +78,7 @@ export const sendNotifications = async ({ req, doc, operation }: {
         const emailConfig: EmailConfig = {
           to: admin.email,
           subject: 'New MSDS Request Needs Review',
-          text: emailText
+          text: emailText,
         }
 
         try {

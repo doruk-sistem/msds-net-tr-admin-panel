@@ -92,7 +92,7 @@ const MsdsRequestsV2: CollectionConfig = {
     },
   ],
   upload: {
-    staticDir: path.resolve(dirname, '../../files/msdsFiles'),
+    staticDir: path.resolve(dirname, '../../files/msdsRequestsFiles'),
     bulkUpload: true,
     mimeTypes: [
       'application/pdf',
