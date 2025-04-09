@@ -8,7 +8,7 @@ import type { CompanyUser, MsdsV2 } from '@/payload-types'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 import { DataTable } from './components/data-table'
-import { columns, type Row } from './components/data-table/columns'
+import { getColumns, type Row } from './components/data-table/columns'
 import SearchMsds from './components/search-msds'
 import TablePagination from './components/table-pagination'
 
@@ -26,36 +26,37 @@ export default function DashboardClient({ serverData: { companyUsers, msdsV2 } }
   const msdsSearchParam = searchParams.get('name')
 
   const msdsContent = msdsV2?.docs
- 
+  const tableColumns = getColumns(t)
+
   const data: Row[] | null = Array.isArray(msdsContent)
     ? msdsContent?.map((item) => ({
-        name: item?.name || '',
-        msdsCreatedAt: item?.createdAt || '',
-        msdsUpdatedAt: item?.updatedAt || '',
-        formNo: item?.formNo || '',
-        updatedCount: item?.updatedCount || 0,
-        author: item?.author || '',
-        certificateDate: item?.certificateDate || '',
-        url: item?.url || '',
-        createdAt: item?.createdAt || '',
-        contentLanguage: {
-          id: typeof item?.contentLanguage === 'object' 
-            ? (item?.contentLanguage?.id ?? 0) 
-            : (Number(item?.contentLanguage) || 0), 
-          code: typeof item?.contentLanguage === 'object' 
-            ? (item?.contentLanguage?.code ?? '') 
-            : '',
-          name: typeof item?.contentLanguage === 'object' 
-            ? (item?.contentLanguage?.name ?? '') 
-            : '',
-          createdAt: typeof item?.contentLanguage === 'object' 
-            ? (item?.contentLanguage?.createdAt ?? '') 
-            : '',
-          updatedAt: typeof item?.contentLanguage === 'object' 
-            ? (item?.contentLanguage?.updatedAt ?? '') 
-            : ''
-        }
-      }))
+      name: item?.name || '',
+      msdsCreatedAt: item?.createdAt || '',
+      msdsUpdatedAt: item?.updatedAt || '',
+      formNo: item?.formNo || '',
+      updatedCount: item?.updatedCount || 0,
+      author: item?.author || '',
+      certificateDate: item?.certificateDate || '',
+      url: item?.url || '',
+      createdAt: item?.createdAt || '',
+      contentLanguage: {
+        id: typeof item?.contentLanguage === 'object'
+          ? (item?.contentLanguage?.id ?? 0)
+          : (Number(item?.contentLanguage) || 0),
+        code: typeof item?.contentLanguage === 'object'
+          ? (item?.contentLanguage?.code ?? '')
+          : '',
+        name: typeof item?.contentLanguage === 'object'
+          ? (item?.contentLanguage?.name ?? '')
+          : '',
+        createdAt: typeof item?.contentLanguage === 'object'
+          ? (item?.contentLanguage?.createdAt ?? '')
+          : '',
+        updatedAt: typeof item?.contentLanguage === 'object'
+          ? (item?.contentLanguage?.updatedAt ?? '')
+          : ''
+      }
+    }))
     : null
 
   return (
@@ -92,7 +93,7 @@ export default function DashboardClient({ serverData: { companyUsers, msdsV2 } }
           </div>
           {Array.isArray(data) ? (
             <>
-              <DataTable columns={columns} data={data} />
+              <DataTable columns={tableColumns} data={data} />
               <TablePagination totalPages={msdsV2?.totalPages || 1} />
             </>
           ) : null}

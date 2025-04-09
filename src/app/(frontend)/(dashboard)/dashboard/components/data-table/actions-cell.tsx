@@ -71,7 +71,7 @@ export default function ActionsCell({ row }: CellContext<Row, unknown>): React.J
         <DialogTrigger asChild>
           <Button variant="outline" size="sm" className="flex items-center gap-2">
             <FileStack className="h-4 w-4" />
-            <span>View Details</span>
+            <span>{t('msdsContentDataTable.viewDetails')}</span>
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[600px]">
@@ -287,12 +287,12 @@ function MsdsContent({ url: _url, details }: MsdsContentProps): React.JSX.Elemen
 
       <div className="space-y-3 rounded-lg bg-muted/50 p-4 text-sm">
         <div className="flex items-center gap-2 border-b pb-2">
-          <div className="w-32 text-muted-foreground">Form No</div>
+          <div className="w-32 text-muted-foreground">{t('dashboardPage.openTheContentDialog.formNo')}</div>
           <div className="font-medium">{details.formNo ?? 'Not specified'}</div>
         </div>
 
         <div className="flex items-center gap-2 border-b pb-2">
-          <div className="w-32 text-muted-foreground">Created Date</div>
+          <div className="w-32 text-muted-foreground">{t('dashboardPage.openTheContentDialog.createdDate')}</div>
           <div className="font-medium">
             {details.msdsCreatedAt
               ? formatDate(details.msdsCreatedAt, locale, {
@@ -305,7 +305,7 @@ function MsdsContent({ url: _url, details }: MsdsContentProps): React.JSX.Elemen
         </div>
 
         <div className="flex items-center gap-2 border-b pb-2">
-          <div className="w-32 text-muted-foreground">Last Updated</div>
+          <div className="w-32 text-muted-foreground">{t('dashboardPage.openTheContentDialog.lastUpdated')}</div>
           <div className="font-medium">
             {details.msdsUpdatedAt
               ? formatDate(details.msdsUpdatedAt, locale, {
@@ -318,17 +318,17 @@ function MsdsContent({ url: _url, details }: MsdsContentProps): React.JSX.Elemen
         </div>
 
         <div className="flex items-center gap-2 border-b pb-2">
-          <div className="w-32 text-muted-foreground">Update Count</div>
+          <div className="w-32 text-muted-foreground">{t('dashboardPage.openTheContentDialog.updateCount')}</div>
           <div className="font-medium">{details.updatedCount ?? 'Not specified'}</div>
         </div>
 
         <div className="flex items-center gap-2 border-b pb-2">
-          <div className="w-32 text-muted-foreground">Author</div>
+          <div className="w-32 text-muted-foreground">{t('dashboardPage.openTheContentDialog.author')}</div>
           <div className="font-medium">{details.author ?? 'Not specified'}</div>
         </div>
 
         <div className="flex items-center gap-2 border-b pb-2">
-          <div className="w-32 text-muted-foreground">Certificate Date</div>
+          <div className="w-32 text-muted-foreground">{t('dashboardPage.openTheContentDialog.certificateDate')}</div>
           <div className="font-medium">
             {details.certificateDate
               ? formatDate(details.certificateDate, locale, {
@@ -365,7 +365,7 @@ function MsdsContent({ url: _url, details }: MsdsContentProps): React.JSX.Elemen
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-32 text-muted-foreground">Language</div>
+          <div className="w-32 text-muted-foreground">{t('dashboardPage.openTheContentDialog.language')}</div>
           <div className="font-medium">
             {details.contentLanguage
               ? `${(details as any).contentLanguage.code} - ${(details as any).contentLanguage.name}`
