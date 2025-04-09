@@ -11,6 +11,10 @@ export async function middleware(request: NextRequest) {
 
   const isLoginPage = pathname.startsWith('/login')
 
+  if (pathname.startsWith('/dashboard/msds-requests')) {
+    return NextResponse.redirect(new URL('/dashboard', request.url))
+  }
+
   if (pathname.startsWith(ADMIN_PATH)) {
     return NextResponse.next()
   }
