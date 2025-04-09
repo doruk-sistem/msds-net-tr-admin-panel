@@ -113,6 +113,12 @@
         "title": "{name} - QR Kod",
         "description": "Bu QR kodunu yazdırabilirsiniz.",
         "print": "Yazdır / PDF Olarak Kaydet"
+      },
+      "validationStatus": {
+        "title": "Geçerlilik Durumu",
+        "validUntil": "Geçerlilik Tarihi",
+        "expired": "Süresi Dolmuş",
+        "notSpecified": "Belirtilmemiş"
       }
     },
     "msdsRequestButton": {
@@ -180,7 +186,8 @@
       "phoneDescription": "Şirket telefon numarası.",
       "address": "Adres",
       "addressDescription": "Şirket adresi.",
-      "saveChanges": "Kaydet"
+      "saveChanges": "Kaydet",
+      "readOnlyMessage": "Şirket bilgileri yalnızca yöneticiler tarafından düzenlenebilir."
     }
   }
 }

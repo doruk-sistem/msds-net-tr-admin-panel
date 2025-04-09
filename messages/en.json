@@ -113,6 +113,12 @@
         "title": "{name} - QR Code",
         "description": "You can print this QR code",
         "print": "Print / Save as PDF"
+      },
+      "validationStatus": {
+        "title": "Validation Status",
+        "validUntil": "Valid until",
+        "expired": "Expired",
+        "notSpecified": "Not specified"
       }
     },
     "msdsRequestButton": {
@@ -180,7 +186,8 @@
       "phoneDescription": "Company phone number.",
       "address": "Address",
       "addressDescription": "Company address.",
-      "saveChanges": "Save Changes"
+      "saveChanges": "Save Changes",
+      "readOnlyMessage": "Company information can only be edited by administrators."
     }
   }
 }
