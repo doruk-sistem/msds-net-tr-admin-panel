@@ -180,7 +180,9 @@
       "phoneDescription": "Company phone number.",
       "address": "Address",
       "addressDescription": "Company address.",
-      "saveChanges": "Save Changes"
+      "saveChanges": "Save Changes",
+      "readOnlyMessage": "Company information can only be edited by administrators."
+
     }
   }
 }

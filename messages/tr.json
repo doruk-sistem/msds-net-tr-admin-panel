@@ -180,7 +180,8 @@
       "phoneDescription": "Şirket telefon numarası.",
       "address": "Adres",
       "addressDescription": "Şirket adresi.",
-      "saveChanges": "Kaydet"
+      "saveChanges": "Kaydet",
+      "readOnlyMessage": "Şirket bilgileri yalnızca yöneticiler tarafından düzenlenebilir." 
     }
   }
 }
