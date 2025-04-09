@@ -72,14 +72,14 @@ const QRCodeCell = ({ row }: { row: any }) => {
           onClick={() => setQrDialogOpen(true)}
         >
           <QrCodeIcon className="h-4 w-4" />
-          <span>Show QR Code</span>
+          <span>{t('dashboardPage.openTheContentDialog.showQRCode')}</span>
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-3">
             <QrCodeIcon className="h-5 w-5 text-primary" />
-            <span>QR Code for {msds.name}</span>
+            <span>{t('dashboardPage.openTheContentDialog.dialogTitle', { name: msds.name })}</span>
           </DialogTitle>
           <DialogDescription>
             {t('dashboardPage.openTheContentDialog.showQRCodeDialog.description')}
@@ -106,7 +106,7 @@ const QRCodeCell = ({ row }: { row: any }) => {
     </Dialog>
   )
 }
-export const columns: ColumnDef<Row>[] = [
+export const getColumns = (t: any): ColumnDef<Row>[] => [
   {
     accessorKey: 'formNo',
     header: ({ column }) => {
@@ -116,7 +116,7 @@ export const columns: ColumnDef<Row>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="flex items-center gap-2 justify-start px-0"
         >
-          Form No
+          {t('msdsContentDataTable.formNo')}
           <ArrowUpDown className="h-4 w-4" />
         </Button>
       )
@@ -129,10 +129,12 @@ export const columns: ColumnDef<Row>[] = [
         </div>
       )
     },
-},
+  },
   {
     accessorKey: 'name',
-    header: 'MSDS Name',
+    header: ({ column }) => {
+      return t('msdsContentDataTable.name')
+    },
     cell: ({
       row: {
         original: { name, url },
@@ -154,7 +156,9 @@ export const columns: ColumnDef<Row>[] = [
   },
   {
     accessorKey: 'language',
-    header: 'Language',
+    header: ({ column }) => {
+      return t('msdsContentDataTable.language')  
+    },
     cell: ({ row }) => {
       const language = row.original.contentLanguage
       const formattedLanguage =
@@ -168,7 +172,7 @@ export const columns: ColumnDef<Row>[] = [
     },
   },
   {
-    accessorKey: 'certificateDate',  
+    accessorKey: 'certificateDate',
     header: ({ column }) => {
       return (
         <Button
@@ -176,7 +180,7 @@ export const columns: ColumnDef<Row>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="flex items-center gap-2 justify-start px-0"
         >
-          Published Date
+          {t('msdsContentDataTable.publishedDate')}  
           <ArrowUpDown className="h-4 w-4" />
         </Button>
       )
@@ -191,10 +195,10 @@ export const columns: ColumnDef<Row>[] = [
         </div>
       )
     },
-},
+  },
   {
     id: 'qrCode',
-    header: 'QR Code',
+    header: t('msdsContentDataTable.qrCode'),  
     cell: ({ row }) => {
       return (
         <div className="flex items-center gap-2 justify-start px-0">
