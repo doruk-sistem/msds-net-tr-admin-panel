@@ -12,6 +12,7 @@ import {
   Printer,
   QrCode as QrCodeIcon,
   SquareArrowOutUpRight,
+  XCircle,
 } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useReactToPrint } from 'react-to-print'
@@ -42,6 +43,9 @@ import {
 } from '@/components/ui/dialog'
 
 import formatDate from '@/utilities/formatDate'
+
+import { Badge } from "@/components/ui/badge"
+import { CheckCircle } from "lucide-react"
 
 const w = typeof window === 'undefined' ? null : window
 
@@ -159,6 +163,19 @@ function MsdsContent({ url: _url, details }: MsdsContentProps): React.JSX.Elemen
       fileName: `${details?.name || 'msds'}.pdf`,
     })
   }
+
+  const calculateValidationDate = (certificateDate: string | null): string | null => {
+    if (!certificateDate) return null;
+    const date = new Date(certificateDate);
+    date.setFullYear(date.getFullYear() + 5);
+    return date.toISOString();
+  };
+
+  const getValidationStatus = (certificateDate: string | null): 'valid' | 'expired' | null => {
+    if (!certificateDate) return null;
+    const validationDate = new Date(calculateValidationDate(certificateDate) || '');
+    return new Date() < validationDate ? 'valid' : 'expired';
+  };
 
   return (
     <div className="space-y-4">
@@ -279,10 +296,10 @@ function MsdsContent({ url: _url, details }: MsdsContentProps): React.JSX.Elemen
           <div className="font-medium">
             {details.msdsCreatedAt
               ? formatDate(details.msdsCreatedAt, locale, {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                })
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })
               : 'Not specified'}
           </div>
         </div>
@@ -292,10 +309,10 @@ function MsdsContent({ url: _url, details }: MsdsContentProps): React.JSX.Elemen
           <div className="font-medium">
             {details.msdsUpdatedAt
               ? formatDate(details.msdsUpdatedAt, locale, {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                })
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })
               : 'Not specified'}
           </div>
         </div>
@@ -315,14 +332,38 @@ function MsdsContent({ url: _url, details }: MsdsContentProps): React.JSX.Elemen
           <div className="font-medium">
             {details.certificateDate
               ? formatDate(details.certificateDate, locale, {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                })
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })
               : 'Not specified'}
           </div>
         </div>
-
+        <div className="flex items-center gap-2 border-b pb-2">
+          <div className="w-32 text-muted-foreground">
+            {t('dashboardPage.openTheContentDialog.validationStatus.title')}
+          </div>
+          <div className="font-medium flex items-center gap-2">
+            {details.certificateDate ? (
+              <>
+                {getValidationStatus(details.certificateDate) === 'valid' ? (
+                  <Badge variant="secondary" className="flex items-center gap-1">
+                    <CheckCircle className="h-4 w-4" />
+                    {t('dashboardPage.openTheContentDialog.validationStatus.validUntil')}{' '}
+                    {formatDate(calculateValidationDate(details.certificateDate)!, locale)}
+                  </Badge>
+                ) : (
+                  <Badge variant="destructive" className="flex items-center gap-1">
+                    <XCircle className="h-4 w-4" />
+                    {t('dashboardPage.openTheContentDialog.validationStatus.expired')}
+                  </Badge>
+                )}
+              </>
+            ) : (
+              t('dashboardPage.openTheContentDialog.validationStatus.notSpecified')
+            )}
+          </div>
+        </div>
         <div className="flex items-center gap-2">
           <div className="w-32 text-muted-foreground">Language</div>
           <div className="font-medium">
