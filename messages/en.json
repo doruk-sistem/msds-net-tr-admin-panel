@@ -96,10 +96,16 @@
     "filtered": "Filtered",
     "activeCompanyUsers": "Active Company Users",
     "msdsContentDataTable": {
+      "qrCode": "QR Code",
+      "name": "MSDS Name",
       "searchByMSDSName": "Search by MSDS Name",
       "openTheContent": "Open the Content",
       "next": "Next",
-      "previous": "Previous"
+      "previous": "Previous",
+      "formNo": "Form No",
+      "language": "Language",
+      "publishedDate": "Published Date",
+      "viewDetails": "View Details"
     },
     "openTheContentDialog": {
       "dialogTitle": "{name} - MSDS Contents",
@@ -113,7 +119,20 @@
         "title": "{name} - QR Code",
         "description": "You can print this QR code",
         "print": "Print / Save as PDF"
-      }
+      },
+      "validationStatus": {
+        "title": "Validation Status",
+        "validUntil": "Valid until",
+        "expired": "Expired",
+        "notSpecified": "Not specified"
+      },
+      "formNo": "Form No",
+      "createdDate": "Created Date",
+      "lastUpdated": "Last Updated",
+      "updateCount": "Update Count",
+      "author": "Author",
+      "certificateDate": "Certificate Date",
+      "language": "Language"
     },
     "msdsRequestButton": {
       "title": "MSDS Request",
@@ -180,7 +199,8 @@
       "phoneDescription": "Company phone number.",
       "address": "Address",
       "addressDescription": "Company address.",
-      "saveChanges": "Save Changes"
+      "saveChanges": "Save Changes",
+      "readOnlyMessage": "Company information can only be edited by administrators."
     }
   }
 }

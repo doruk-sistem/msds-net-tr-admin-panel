@@ -2,10 +2,11 @@
 export const dynamic = 'force-dynamic'
 
 import Link from 'next/link'
-import { FileText, LayoutDashboard, Settings } from 'lucide-react'
+import {LayoutDashboard, Settings } from 'lucide-react'
+// import FileText from 'lucide-react'
 import { cn } from '@/utilities/cn'
 import { useTranslations } from 'next-intl'
-import { MsdsRequestButton } from '../MsdsRequest'
+// import { MsdsRequestButton } from '../MsdsRequest'
 import { FC } from 'react'
 
 
@@ -27,11 +28,11 @@ const items: DashboardNavItem[] = [
   //   component: MsdsRequestButton,  
   //   icon: FileText,
   // },
-  {
-    title: 'dashboardNav.msdsList',
-    href: '/dashboard/msds-requests',
-    icon: FileText,
-  },
+  // {
+  //   title: 'dashboardNav.msdsList',
+  //   href: '/dashboard/msds-requests',
+  //   icon: FileText,
+  // },
   {
     title: 'dashboardNav.settings',
     href: '/dashboard/settings/profile',

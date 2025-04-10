@@ -96,10 +96,16 @@
     "filtered": "Filtrelenmiş",
     "activeCompanyUsers": "Aktif Şirket Kullanıcıları",
     "msdsContentDataTable": {
+      "qrCode": "QR Kod",
+      "name": "MSDS Adı",
       "searchByMSDSName": "MSDS ismine göre ara",
       "openTheContent": "İçeriği Aç",
       "next": "Sonraki",
-      "previous": "Önceki"
+      "previous": "Önceki",
+      "formNo": "Form No",
+      "language": "Dil",
+      "publishedDate": "Yayın Tarihi",
+      "viewDetails": "Detayları Görüntüle"
     },
     "openTheContentDialog": {
       "dialogTitle": "{name} - MSDS İçerikleri",
@@ -113,7 +119,20 @@
         "title": "{name} - QR Kod",
         "description": "Bu QR kodunu yazdırabilirsiniz.",
         "print": "Yazdır / PDF Olarak Kaydet"
-      }
+      },
+      "validationStatus": {
+        "title": "Geçerlilik Durumu",
+        "validUntil": "Geçerlilik Tarihi",
+        "expired": "Süresi Dolmuş",
+        "notSpecified": "Belirtilmemiş"
+      },
+      "formNo": "Form No",
+      "createdDate": "Oluşturulma Tarihi",
+      "lastUpdated": "Son Güncelleme",
+      "updateCount": "Güncelleme Sayısı",
+      "author": "Yazar",
+      "certificateDate": "Sertifika Tarihi",
+      "language": "Dil"
     },
     "msdsRequestButton": {
       "title": "MSDS Talebi Oluştur",
@@ -180,7 +199,8 @@
       "phoneDescription": "Şirket telefon numarası.",
       "address": "Adres",
       "addressDescription": "Şirket adresi.",
-      "saveChanges": "Kaydet"
+      "saveChanges": "Kaydet",
+      "readOnlyMessage": "Şirket bilgileri yalnızca yöneticiler tarafından düzenlenebilir."
     }
   }
 }

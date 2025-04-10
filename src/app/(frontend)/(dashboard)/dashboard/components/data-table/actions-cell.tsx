@@ -12,6 +12,7 @@ import {
   Printer,
   QrCode as QrCodeIcon,
   SquareArrowOutUpRight,
+  XCircle,
 } from 'lucide-react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useReactToPrint } from 'react-to-print'
@@ -43,6 +44,9 @@ import {
 
 import formatDate from '@/utilities/formatDate'
 
+import { Badge } from "@/components/ui/badge"
+import { CheckCircle } from "lucide-react"
+
 const w = typeof window === 'undefined' ? null : window
 
 export default function ActionsCell({ row }: CellContext<Row, unknown>): React.JSX.Element {
@@ -67,7 +71,7 @@ export default function ActionsCell({ row }: CellContext<Row, unknown>): React.J
         <DialogTrigger asChild>
           <Button variant="outline" size="sm" className="flex items-center gap-2">
             <FileStack className="h-4 w-4" />
-            <span>View Details</span>
+            <span>{t('msdsContentDataTable.viewDetails')}</span>
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[600px]">
@@ -159,6 +163,19 @@ function MsdsContent({ url: _url, details }: MsdsContentProps): React.JSX.Elemen
       fileName: `${details?.name || 'msds'}.pdf`,
     })
   }
+
+  const calculateValidationDate = (certificateDate: string | null): string | null => {
+    if (!certificateDate) return null;
+    const date = new Date(certificateDate);
+    date.setFullYear(date.getFullYear() + 5);
+    return date.toISOString();
+  };
+
+  const getValidationStatus = (certificateDate: string | null): 'valid' | 'expired' | null => {
+    if (!certificateDate) return null;
+    const validationDate = new Date(calculateValidationDate(certificateDate) || '');
+    return new Date() < validationDate ? 'valid' : 'expired';
+  };
 
   return (
     <div className="space-y-4">
@@ -270,61 +287,85 @@ function MsdsContent({ url: _url, details }: MsdsContentProps): React.JSX.Elemen
 
       <div className="space-y-3 rounded-lg bg-muted/50 p-4 text-sm">
         <div className="flex items-center gap-2 border-b pb-2">
-          <div className="w-32 text-muted-foreground">Form No</div>
+          <div className="w-32 text-muted-foreground">{t('dashboardPage.openTheContentDialog.formNo')}</div>
           <div className="font-medium">{details.formNo ?? 'Not specified'}</div>
         </div>
 
         <div className="flex items-center gap-2 border-b pb-2">
-          <div className="w-32 text-muted-foreground">Created Date</div>
+          <div className="w-32 text-muted-foreground">{t('dashboardPage.openTheContentDialog.createdDate')}</div>
           <div className="font-medium">
             {details.msdsCreatedAt
               ? formatDate(details.msdsCreatedAt, locale, {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                })
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })
               : 'Not specified'}
           </div>
         </div>
 
         <div className="flex items-center gap-2 border-b pb-2">
-          <div className="w-32 text-muted-foreground">Last Updated</div>
+          <div className="w-32 text-muted-foreground">{t('dashboardPage.openTheContentDialog.lastUpdated')}</div>
           <div className="font-medium">
             {details.msdsUpdatedAt
               ? formatDate(details.msdsUpdatedAt, locale, {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                })
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })
               : 'Not specified'}
           </div>
         </div>
 
         <div className="flex items-center gap-2 border-b pb-2">
-          <div className="w-32 text-muted-foreground">Update Count</div>
+          <div className="w-32 text-muted-foreground">{t('dashboardPage.openTheContentDialog.updateCount')}</div>
           <div className="font-medium">{details.updatedCount ?? 'Not specified'}</div>
         </div>
 
         <div className="flex items-center gap-2 border-b pb-2">
-          <div className="w-32 text-muted-foreground">Author</div>
+          <div className="w-32 text-muted-foreground">{t('dashboardPage.openTheContentDialog.author')}</div>
           <div className="font-medium">{details.author ?? 'Not specified'}</div>
         </div>
 
         <div className="flex items-center gap-2 border-b pb-2">
-          <div className="w-32 text-muted-foreground">Certificate Date</div>
+          <div className="w-32 text-muted-foreground">{t('dashboardPage.openTheContentDialog.certificateDate')}</div>
           <div className="font-medium">
             {details.certificateDate
               ? formatDate(details.certificateDate, locale, {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                })
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })
               : 'Not specified'}
           </div>
         </div>
-
+        <div className="flex items-center gap-2 border-b pb-2">
+          <div className="w-32 text-muted-foreground">
+            {t('dashboardPage.openTheContentDialog.validationStatus.title')}
+          </div>
+          <div className="font-medium flex items-center gap-2">
+            {details.certificateDate ? (
+              <>
+                {getValidationStatus(details.certificateDate) === 'valid' ? (
+                  <Badge variant="secondary" className="flex items-center gap-1">
+                    <CheckCircle className="h-4 w-4" />
+                    {t('dashboardPage.openTheContentDialog.validationStatus.validUntil')}{' '}
+                    {formatDate(calculateValidationDate(details.certificateDate)!, locale)}
+                  </Badge>
+                ) : (
+                  <Badge variant="destructive" className="flex items-center gap-1">
+                    <XCircle className="h-4 w-4" />
+                    {t('dashboardPage.openTheContentDialog.validationStatus.expired')}
+                  </Badge>
+                )}
+              </>
+            ) : (
+              t('dashboardPage.openTheContentDialog.validationStatus.notSpecified')
+            )}
+          </div>
+        </div>
         <div className="flex items-center gap-2">
-          <div className="w-32 text-muted-foreground">Language</div>
+          <div className="w-32 text-muted-foreground">{t('dashboardPage.openTheContentDialog.language')}</div>
           <div className="font-medium">
             {details.contentLanguage
               ? `${(details as any).contentLanguage.code} - ${(details as any).contentLanguage.name}`
