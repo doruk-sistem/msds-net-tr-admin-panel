@@ -8,8 +8,9 @@ const FileMedia: CollectionConfig = {
     group: 'Media',
     description: {
       en: 'Upload and manage SDS files',
-      tr: 'SDS dosyalarını yükleyin ve yönetin'
-    }
+      tr: 'SDS dosyalarını yükleyin ve yönetin',
+    },
+    hidden: true,
   },
   upload: {
     staticDir: path.resolve(process.cwd(), 'public/uploads/files'),
@@ -17,7 +18,7 @@ const FileMedia: CollectionConfig = {
     mimeTypes: [
       'application/pdf',
       'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     ],
     filesRequiredOnCreate: true,
     disableLocalStorage: false,
@@ -28,24 +29,24 @@ const FileMedia: CollectionConfig = {
       type: 'text',
       label: {
         en: 'Alt Text',
-        tr: 'Alt Metin'
-      }
+        tr: 'Alt Metin',
+      },
     },
     {
       name: 'caption',
       type: 'text',
       label: {
         en: 'Caption',
-        tr: 'Başlık'
-      }
-    }
+        tr: 'Başlık',
+      },
+    },
   ],
   access: {
     read: () => true,
     create: () => true,
     update: () => true,
     delete: () => true,
-  }
+  },
 }
 
 export default FileMedia
