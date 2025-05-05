@@ -49,13 +49,23 @@ export default function ResetPasswordEmailPageClient() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     startTransition(async () => {
-      const res = await authService.resetPasswordEmail({
-        email: values.email,
-      })
+      try {
+        const res = await authService.resetPasswordEmail({
+          email: values.email,
+        })
 
-      if (res?.success) {
-        setIsSuccess(true)
-      } else {
+        if (res?.error) {
+          toast({
+            title: t('resetPasswordEmailPage.invalidUserToast.title'),
+            description: t('resetPasswordEmailPage.invalidUserToast.description'),
+          })
+          return
+        }
+
+        if (res?.success) {
+          setIsSuccess(true)
+        }
+      } catch (error) {
         toast({
           title: t('resetPasswordEmailPage.invalidUserToast.title'),
           description: t('resetPasswordEmailPage.invalidUserToast.description'),
