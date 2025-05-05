@@ -11,7 +11,7 @@ const QRCodeComponent: React.FC = () => {
         return null
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
+    const baseUrl = typeof window !== 'undefined' ? window.location.origin : ''
     const qrValue = `${baseUrl}/admin/collections/msdsV2/${id}`
 
     const handleDownload = async (e: React.MouseEvent) => {
