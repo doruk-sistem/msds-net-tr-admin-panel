@@ -7,6 +7,7 @@ const ContentLanguages: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'code'],
+    hidden: true,
   },
   fields: [
     {

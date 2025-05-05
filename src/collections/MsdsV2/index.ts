@@ -108,6 +108,17 @@ const MsdsV2: CollectionConfig = {
       type: 'checkbox',
     },
     {
+      name: 'qrCode',
+      type: 'ui',
+      admin: {
+        position: 'sidebar',
+        components: {
+          Field: 'src/collections/MsdsV2/components/QRCodeComponent',
+          Cell: 'src/collections/MsdsV2/components/QRCodeCell',
+        },
+      },
+    },
+    {
       type: 'collapsible',
       label: {
         tr: 'Diğer Bilgiler',
@@ -149,7 +160,7 @@ const MsdsV2: CollectionConfig = {
           },
           type: 'date',
         },
-        
+
         {
           name: 'formNo',
           label: {
@@ -202,21 +213,21 @@ const MsdsV2: CollectionConfig = {
           admin: {
             description: {
               tr: 'MSDS belgesinin geçerlilik süresi sonu (Sertifika tarihinden 5 yıl sonra)',
-              en: 'End of validity period for MSDS document (5 years after certificate date)'
-            }
+              en: 'End of validity period for MSDS document (5 years after certificate date)',
+            },
           },
           hooks: {
             beforeChange: [
               ({ value, data }) => {
                 if (!value && data?.certificateDate) {
-                  const certDate = new Date(data.certificateDate);
-                  certDate.setFullYear(certDate.getFullYear() + 5);
-                  return certDate.toISOString();
+                  const certDate = new Date(data.certificateDate)
+                  certDate.setFullYear(certDate.getFullYear() + 5)
+                  return certDate.toISOString()
                 }
-                return value;
-              }
-            ]
-          }
+                return value
+              },
+            ],
+          },
         },
         {
           name: 'contentLanguage',
@@ -260,6 +271,7 @@ const MsdsV2: CollectionConfig = {
           })
           data.id = (lastDoc.docs[0]?.id || 0) + 1
         }
+        delete data.qrCode
         return data
       },
     ],

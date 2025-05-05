@@ -24,7 +24,8 @@ const MsdsRequests: CollectionConfig = {
     description: {
       tr: 'MSDS taleplerini yönetmek için kullanılır.',
       en: 'Used to manage MSDS requests.'
-    }
+    },
+    hidden: true,
   },
   fields: [
     {
