@@ -47,9 +47,15 @@ class AuthService {
   }
 
   public async resetPasswordEmail(body: { email: string }) {
-    const res = await axios.post(`${this.BASE_PATH}/reset-password-email`, body)
-
-    return res.data
+    try {
+      const res = await axios.post(`${this.BASE_PATH}/reset-password-email`, body)
+      return res.data
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        return { error: { message: 'User not found' } }
+      }
+      throw error
+    }
   }
 
   public async resetPassword(body: { password: string; token: string }) {
