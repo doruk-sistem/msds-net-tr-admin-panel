@@ -9,6 +9,8 @@ import { anyone } from '@/access/anyone'
 
 import { aiScanning } from './hooks/aiScanning'
 import { generateMsdsUniqueId } from './hooks/generateMsdsUniqueId'
+import QRCodeComponent from './components/QRCodeComponent'
+import QRCodeCell from './components/QRCodeCell'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
