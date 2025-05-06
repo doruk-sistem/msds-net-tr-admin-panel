@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import QRCodeSVG from 'react-qr-code'
 
-const QRCodeCell: React.FC<{ rowData: any; qrSize: number }> = ({ rowData, qrSize }) => {
+const QRCodeCell: React.FC<{ rowData: any; qrSize?: number }> = ({ rowData, qrSize = 50 }) => {
     const [contentUrl, setContentUrl] = useState('')
 
     useEffect(() => {
@@ -37,12 +37,12 @@ const QRCodeCell: React.FC<{ rowData: any; qrSize: number }> = ({ rowData, qrSiz
                 return
             }
 
-            canvas.width = 200
-            canvas.height = 200
+            canvas.width = qrSize
+            canvas.height = qrSize
 
             const img = new Image()
             img.onload = () => {
-                ctx.drawImage(img, 0, 0, 200, 200)
+                ctx.drawImage(img, 0, 0, qrSize, qrSize)
                 const pngFile = canvas.toDataURL('image/png')
                 const downloadLink = document.createElement('a')
                 downloadLink.download = `msds-qr-${rowData.id}.png`
@@ -62,20 +62,20 @@ const QRCodeCell: React.FC<{ rowData: any; qrSize: number }> = ({ rowData, qrSiz
     }
 
     return (
-        <div className="flex flex-col gap-1 p-2">
+        <div className="flex flex-col gap-1 p-2 items-center">
             <QRCodeSVG
                 className={`qr-code-svg-${rowData.id}`}
                 value={contentUrl}
                 size={qrSize}
                 style={{
-                    maxWidth: '35%',
-                    height: 'auto'
+                    width: qrSize,
+                    height: qrSize
                 }}
             />
             <button
                 onClick={handleDownload}
                 type="button"
-                className="w-12 h-8 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="w-12 h-8 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-2"
             >
                 İndir
             </button>

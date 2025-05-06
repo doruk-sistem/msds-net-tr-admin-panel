@@ -24,7 +24,7 @@ const QRCodeComponent: React.FC = () => {
         return null
     }
 
-    return <QRCodeCell rowData={{ ...data, id }} qrSize={400} />
+    return <QRCodeCell rowData={{ ...data, id }} qrSize={200} />
 }
 
 export default QRCodeComponent 
