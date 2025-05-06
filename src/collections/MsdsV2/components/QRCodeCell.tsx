@@ -3,18 +3,19 @@
 import React, { useState, useEffect } from 'react'
 import QRCodeSVG from 'react-qr-code'
 
-const QRCodeCell: React.FC<{ rowData: any }> = ({ rowData }) => {
-    const [baseUrl, setBaseUrl] = useState('')
+const QRCodeCell: React.FC<{ rowData: any; qrSize: number }> = ({ rowData, qrSize }) => {
+    const [contentUrl, setContentUrl] = useState('')
 
     useEffect(() => {
-        setBaseUrl(window.location.origin)
-    }, [])
+        if (typeof window !== 'undefined' && rowData?.filename) {
+            const contentPath = `/api/msdsV2/file/${rowData.filename}`
+            setContentUrl(`${window.location.origin}${contentPath}`)
+        }
+    }, [rowData?.filename])
 
     if (!rowData?.id) {
         return null
     }
-
-    const qrValue = `${baseUrl}/api/msdsV2/${rowData.id}/file`
 
     const handleDownload = async (e: React.MouseEvent) => {
         e.preventDefault()
@@ -64,9 +65,10 @@ const QRCodeCell: React.FC<{ rowData: any }> = ({ rowData }) => {
         <div className="flex flex-col gap-1 p-2">
             <QRCodeSVG
                 className={`qr-code-svg-${rowData.id}`}
-                value={qrValue}
+                value={contentUrl}
+                size={qrSize}
                 style={{
-                    maxWidth: '13%',
+                    maxWidth: '35%',
                     height: 'auto'
                 }}
             />
