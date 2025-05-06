@@ -1,18 +1,22 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDocumentInfo } from '@payloadcms/ui'
 import QRCodeSVG from 'react-qr-code'
 
 const QRCodeComponent: React.FC = () => {
     const { id } = useDocumentInfo()
+    const [baseUrl, setBaseUrl] = useState('')
+
+    useEffect(() => {
+        setBaseUrl(window.location.origin)
+    }, [])
 
     if (!id) {
         return null
     }
 
-    const baseUrl = typeof window !== 'undefined' ? window.location.origin : ''
-    const qrValue = `${baseUrl}/admin/collections/msdsV2/${id}`
+    const qrValue = `${baseUrl}/api/msdsV2/${id}/file`
 
     const handleDownload = async (e: React.MouseEvent) => {
         e.preventDefault()
