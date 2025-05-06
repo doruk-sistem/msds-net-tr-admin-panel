@@ -1,15 +1,20 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import QRCodeSVG from 'react-qr-code'
 
 const QRCodeCell: React.FC<{ rowData: any }> = ({ rowData }) => {
+    const [baseUrl, setBaseUrl] = useState('')
+
+    useEffect(() => {
+        setBaseUrl(window.location.origin)
+    }, [])
+
     if (!rowData?.id) {
         return null
     }
 
-    const baseUrl = typeof window !== 'undefined' ? window.location.origin : ''
-    const qrValue = `${baseUrl}/admin/collections/msdsV2/${rowData.id}`
+    const qrValue = `${baseUrl}/api/msdsV2/${rowData.id}/file`
 
     const handleDownload = async (e: React.MouseEvent) => {
         e.preventDefault()
@@ -60,7 +65,6 @@ const QRCodeCell: React.FC<{ rowData: any }> = ({ rowData }) => {
             <QRCodeSVG
                 className={`qr-code-svg-${rowData.id}`}
                 value={qrValue}
-                size={40}
                 style={{
                     maxWidth: '100%',
                     height: 'auto'
