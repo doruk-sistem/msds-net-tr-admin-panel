@@ -66,7 +66,7 @@ const QRCodeCell: React.FC<{ rowData: any }> = ({ rowData }) => {
                 className={`qr-code-svg-${rowData.id}`}
                 value={qrValue}
                 style={{
-                    maxWidth: '100%',
+                    maxWidth: '13%',
                     height: 'auto'
                 }}
             />
