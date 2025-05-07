@@ -3,18 +3,19 @@
 import React, { useState, useEffect } from 'react'
 import QRCodeSVG from 'react-qr-code'
 
-const QRCodeCell: React.FC<{ rowData: any }> = ({ rowData }) => {
-    const [baseUrl, setBaseUrl] = useState('')
+const QRCodeCell: React.FC<{ rowData: any; qrSize?: number }> = ({ rowData, qrSize = 50 }) => {
+    const [contentUrl, setContentUrl] = useState('')
 
     useEffect(() => {
-        setBaseUrl(window.location.origin)
-    }, [])
+        if (typeof window !== 'undefined' && rowData?.filename) {
+            const contentPath = `/api/msdsV2/file/${rowData.filename}`
+            setContentUrl(`${window.location.origin}${contentPath}`)
+        }
+    }, [rowData?.filename])
 
     if (!rowData?.id) {
         return null
     }
-
-    const qrValue = `${baseUrl}/api/msdsV2/${rowData.id}/file`
 
     const handleDownload = async (e: React.MouseEvent) => {
         e.preventDefault()
@@ -36,12 +37,12 @@ const QRCodeCell: React.FC<{ rowData: any }> = ({ rowData }) => {
                 return
             }
 
-            canvas.width = 200
-            canvas.height = 200
+            canvas.width = qrSize
+            canvas.height = qrSize
 
             const img = new Image()
             img.onload = () => {
-                ctx.drawImage(img, 0, 0, 200, 200)
+                ctx.drawImage(img, 0, 0, qrSize, qrSize)
                 const pngFile = canvas.toDataURL('image/png')
                 const downloadLink = document.createElement('a')
                 downloadLink.download = `msds-qr-${rowData.id}.png`
@@ -61,19 +62,20 @@ const QRCodeCell: React.FC<{ rowData: any }> = ({ rowData }) => {
     }
 
     return (
-        <div className="flex flex-col gap-1 p-2">
+        <div className="flex flex-col gap-1 p-2 items-center">
             <QRCodeSVG
                 className={`qr-code-svg-${rowData.id}`}
-                value={qrValue}
+                value={contentUrl}
+                size={qrSize}
                 style={{
-                    maxWidth: '13%',
-                    height: 'auto'
+                    width: qrSize,
+                    height: qrSize
                 }}
             />
             <button
                 onClick={handleDownload}
                 type="button"
-                className="w-12 h-8 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="w-12 h-8 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mt-2"
             >
                 İndir
             </button>
