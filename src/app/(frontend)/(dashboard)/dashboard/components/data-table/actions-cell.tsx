@@ -348,7 +348,7 @@ function MsdsContent({ url: _url, details }: MsdsContentProps): React.JSX.Elemen
               <>
                 {getValidationStatus(details.certificateDate) === 'valid' ? (
                   <Badge variant="secondary" className="flex items-center gap-1">
-                    <CheckCircle className="h-4 w-4" />
+                    <CheckCircle className="h-4 w-4 text-green-400" />
                     {t('dashboardPage.openTheContentDialog.validationStatus.validUntil')}{' '}
                     {formatDate(calculateValidationDate(details.certificateDate)!, locale)}
                   </Badge>

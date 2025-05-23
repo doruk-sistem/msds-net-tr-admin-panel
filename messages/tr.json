@@ -105,6 +105,7 @@
       "formNo": "Form No",
       "language": "Dil",
       "publishedDate": "Yayın Tarihi",
+      "validationStatus": "Geçerlilik Durumu",
       "viewDetails": "Detayları Görüntüle"
     },
     "openTheContentDialog": {
