@@ -196,6 +196,11 @@ export const getColumns = (t: any): ColumnDef<Row>[] => [
         </div>
       )
     },
+    sortingFn: (rowA, rowB, columnId) => {
+      const dateA = rowA.original.certificateDate ? new Date(rowA.original.certificateDate).getTime() : 0
+      const dateB = rowB.original.certificateDate ? new Date(rowB.original.certificateDate).getTime() : 0
+      return dateA - dateB
+    },
   },
   {
     accessorKey: 'expiryDate',
@@ -233,10 +238,32 @@ export const getColumns = (t: any): ColumnDef<Row>[] => [
             <XCircle className="h-4 w-4 text-red-500" />
           )}
           <span className={`text-sm ${isValid ? 'text-slate-900 dark:text-slate-100' : 'text-red-500'}`}>
-            {expiryDate ? `Valid until ${formatDate(expiryDate)}` : 'N/A'}
+            {expiryDate ? (t === undefined ? `Valid until ${formatDate(expiryDate)}` : `${t('msdsContentDataTable.validationStatus')} ${formatDate(expiryDate)}`) : 'N/A'}
           </span>
         </div>
       )
+    },
+    sortingFn: (rowA, rowB, columnId) => {
+      // Calculate expiry dates for both rows
+      let expiryDateA = rowA.original.expiryDate
+      let expiryDateB = rowB.original.expiryDate
+      
+      // If expiry date doesn't exist but certificate date does, calculate it
+      if (!expiryDateA && rowA.original.certificateDate) {
+        const certDateA = new Date(rowA.original.certificateDate)
+        certDateA.setFullYear(certDateA.getFullYear() + 5)
+        expiryDateA = certDateA.toISOString()
+      }
+      
+      if (!expiryDateB && rowB.original.certificateDate) {
+        const certDateB = new Date(rowB.original.certificateDate)
+        certDateB.setFullYear(certDateB.getFullYear() + 5)
+        expiryDateB = certDateB.toISOString()
+      }
+      
+      const dateA = expiryDateA ? new Date(expiryDateA).getTime() : 0
+      const dateB = expiryDateB ? new Date(expiryDateB).getTime() : 0
+      return dateA - dateB
     },
   },
   {
