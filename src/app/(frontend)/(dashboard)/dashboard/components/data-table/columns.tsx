@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog'
 import { DataFromCollectionSlug } from 'payload'
 import { ColumnDef } from '@tanstack/react-table'
-import { ArrowUpDown } from "lucide-react"
+import { ArrowUpDown, CheckCircle2, XCircle } from "lucide-react"
 import ActionsCell from './actions-cell'
 import formatDate from '@/utilities/formatDate'
 import { Button } from '@/components/ui/button'
@@ -32,6 +32,7 @@ export type Row = {
   updatedCount: MsdsContent['updatedCount']
   author: MsdsContent['author']
   certificateDate: MsdsContent['certificateDate']
+  expiryDate: MsdsContent['expiryDate']
   url: MsdsContent['url']
   createdAt: MsdsContent['createdAt']
   contentLanguage: {
@@ -124,7 +125,7 @@ export const getColumns = (t: any): ColumnDef<Row>[] => [
     cell: ({ row }) => {
       const formNo = row.original.formNo
       return (
-        <div className="font-medium text-sm text-slate-600">
+        <div className="font-medium text-sm text-slate-600 w-24">
           {formNo || 'N/A'}
         </div>
       )
@@ -141,8 +142,8 @@ export const getColumns = (t: any): ColumnDef<Row>[] => [
       },
     }) => {
       return (
-        <div className="flex items-center space-x-1">
-          <div className="font-medium text-slate-900 dark:text-slate-100">{name}</div>
+        <div className="flex items-center space-x-1 max-w-[200px]">
+          <div className="font-medium text-slate-900 dark:text-slate-100 truncate">{name}</div>
           {url ? (
             <a href={url} target="_blank" rel="noopener noreferrer" className="block">
               <Button variant="ghost" size="sm">
@@ -165,7 +166,7 @@ export const getColumns = (t: any): ColumnDef<Row>[] => [
         typeof language === 'object' ? `${language?.code} (${language?.name})` : ''
 
       return (
-        <div className="flex flex-col">
+        <div className="flex flex-col w-28">
           <span className="text-sm text-slate-900 dark:text-slate-100">{formattedLanguage}</span>
         </div>
       )
@@ -188,9 +189,51 @@ export const getColumns = (t: any): ColumnDef<Row>[] => [
     cell: ({ row }) => {
       const date = row.original.certificateDate
       return (
-        <div className="flex flex-col">
+        <div className="flex flex-col w-28">
           <span className="text-sm text-slate-900 dark:text-slate-100">
             {date ? formatDate(date) : 'N/A'}
+          </span>
+        </div>
+      )
+    },
+  },
+  {
+    accessorKey: 'expiryDate',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="flex items-center gap-2 justify-start px-0"
+        >
+          {t('msdsContentDataTable.validationStatus')}
+          <ArrowUpDown className="h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => {
+      let expiryDate = row.original.expiryDate
+      const certificateDate = row.original.certificateDate
+      
+      // Eğer expiryDate yoksa ama certificateDate varsa, 5 yıl ekleyerek hesapla
+      if (!expiryDate && certificateDate) {
+        const certDate = new Date(certificateDate)
+        certDate.setFullYear(certDate.getFullYear() + 5)
+        expiryDate = certDate.toISOString()
+      }
+      
+      // Geçerlilik durumunu kontrol et
+      const isValid = expiryDate ? new Date() < new Date(expiryDate) : false
+      
+      return (
+        <div className="flex flex-row items-center gap-2 w-40">
+          {expiryDate && (
+            isValid ? 
+            <CheckCircle2 className="h-4 w-4 text-green-400" /> : 
+            <XCircle className="h-4 w-4 text-red-500" />
+          )}
+          <span className={`text-sm ${isValid ? 'text-slate-900 dark:text-slate-100' : 'text-red-500'}`}>
+            {expiryDate ? `Valid until ${formatDate(expiryDate)}` : 'N/A'}
           </span>
         </div>
       )

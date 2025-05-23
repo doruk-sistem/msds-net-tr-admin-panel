@@ -105,6 +105,7 @@
       "formNo": "Form No",
       "language": "Language",
       "publishedDate": "Published Date",
+      "validationStatus": "Validation Status",
       "viewDetails": "View Details"
     },
     "openTheContentDialog": {
