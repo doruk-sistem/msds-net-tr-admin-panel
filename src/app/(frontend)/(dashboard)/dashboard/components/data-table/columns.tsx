@@ -158,7 +158,7 @@ export const getColumns = (t: any): ColumnDef<Row>[] => [
   {
     accessorKey: 'language',
     header: ({ column }) => {
-      return t('msdsContentDataTable.language')  
+      return t('msdsContentDataTable.language')
     },
     cell: ({ row }) => {
       const language = row.original.contentLanguage
@@ -181,7 +181,7 @@ export const getColumns = (t: any): ColumnDef<Row>[] => [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="flex items-center gap-2 justify-start px-0"
         >
-          {t('msdsContentDataTable.publishedDate')}  
+          {t('msdsContentDataTable.publishedDate')}
           <ArrowUpDown className="h-4 w-4" />
         </Button>
       )
@@ -219,23 +219,23 @@ export const getColumns = (t: any): ColumnDef<Row>[] => [
     cell: ({ row }) => {
       let expiryDate = row.original.expiryDate
       const certificateDate = row.original.certificateDate
-      
+
       // Eğer expiryDate yoksa ama certificateDate varsa, 5 yıl ekleyerek hesapla
       if (!expiryDate && certificateDate) {
         const certDate = new Date(certificateDate)
         certDate.setFullYear(certDate.getFullYear() + 5)
         expiryDate = certDate.toISOString()
       }
-      
+
       // Geçerlilik durumunu kontrol et
       const isValid = expiryDate ? new Date() < new Date(expiryDate) : false
-      
+
       return (
         <div className="flex flex-row items-center gap-2 w-40">
           {expiryDate && (
-            isValid ? 
-            <CheckCircle2 className="h-4 w-4 text-green-400" /> : 
-            <XCircle className="h-4 w-4 text-red-500" />
+            isValid ?
+              <CheckCircle2 className="h-5 w-5 text-green-400" /> :
+              <XCircle className="h-5 w-5 text-red-500" />
           )}
           <span className={`text-sm ${isValid ? 'text-slate-900 dark:text-slate-100' : 'text-red-500'}`}>
             {expiryDate ? (t === undefined ? `Valid until ${formatDate(expiryDate)}` : `${t('msdsContentDataTable.validUntil')} ${formatDate(expiryDate)}`) : 'N/A'}
@@ -247,20 +247,20 @@ export const getColumns = (t: any): ColumnDef<Row>[] => [
       // Calculate expiry dates for both rows
       let expiryDateA = rowA.original.expiryDate
       let expiryDateB = rowB.original.expiryDate
-      
+
       // If expiry date doesn't exist but certificate date does, calculate it
       if (!expiryDateA && rowA.original.certificateDate) {
         const certDateA = new Date(rowA.original.certificateDate)
         certDateA.setFullYear(certDateA.getFullYear() + 5)
         expiryDateA = certDateA.toISOString()
       }
-      
+
       if (!expiryDateB && rowB.original.certificateDate) {
         const certDateB = new Date(rowB.original.certificateDate)
         certDateB.setFullYear(certDateB.getFullYear() + 5)
         expiryDateB = certDateB.toISOString()
       }
-      
+
       const dateA = expiryDateA ? new Date(expiryDateA).getTime() : 0
       const dateB = expiryDateB ? new Date(expiryDateB).getTime() : 0
       return dateA - dateB
@@ -268,7 +268,7 @@ export const getColumns = (t: any): ColumnDef<Row>[] => [
   },
   {
     id: 'qrCode',
-    header: t('msdsContentDataTable.qrCode'),  
+    header: t('msdsContentDataTable.qrCode'),
     cell: ({ row }) => {
       return (
         <div className="flex items-center gap-2 justify-start px-0">
