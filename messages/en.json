@@ -203,5 +203,11 @@
       "saveChanges": "Save Changes",
       "readOnlyMessage": "Company information can only be edited by administrators."
     }
+  },
+  "validation": {
+    "password": {
+      "minLength": "Password must be at least 6 characters",
+      "mismatch": "Passwords do not match"
+    }
   }
 }

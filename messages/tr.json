@@ -203,5 +203,11 @@
       "saveChanges": "Kaydet",
       "readOnlyMessage": "Şirket bilgileri yalnızca yöneticiler tarafından düzenlenebilir."
     }
+  },
+  "validation": {
+    "password": {
+      "minLength": "Parola en az 6 karakter olmalıdır",
+      "mismatch": "Parolalar eşleşmiyor"
+    }
   }
 }
