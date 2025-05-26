@@ -238,7 +238,7 @@ export const getColumns = (t: any): ColumnDef<Row>[] => [
             <XCircle className="h-4 w-4 text-red-500" />
           )}
           <span className={`text-sm ${isValid ? 'text-slate-900 dark:text-slate-100' : 'text-red-500'}`}>
-            {expiryDate ? (t === undefined ? `Valid until ${formatDate(expiryDate)}` : `${t('msdsContentDataTable.validationStatus')} ${formatDate(expiryDate)}`) : 'N/A'}
+            {expiryDate ? (t === undefined ? `Valid until ${formatDate(expiryDate)}` : `${t('msdsContentDataTable.validUntil')} ${formatDate(expiryDate)}`) : 'N/A'}
           </span>
         </div>
       )
