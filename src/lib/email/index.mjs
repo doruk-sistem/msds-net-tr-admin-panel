@@ -1,17 +1,17 @@
 import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
 
-dotenv.config()  // .env dosyasını yükle
+dotenv.config() // .env dosyasını yükle
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS
-  }
+    pass: process.env.SMTP_PASS,
+  },
 })
 
-export const sendEmail = async ({ to, subject, text }) => {
+export const sendEmail = async ({ to, subject, text, html }) => {
   try {
     console.log('Email gönderiliyor...', { to, subject })
 
@@ -19,7 +19,8 @@ export const sendEmail = async ({ to, subject, text }) => {
       from: process.env.SMTP_FROM,
       to,
       subject,
-      text
+      text,
+      html: html || text, // HTML yoksa text'i kullan
     })
 
     console.log('Email başarıyla gönderildi:', info.response)
