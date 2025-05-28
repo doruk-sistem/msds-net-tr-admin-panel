@@ -1,3 +1,4 @@
+
 import type { CollectionConfig } from 'payload'
 
 import bcrypt from 'bcryptjs'
@@ -6,6 +7,7 @@ import generateRandomPassword from '@/utilities/generatePassword'
 import { getServerSideURL } from '@/utilities/getURL'
 
 import { authenticated } from '../../access/authenticated'
+import { sendEmail } from '@/lib/email'
 
 const CompanyUsers: CollectionConfig = {
   slug: 'companyUsers',
@@ -88,19 +90,33 @@ const CompanyUsers: CollectionConfig = {
                 const newPassword = !value ? generateRandomPassword() : value
 
                 if (data?.sendEmail && operation === 'create') {
-                  await req.payload.email.sendEmail({
-                    from: '"MSDS System" <info@doruksistem.com.tr>',
+                  await sendEmail({
                     to: data?.email,
                     subject: 'MSDS System - Create Password',
-                    text: `${data?.fullname}, please complete your registration.`,
                     html: `
-                      <b>Hello ${data?.fullname}, please complete your registration.</b>
-                      <br />
-                      <p>We have created an account for you on msds.net.tr. Please create a password to log in.</p>
-                      <br />
-                      <br />
-                      <a href="${getServerSideURL()}/auth/complate-registration?email=${data?.email}" target="_blank">Click here to complete your registration.</a>
+                      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+                        <div style="text-align: center; margin-bottom: 20px;">
+                          <img src="https://msds.net.tr/msds-com-tr-logo.png" alt="MSDS System Logo" style="width: 180px;" />
+                        </div>
+                        <h2 style="color: #333;">Welcome to MSDS System!</h2>
+                        <p>Hello <strong>${data?.fullname}</strong>,</p>
+                        <p>We have created an account for you on msds.net.tr. To complete your registration and set up your password, please click the button below:</p>
+                        <div style="text-align: center; margin: 30px 0;">
+                          <a href="${getServerSideURL()}/auth/complate-registration?email=${data?.email}" 
+                             style="background-color: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block;">
+                            Complete Registration
+                          </a>
+                        </div>
+                        <p>If the button above doesn't work, you can also copy and paste this link into your browser:</p>
+                        <p style="word-break: break-all; color: #666;">
+                          ${getServerSideURL()}/auth/complate-registration?email=${data?.email}
+                        </p>
+                        <p>This link will expire in 24 hours.</p>
+                        <hr style="border: 1px solid #eee; margin: 20px 0;">
+                        <p style="color: #666; font-size: 12px;">This is an automated message, please do not reply to this email.</p>
+                      </div>
                     `,
+                    text: `${data?.fullname}, please complete your registration by clicking the link below:\n\n${getServerSideURL()}/auth/complate-registration?email=${data?.email}`,
                   })
                 }
 

@@ -37,6 +37,7 @@ export default function DashboardClient({ serverData: { companyUsers, msdsV2 } }
       updatedCount: item?.updatedCount || 0,
       author: item?.author || '',
       certificateDate: item?.certificateDate || '',
+      expiryDate: item?.expiryDate || '',
       url: item?.url || '',
       createdAt: item?.createdAt || '',
       contentLanguage: {

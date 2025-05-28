@@ -105,7 +105,9 @@
       "formNo": "Form No",
       "language": "Language",
       "publishedDate": "Published Date",
-      "viewDetails": "View Details"
+      "validationStatus": "Validation Status",
+      "viewDetails": "View Details",
+      "validUntil": "Valid Until"
     },
     "openTheContentDialog": {
       "dialogTitle": "{name} - MSDS Contents",
@@ -201,6 +203,12 @@
       "addressDescription": "Company address.",
       "saveChanges": "Save Changes",
       "readOnlyMessage": "Company information can only be edited by administrators."
+    }
+  },
+  "validation": {
+    "password": {
+      "minLength": "Password must be at least 6 characters",
+      "mismatch": "Passwords do not match"
     }
   }
 }
