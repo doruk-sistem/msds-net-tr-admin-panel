@@ -106,7 +106,8 @@
       "language": "Language",
       "publishedDate": "Published Date",
       "validationStatus": "Validation Status",
-      "viewDetails": "View Details"
+      "viewDetails": "View Details",
+      "validUntil": "Valid Until"
     },
     "openTheContentDialog": {
       "dialogTitle": "{name} - MSDS Contents",
