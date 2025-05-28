@@ -26,10 +26,6 @@ import authService from '@/services/auth.service'
 
 import { useToast } from '@/hooks/use-toast'
 
-const formSchema = z.object({
-  password: z.string().min(3),
-})
-
 export default function ComplateRegistrationPageClient() {
   const searchParams = useSearchParams()
   const email = searchParams.get('email')
@@ -40,10 +36,19 @@ export default function ComplateRegistrationPageClient() {
   const { toast } = useToast()
   const t = useTranslations()
 
+  const formSchema = z.object({
+    password: z.string().min(6, t('validation.password.minLength')),
+    confirmPassword: z.string().min(6, t('validation.password.minLength')),
+  }).refine((data) => data.password === data.confirmPassword, {
+    message: t('validation.password.mismatch'),
+    path: ["confirmPassword"],
+  })
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       password: '',
+      confirmPassword: '',
     },
   })
 
@@ -104,10 +109,31 @@ export default function ComplateRegistrationPageClient() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm font-medium">
-                          {t('loginPage.password')}
+                          {t('common.password')}
                         </FormLabel>
                         <FormControl>
                           <Input
+                            type="password"
+                            placeholder="••••••••"
+                            {...field}
+                            className="h-12 bg-background/50 dark:bg-background/50 border-border/30 dark:border-border/20 focus:border-primary/50 focus:ring-0"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium">
+                          {t('common.confirmPassword')}
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="password"
                             placeholder="••••••••"
                             {...field}
                             className="h-12 bg-background/50 dark:bg-background/50 border-border/30 dark:border-border/20 focus:border-primary/50 focus:ring-0"

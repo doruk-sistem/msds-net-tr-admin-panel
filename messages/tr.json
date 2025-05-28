@@ -106,7 +106,8 @@
       "language": "Dil",
       "publishedDate": "Yayın Tarihi",
       "validationStatus": "Geçerlilik Durumu",
-      "viewDetails": "Detayları Görüntüle"
+      "viewDetails": "Detayları Görüntüle",
+      "validUntil": "Geçerlilik Tarihi"
     },
     "openTheContentDialog": {
       "dialogTitle": "{name} - MSDS İçerikleri",
@@ -202,6 +203,12 @@
       "addressDescription": "Şirket adresi.",
       "saveChanges": "Kaydet",
       "readOnlyMessage": "Şirket bilgileri yalnızca yöneticiler tarafından düzenlenebilir."
+    }
+  },
+  "validation": {
+    "password": {
+      "minLength": "Parola en az 6 karakter olmalıdır",
+      "mismatch": "Parolalar eşleşmiyor"
     }
   }
 }

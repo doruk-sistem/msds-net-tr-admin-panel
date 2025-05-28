@@ -27,10 +27,6 @@ import { useToast } from '@/hooks/use-toast'
 import AuthLayout from '@/components/frontend/auth-layout'
 import { MoveLeft } from 'lucide-react'
 
-const formSchema = z.object({
-  password: z.string().min(3),
-})
-
 interface ResetPasswordPageClientProps {
   hasExpired: boolean
 }
@@ -45,11 +41,21 @@ export default function ResetPasswordPageClient({ hasExpired }: ResetPasswordPag
   const { toast } = useToast()
   const t = useTranslations()
 
+  const formSchema = z.object({
+    password: z.string().min(6, t('validation.password.minLength')),
+    confirmPassword: z.string()
+  }).refine((data) => data.password === data.confirmPassword, {
+    message: t('validation.password.mismatch'),
+    path: ["confirmPassword"],
+  })
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       password: '',
+      confirmPassword: '',
     },
+    mode: 'onChange',
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -124,7 +130,28 @@ export default function ResetPasswordPageClient({ hasExpired }: ResetPasswordPag
                       </FormLabel>
                       <FormControl>
                         <Input
+                          type="password"
                           placeholder={t('common.newPassword')}
+                          {...field}
+                          className="h-12 bg-background/50 dark:bg-background/50 border-border/30 dark:border-border/20 focus:border-primary/50 focus:ring-0"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="confirmPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium">
+                        {t('common.confirmPassword')}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="password"
+                          placeholder={t('common.confirmPassword')}
                           {...field}
                           className="h-12 bg-background/50 dark:bg-background/50 border-border/30 dark:border-border/20 focus:border-primary/50 focus:ring-0"
                         />
