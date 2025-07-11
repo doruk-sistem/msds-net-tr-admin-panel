@@ -2,10 +2,10 @@ import nodemailer from 'nodemailer'
 
 // Email transport yapılandırması
 const transporter = nodemailer.createTransport({
-  service: 'gmail', // Gmail için özel ayar
   host: process.env.SMTP_HOST,
   port: Number(process.env.SMTP_PORT),
   secure: false, // TLS için false
+  requireTLS: true,
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
@@ -40,7 +40,7 @@ export const sendEmail = async ({
     console.log('Email gönderiliyor...', { to, subject }) // Debug log
 
     const mailOptions = {
-      from: process.env.SMTP_FROM,
+      from: process.env.SMTP_FROM || process.env.SMTP_USER,
       to,
       subject,
       text,
