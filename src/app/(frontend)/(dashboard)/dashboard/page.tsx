@@ -14,6 +14,7 @@ export default async function DashboardPage({ searchParams: searchParamsPromise 
 
   let companyUsers: PaginatedDocs<CompanyUser> | null = null
   let msdsV2: PaginatedDocs<MsdsV2> | null = null
+  let activeCompanyName: string | null = null
 
   try {
     const user = await getMe()
@@ -23,6 +24,25 @@ export default async function DashboardPage({ searchParams: searchParamsPromise 
     const payload = await getPayloadCMS()
 
     if (companyId) {
+      // Kullanıcının tüm şirketlerini al
+      const userCompanies = await payload.find({
+        collection: 'companyUsers',
+        depth: 1,
+        where: {
+          email: {
+            equals: user.email,
+          },
+        },
+      })
+
+      // Eğer kullanıcı birden fazla şirkete kayıtlıysa aktif şirket adını al
+      if (userCompanies?.docs && userCompanies.docs.length > 1) {
+        const activeCompany = userCompanies.docs.find(u => u.id === user.id)
+        if (activeCompany?.company && typeof activeCompany.company === 'object') {
+          activeCompanyName = activeCompany.company.companyName || null
+        }
+      }
+
       const msdsV2Response = await payload.find({
         collection: 'msdsV2',
         depth: 2,
@@ -38,10 +58,10 @@ export default async function DashboardPage({ searchParams: searchParamsPromise 
           },
           ...(!!name
             ? {
-                name: {
-                  like: name,
-                },
-              }
+              name: {
+                like: name,
+              },
+            }
             : {}),
         },
       })
@@ -66,5 +86,5 @@ export default async function DashboardPage({ searchParams: searchParamsPromise 
     console.error('DashboardPage error: ', error)
   }
 
-  return <DashboardClient serverData={{ companyUsers, msdsV2 }} />
+  return <DashboardClient serverData={{ companyUsers, msdsV2, activeCompanyName }} />
 }

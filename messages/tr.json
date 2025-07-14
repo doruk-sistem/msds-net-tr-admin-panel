@@ -108,6 +108,7 @@
   },
   "dashboardPage": {
     "title": "Kontrol Paneli",
+    "activeCompany": "Aktif Şirket",
     "msdsContent": "MSDS İçeriği",
     "totalMSDS": "Toplam MSDS",
     "filtered": "Filtrelenmiş",

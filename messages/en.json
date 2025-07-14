@@ -108,6 +108,7 @@
   },
   "dashboardPage": {
     "title": "Dashboard",
+    "activeCompany": "Active Company",
     "msdsContent": "MSDS Content",
     "totalMSDS": "Total MSDS",
     "filtered": "Filtered",
