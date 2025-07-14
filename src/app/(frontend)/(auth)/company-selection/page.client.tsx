@@ -15,38 +15,38 @@ import authService from '@/services/auth.service'
 import { useToast } from '@/hooks/use-toast'
 
 interface CompanySelectionModalProps {
-  isOpen: boolean
-  onClose: () => void
-  userCompanies: Array<{
-    id: string
-    fullname: string
+    isOpen: boolean
+    onClose: () => void
+    userCompanies: Array<{
+        id: string
+        fullname: string
+        email: string
+        company: {
+            id: string
+            companyName: string
+        }
+        registrationCompleted: boolean
+    }>
     email: string
-    company: {
-      id: string
-      companyName: string
-    }
-    registrationCompleted: boolean
-  }>
-  email: string
 }
 
 export default function CompanySelectionModal({
-  isOpen,
-  onClose,
-  userCompanies,
-  email,
+    isOpen,
+    onClose,
+    userCompanies,
+    email,
 }: CompanySelectionModalProps) {
     const [selectedUserId, setSelectedUserId] = useState<string>('')
     const [isLoading, setIsLoading] = useState(false)
     const router = useRouter()
     const { toast } = useToast()
-    const t = useTranslations()
+    const t = useTranslations('companySelection')
 
     const handleCompanySelection = async () => {
         if (!selectedUserId) {
             toast({
-                title: 'Error',
-                description: 'Please select a company',
+                title: t('error.title'),
+                description: t('error.selectCompany'),
             })
             return
         }
@@ -54,15 +54,15 @@ export default function CompanySelectionModal({
         setIsLoading(true)
 
         try {
-                  const res = await authService.selectCompany({
-        email,
-        userId: selectedUserId,
-      })
+            const res = await authService.selectCompany({
+                email,
+                userId: selectedUserId,
+            })
 
             if (res?.accessToken) {
                 toast({
-                    title: t('loginPage.successToast.title'),
-                    description: t('loginPage.successToast.description'),
+                    title: t('successToast.title'),
+                    description: t('successToast.description'),
                 })
                 router.push('/dashboard')
                 onClose()
@@ -72,13 +72,13 @@ export default function CompanySelectionModal({
 
             if (axios.isAxiosError(error)) {
                 toast({
-                    title: 'Error',
-                    description: error?.response?.data?.error?.message || 'Something went wrong',
+                    title: t('error.title'),
+                    description: error?.response?.data?.error?.message || t('error.general'),
                 })
             } else {
                 toast({
-                    title: 'Error',
-                    description: 'Something went wrong. Please try again later.',
+                    title: t('error.title'),
+                    description: t('error.general'),
                 })
             }
         } finally {
@@ -90,11 +90,11 @@ export default function CompanySelectionModal({
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle>Select Company</DialogTitle>
+                    <DialogTitle>{t('title')}</DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4">
                     <p className="text-sm text-muted-foreground">
-                        You have accounts in multiple companies. Please select which company you want to access:
+                        {t('description')}
                     </p>
 
                     <div className="space-y-3">
@@ -102,8 +102,8 @@ export default function CompanySelectionModal({
                             <Card
                                 key={userCompany.id}
                                 className={`cursor-pointer transition-all hover:shadow-md ${selectedUserId === userCompany.id
-                                        ? 'ring-2 ring-primary border-primary'
-                                        : 'hover:border-primary/50'
+                                    ? 'ring-2 ring-primary border-primary'
+                                    : 'hover:border-primary/50'
                                     }`}
                                 onClick={() => setSelectedUserId(userCompany.id)}
                             >
@@ -131,7 +131,7 @@ export default function CompanySelectionModal({
                             className="flex-1"
                             disabled={isLoading}
                         >
-                            Cancel
+                            {t('buttons.cancel')}
                         </Button>
                         <Button
                             onClick={handleCompanySelection}
@@ -139,7 +139,7 @@ export default function CompanySelectionModal({
                             loading={isLoading}
                             disabled={!selectedUserId}
                         >
-                            Continue
+                            {t('buttons.continue')}
                         </Button>
                     </div>
                 </div>
