@@ -27,12 +27,24 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: { message: 'Invalid credentials' } }, { status: 401 })
     }
 
-    // Önce şifre doğrulaması yap
-    const user = users.docs[0]
-    const isValid =
-      password && user.hashedPassword ? await bcrypt.compare(password, user.hashedPassword) : false
+    // Kullanıcılar arasından şifresi doğru olanı bul
+    let validUser: any = null
+    let isValid = false
 
-    if (!isValid) {
+    for (const user of users.docs) {
+      const userPasswordValid =
+        password && user.hashedPassword
+          ? await bcrypt.compare(password, user.hashedPassword)
+          : false
+
+      if (userPasswordValid) {
+        validUser = user
+        isValid = true
+        break
+      }
+    }
+
+    if (!isValid || !validUser) {
       return NextResponse.json({ error: { message: 'Invalid password' } }, { status: 401 })
     }
 
@@ -57,12 +69,13 @@ export async function POST(request: Request) {
     }
 
     // Tek şirkete kayıtlı kullanıcı için direkt giriş yap
+    // registrationCompleted kontrolü kaldırıldı - kullanıcı şifre ile giriş yapabilir
     const { accessToken, refreshToken } = await authHelper.encrypt({
-      userId: user.id,
+      userId: validUser.id,
     })
 
-    delete user.hashedPassword
-    delete user.apiKey
+    delete validUser.hashedPassword
+    delete validUser.apiKey
 
     return NextResponse.json(
       {
