@@ -23,6 +23,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: { message: 'Invalid user' } }, { status: 401 })
     }
 
+    // Kullanıcı zaten login sırasında doğrulanmış, şifre kontrolü yapmaya gerek yok
     // JWT token oluştur
     const { accessToken, refreshToken } = await authHelper.encrypt({
       userId: user.id,

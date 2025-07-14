@@ -27,6 +27,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: { message: 'Invalid credentials' } }, { status: 401 })
     }
 
+    // Önce şifre doğrulaması yap
+    const user = users.docs[0]
+    const isValid =
+      password && user.hashedPassword ? await bcrypt.compare(password, user.hashedPassword) : false
+
+    if (!isValid) {
+      return NextResponse.json({ error: { message: 'Invalid password' } }, { status: 401 })
+    }
+
     // Eğer kullanıcı birden fazla şirkete kayıtlıysa, şirket seçimi için özel response döndür
     if (users.docs.length > 1) {
       const userCompanies = users.docs.map((user) => ({
@@ -47,15 +56,7 @@ export async function POST(request: Request) {
       )
     }
 
-    const user = users.docs[0]
-
-    const isValid =
-      password && user.hashedPassword ? await bcrypt.compare(password, user.hashedPassword) : false
-
-    if (!isValid) {
-      return NextResponse.json({ error: { message: 'Invalid password' } }, { status: 401 })
-    }
-
+    // Tek şirkete kayıtlı kullanıcı için direkt giriş yap
     const { accessToken, refreshToken } = await authHelper.encrypt({
       userId: user.id,
     })
