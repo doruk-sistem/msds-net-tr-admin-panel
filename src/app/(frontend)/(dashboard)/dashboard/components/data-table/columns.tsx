@@ -108,6 +108,36 @@ const QRCodeCell = ({ row }: { row: any }) => {
     </Dialog>
   )
 }
+// PDF Link Cell bileşeni
+function PdfLinkCell({ row }: { row: any }) {
+  const t = useTranslations();
+  const { toast } = useToast();
+  const urlValue = row.original.url;
+  const w = typeof window === 'undefined' ? null : window;
+  const contentPath = typeof urlValue === 'string' ? encodeURI(urlValue) : '';
+  const contentUrl = contentPath.startsWith('http') ? contentPath : `${w?.location?.origin}${contentPath}`;
+  const copyPDFLink = () => {
+    w?.navigator.clipboard.writeText(contentUrl);
+    toast({
+      title: t('dashboardPage.openTheContentDialog.copyPDFLinkToastTitle') || 'Link Copied!',
+      description: contentUrl,
+    });
+  };
+  return (
+    <div style={{ minWidth: 20, maxWidth: 24, display: 'flex', justifyContent: 'center' }}>
+      <Tooltip delayDuration={0} content={<p>{t('dashboardPage.openTheContentDialog.copyPDFLink')}</p>}>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={copyPDFLink}
+          className="hover:bg-primary/10 hover:text-primary"
+        >
+          <FileText className="h-4 w-4" />
+        </Button>
+      </Tooltip>
+    </div>
+  );
+}
 export const getColumns = (t: any): ColumnDef<Row>[] => [
   {
     accessorKey: 'formNo',
@@ -277,35 +307,7 @@ export const getColumns = (t: any): ColumnDef<Row>[] => [
   {
     id: 'pdfLink',
     header: t('msdsContentDataTable.pdfLink'),
-    cell: ({ row }) => {
-      const t = useTranslations();
-      const { toast } = useToast();
-      const urlValue = row.original.url;
-      const w = typeof window === 'undefined' ? null : window;
-      const contentPath = typeof urlValue === 'string' ? encodeURI(urlValue) : '';
-      const contentUrl = contentPath.startsWith('http') ? contentPath : `${w?.location?.origin}${contentPath}`;
-      const copyPDFLink = () => {
-        w?.navigator.clipboard.writeText(contentUrl);
-        toast({
-          title: t('dashboardPage.openTheContentDialog.copyPDFLinkToastTitle') || 'Link Copied!',
-          description: contentUrl,
-        });
-      };
-      return (
-        <div style={{ minWidth: 20, maxWidth: 24, display: 'flex', justifyContent: 'center' }}>
-          <Tooltip delayDuration={0} content={<p>{t('dashboardPage.openTheContentDialog.copyPDFLink')}</p>}>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={copyPDFLink}
-              className="hover:bg-primary/10 hover:text-primary"
-            >
-              <FileText className="h-4 w-4" />
-            </Button>
-          </Tooltip>
-        </div>
-      );
-    },
+    cell: PdfLinkCell,
   },
   {
     id: 'actions',
