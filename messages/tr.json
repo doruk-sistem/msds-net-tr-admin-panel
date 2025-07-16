@@ -23,6 +23,23 @@
     "backToLogin": "Giriş Yap",
     "details": "Detaylar"
   },
+  "companySelection": {
+    "title": "Şirket Seç",
+    "description": "Birden fazla şirkette hesabınız var. Hangi şirkete erişmek istediğinizi seçin:",
+    "successToast": {
+      "title": "Tekrar hoş geldiniz!",
+      "description": "Kontrol paneline yönlendiriliyorsunuz..."
+    },
+    "buttons": {
+      "cancel": "İptal",
+      "continue": "Devam Et"
+    },
+    "error": {
+      "title": "Hata",
+      "selectCompany": "Lütfen bir şirket seçin",
+      "general": "Bir şeyler yanlış gitti. Lütfen daha sonra tekrar deneyin."
+    }
+  },
   "loginPage": {
     "title": "<span class='text-primary'>Yönetim Panelinize</span><br /> Güvenli Giriş Yapın",
     "description": "Doruksistem Mühendislik, Teknoloji ve Danışmanlık hizmetleri yönetim panelinize güvenli giriş yapın.",
@@ -91,6 +108,7 @@
   },
   "dashboardPage": {
     "title": "Kontrol Paneli",
+    "activeCompany": "Aktif Şirket",
     "msdsContent": "MSDS İçeriği",
     "totalMSDS": "Toplam MSDS",
     "filtered": "Filtrelenmiş",

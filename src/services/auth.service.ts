@@ -64,6 +64,12 @@ class AuthService {
     return res.data
   }
 
+  public async selectCompany(body: { email: string; userId: string }) {
+    const res = await axios.post(`${this.BASE_PATH}/select-company`, body)
+
+    return res.data
+  }
+
   public async updateUser({
     body,
     id,

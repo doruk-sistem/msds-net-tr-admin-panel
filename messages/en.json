@@ -23,6 +23,23 @@
     "backToLogin": "Back to Login",
     "details": "Details"
   },
+  "companySelection": {
+    "title": "Select Company",
+    "description": "You have accounts in multiple companies. Please select which company you want to access:",
+    "successToast": {
+      "title": "Welcome Back!",
+      "description": "Logging you into the dashboard..."
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "continue": "Continue"
+    },
+    "error": {
+      "title": "Error",
+      "selectCompany": "Please select a company",
+      "general": "Something went wrong. Please try again later."
+    }
+  },
   "loginPage": {
     "title": "Secure Login to <br /><span class='text-primary'>Management Panel</span>",
     "description": "Securely log in to Doruksistem Engineering, Technology and Consulting services management panel.",
@@ -91,6 +108,7 @@
   },
   "dashboardPage": {
     "title": "Dashboard",
+    "activeCompany": "Active Company",
     "msdsContent": "MSDS Content",
     "totalMSDS": "Total MSDS",
     "filtered": "Filtered",
