@@ -14,7 +14,7 @@ export async function POST(request: Request) {
     const payload = await getPayloadCMS()
 
     const users = await payload.find({
-      depth: 0,
+      depth: 1,
       collection: 'companyUsers',
       where: {
         email: {
@@ -23,25 +23,59 @@ export async function POST(request: Request) {
       },
     })
 
-    const user = users?.docs[0]
-
-    if (!user) {
+    if (!users?.docs || users.docs.length === 0) {
       return NextResponse.json({ error: { message: 'Invalid credentials' } }, { status: 401 })
     }
 
-    const isValid =
-      password && user.hashedPassword ? await bcrypt.compare(password, user.hashedPassword) : false
+    // Kullanıcılar arasından şifresi doğru olanı bul
+    let validUser: any = null
+    let isValid = false
 
-    if (!isValid) {
+    for (const user of users.docs) {
+      const userPasswordValid =
+        password && user.hashedPassword
+          ? await bcrypt.compare(password, user.hashedPassword)
+          : false
+
+      if (userPasswordValid) {
+        validUser = user
+        isValid = true
+        break
+      }
+    }
+
+    if (!isValid || !validUser) {
       return NextResponse.json({ error: { message: 'Invalid password' } }, { status: 401 })
     }
 
+    // Eğer kullanıcı birden fazla şirkete kayıtlıysa, şirket seçimi için özel response döndür
+    if (users.docs.length > 1) {
+      const userCompanies = users.docs.map((user) => ({
+        id: user.id,
+        fullname: user.fullname,
+        email: user.email,
+        company: user.company,
+        registrationCompleted: user.registrationCompleted,
+      }))
+
+      return NextResponse.json(
+        {
+          requiresCompanySelection: true,
+          userCompanies,
+          message: 'Please select a company to continue',
+        },
+        { status: 200 },
+      )
+    }
+
+    // Tek şirkete kayıtlı kullanıcı için direkt giriş yap
+    // registrationCompleted kontrolü kaldırıldı - kullanıcı şifre ile giriş yapabilir
     const { accessToken, refreshToken } = await authHelper.encrypt({
-      userId: user.id,
+      userId: validUser.id,
     })
 
-    delete user.hashedPassword
-    delete user.apiKey
+    delete validUser.hashedPassword
+    delete validUser.apiKey
 
     return NextResponse.json(
       {

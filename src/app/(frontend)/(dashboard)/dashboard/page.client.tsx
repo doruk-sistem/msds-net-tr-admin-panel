@@ -16,10 +16,11 @@ interface Props {
   serverData: {
     companyUsers: PaginatedDocs<CompanyUser> | null
     msdsV2: PaginatedDocs<MsdsV2> | null
+    activeCompanyName: string | null
   }
 }
 
-export default function DashboardClient({ serverData: { companyUsers, msdsV2 } }: Props) {
+export default function DashboardClient({ serverData: { companyUsers, msdsV2, activeCompanyName } }: Props) {
   const searchParams = useSearchParams()
   const t = useTranslations('dashboardPage')
 
@@ -62,7 +63,14 @@ export default function DashboardClient({ serverData: { companyUsers, msdsV2 } }
 
   return (
     <div className="space-y-4">
-      <h2 className="text-3xl font-bold tracking-tight">{t('title')}</h2>
+      <div className="flex flex-col gap-2">
+        <h2 className="text-3xl font-bold tracking-tight">{t('title')}</h2>
+        {activeCompanyName && (
+          <p className="text-base font-medium text-foreground">
+            {t('activeCompany')}: <span className="text-primary font-semibold">{activeCompanyName}</span>
+          </p>
+        )}
+      </div>
       <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-2">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

@@ -1,6 +1,6 @@
 'use client'
 
-import { useTransition } from 'react'
+import { useTransition, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -25,6 +25,7 @@ import { ThemeToggle } from '@/components/frontend/theme-toggle'
 import DynamicLogo from '@/components/frontend/dynamic-logo'
 
 import authService from '@/services/auth.service'
+import CompanySelectionModal from '../company-selection/page.client'
 
 import { useToast } from '@/hooks/use-toast'
 
@@ -35,6 +36,9 @@ const formSchema = z.object({
 
 export default function LoginClient() {
   const [isPending, startTransition] = useTransition()
+  const [showCompanySelection, setShowCompanySelection] = useState(false)
+  const [userCompanies, setUserCompanies] = useState([])
+  const [loginCredentials, setLoginCredentials] = useState({ email: '', password: '' })
 
   const router = useRouter()
   const { toast } = useToast()
@@ -55,6 +59,14 @@ export default function LoginClient() {
           email: values.email,
           password: values.password,
         })
+
+        // Eğer şirket seçimi gerekiyorsa
+        if (res?.requiresCompanySelection) {
+          setUserCompanies(res.userCompanies)
+          setLoginCredentials({ email: values.email, password: values.password })
+          setShowCompanySelection(true)
+          return
+        }
 
         if (res?.accessToken) {
           toast({
@@ -176,6 +188,13 @@ export default function LoginClient() {
           </Card>
         </div>
       </div>
+
+      <CompanySelectionModal
+        isOpen={showCompanySelection}
+        onClose={() => setShowCompanySelection(false)}
+        userCompanies={userCompanies}
+        email={loginCredentials.email}
+      />
     </div>
   )
 }
