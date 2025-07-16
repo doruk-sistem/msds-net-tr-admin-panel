@@ -125,7 +125,8 @@
       "publishedDate": "Yayın Tarihi",
       "validationStatus": "Geçerlilik Durumu",
       "viewDetails": "Detayları Görüntüle",
-      "validUntil": "Geçerlilik Tarihi"
+      "validUntil": "Geçerlilik Tarihi",
+      "pdfLink": "URL/LINK"
     },
     "openTheContentDialog": {
       "dialogTitle": "{name} - MSDS İçerikleri",
@@ -135,6 +136,7 @@
       "showQRCode": "QR Kod'u Gör",
       "moreOptions": "Daha Fazla Seçenek",
       "copyPDFLink": "PDF Link'ini Kopyala",
+      "copyPDFLinkToastTitle": "Link Kopyalandı!",
       "showQRCodeDialog": {
         "title": "{name} - QR Kod",
         "description": "Bu QR kodunu yazdırabilirsiniz.",

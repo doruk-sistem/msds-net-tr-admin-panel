@@ -14,11 +14,12 @@ import { ArrowUpDown, CheckCircle2, XCircle } from "lucide-react"
 import ActionsCell from './actions-cell'
 import formatDate from '@/utilities/formatDate'
 import { Button } from '@/components/ui/button'
-import { Printer, QrCodeIcon, SquareArrowOutUpRight } from 'lucide-react'
+import { Printer, QrCodeIcon, SquareArrowOutUpRight, FileText } from 'lucide-react'
 import QRCode from 'react-qr-code'
 import { useTranslations } from 'next-intl'
 import { useReactToPrint } from 'react-to-print'
-
+import Tooltip from '@/components/ui/tooltip-basic'
+import { useToast } from '@/hooks/use-toast'
 type MsdsContent = DataFromCollectionSlug<'msdsV2'>
 
 export type Row = {
@@ -107,6 +108,36 @@ const QRCodeCell = ({ row }: { row: any }) => {
     </Dialog>
   )
 }
+// PDF Link Cell bileşeni
+function PdfLinkCell({ row }: { row: any }) {
+  const t = useTranslations();
+  const { toast } = useToast();
+  const urlValue = row.original.url;
+  const w = typeof window === 'undefined' ? null : window;
+  const contentPath = typeof urlValue === 'string' ? encodeURI(urlValue) : '';
+  const contentUrl = contentPath.startsWith('http') ? contentPath : `${w?.location?.origin}${contentPath}`;
+  const copyPDFLink = () => {
+    w?.navigator.clipboard.writeText(contentUrl);
+    toast({
+      title: t('dashboardPage.openTheContentDialog.copyPDFLinkToastTitle') || 'Link Copied!',
+      description: contentUrl,
+    });
+  };
+  return (
+    <div style={{ minWidth: 20, maxWidth: 24, display: 'flex', justifyContent: 'center' }}>
+      <Tooltip delayDuration={0} content={<p>{t('dashboardPage.openTheContentDialog.copyPDFLink')}</p>}>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={copyPDFLink}
+          className="hover:bg-primary/10 hover:text-primary"
+        >
+          <FileText className="h-4 w-4" />
+        </Button>
+      </Tooltip>
+    </div>
+  );
+}
 export const getColumns = (t: any): ColumnDef<Row>[] => [
   {
     accessorKey: 'formNo',
@@ -136,14 +167,10 @@ export const getColumns = (t: any): ColumnDef<Row>[] => [
     header: ({ column }) => {
       return t('msdsContentDataTable.name')
     },
-    cell: ({
-      row: {
-        original: { name, url },
-      },
-    }) => {
+    cell: ({ row: { original: { name, url } } }) => {
       return (
-        <div className="flex items-center space-x-1 max-w-[200px]">
-          <div className="font-medium text-slate-900 dark:text-slate-100 truncate">{name}</div>
+        <div className="flex items-center space-x-1 max-w-[160px] truncate">
+          <div className="font-medium text-slate-900 dark:text-slate-100 truncate max-w-[140px]">{name}</div>
           {url ? (
             <a href={url} target="_blank" rel="noopener noreferrer" className="block">
               <Button variant="ghost" size="sm">
@@ -166,8 +193,8 @@ export const getColumns = (t: any): ColumnDef<Row>[] => [
         typeof language === 'object' ? `${language?.code} (${language?.name})` : ''
 
       return (
-        <div className="flex flex-col w-28">
-          <span className="text-sm text-slate-900 dark:text-slate-100">{formattedLanguage}</span>
+        <div className="flex flex-col w-20 truncate">
+          <span className="text-sm text-slate-900 dark:text-slate-100 truncate">{formattedLanguage}</span>
         </div>
       )
     },
@@ -276,6 +303,11 @@ export const getColumns = (t: any): ColumnDef<Row>[] => [
         </div>
       )
     },
+  },
+  {
+    id: 'pdfLink',
+    header: t('msdsContentDataTable.pdfLink'),
+    cell: PdfLinkCell,
   },
   {
     id: 'actions',
