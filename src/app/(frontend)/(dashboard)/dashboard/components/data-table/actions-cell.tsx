@@ -141,8 +141,14 @@ function MsdsContent({ url: _url, details }: MsdsContentProps): React.JSX.Elemen
 
   const [qrDialogOpen, setQrDialogOpen] = useState(false)
 
-  const contentPath = typeof _url === 'string' ? encodeURI(_url) : ''
-  const contentUrl = `${w?.location?.origin}${contentPath}`
+  // DÜZELTME: Eğer _url zaten tam bir URL ise başına origin ekleme
+  let contentPath = typeof _url === 'string' ? encodeURI(_url) : '';
+  let contentUrl = '';
+  if (contentPath.startsWith('http://') || contentPath.startsWith('https://')) {
+    contentUrl = contentPath;
+  } else {
+    contentUrl = `${w?.location?.origin}${contentPath}`;
+  }
 
   const openPdfToNewTab = () => {
     w?.open(contentPath, '_blank')
@@ -152,7 +158,7 @@ function MsdsContent({ url: _url, details }: MsdsContentProps): React.JSX.Elemen
     w?.navigator.clipboard.writeText(contentUrl)
 
     toast({
-      title: 'Link Copied!',
+      title: t('dashboardPage.openTheContentDialog.copyPDFLinkToastTitle') || 'Link Copied!',
       description: contentUrl,
     })
   }
@@ -218,6 +224,20 @@ function MsdsContent({ url: _url, details }: MsdsContentProps): React.JSX.Elemen
             </div>
           </Tooltip>
 
+          <Tooltip
+            delayDuration={0}
+            content={<p>{t('dashboardPage.openTheContentDialog.copyPDFLink')}</p>}
+          >
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={copyPDFLink}
+              className="hover:bg-primary/10 hover:text-primary"
+            >
+              <FileText className="h-4 w-4" />
+            </Button>
+          </Tooltip>
+
           <Dialog open={qrDialogOpen} onOpenChange={setQrDialogOpen}>
             <DialogTrigger asChild>
               <Tooltip
@@ -266,22 +286,7 @@ function MsdsContent({ url: _url, details }: MsdsContentProps): React.JSX.Elemen
             </DialogContent>
           </Dialog>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="hover:bg-primary/10">
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuLabel className="text-xs font-medium text-muted-foreground">
-                {t('dashboardPage.openTheContentDialog.moreOptions')}
-              </DropdownMenuLabel>
-              <DropdownMenuItem onClick={copyPDFLink} className="gap-2">
-                <FileText className="h-4 w-4" />
-                <span>{t('dashboardPage.openTheContentDialog.copyPDFLink')}</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {/* More Options (DropdownMenu) tamamen kaldırıldı */}
         </div>
       </div>
 
