@@ -64,7 +64,7 @@ export default function CompanySelectionModal({
                     title: t('successToast.title'),
                     description: t('successToast.description'),
                 })
-                router.push('/dashboard')
+                window.location.reload() // Şirket seçimi sonrası tam sayfa yenileme
                 onClose()
             }
         } catch (error: any) {

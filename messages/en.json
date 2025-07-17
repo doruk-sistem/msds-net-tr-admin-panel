@@ -125,7 +125,8 @@
       "publishedDate": "Published Date",
       "validationStatus": "Validation Status",
       "viewDetails": "View Details",
-      "validUntil": "Valid Until"
+      "validUntil": "Valid Until",
+      "pdfLink": "URL/LINK"
     },
     "openTheContentDialog": {
       "dialogTitle": "{name} - MSDS Contents",
@@ -135,6 +136,7 @@
       "showQRCode": "Show QR Code",
       "moreOptions": "More Options",
       "copyPDFLink": "Copy PDF Link",
+      "copyPDFLinkToastTitle": "Link Copied!",
       "showQRCodeDialog": {
         "title": "{name} - QR Code",
         "description": "You can print this QR code",

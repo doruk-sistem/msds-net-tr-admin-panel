@@ -1,9 +1,10 @@
-import * as migration_20241219_141241_inital from './20241219_141241_inital';
-import * as migration_20250106_110124_v0_0_1_beta_9 from './20250106_110124_v0_0_1_beta_9';
-import * as migration_20250123_165154_v0_0_1_beta_10 from './20250123_165154_v0_0_1_beta_10';
-import * as migration_20250204_102827_v0_0_1_beta_12 from './20250204_102827_v0_0_1_beta_12';
-import * as migration_20250312_103755 from './20250312_103755';
-import * as migration_20250317_100057 from './20250317_100057';
+import * as migration_20241219_141241_inital from './20241219_141241_inital'
+import * as migration_20250106_110124_v0_0_1_beta_9 from './20250106_110124_v0_0_1_beta_9'
+import * as migration_20250123_165154_v0_0_1_beta_10 from './20250123_165154_v0_0_1_beta_10'
+import * as migration_20250204_102827_v0_0_1_beta_12 from './20250204_102827_v0_0_1_beta_12'
+import * as migration_20250312_103755 from './20250312_103755'
+import * as migration_20250317_100057 from './20250317_100057'
+import * as migration_20250318_000001_remove_unique_email_company_users from './20250318_000001_remove_unique_email_company_users'
 
 export const migrations = [
   {
@@ -34,6 +35,11 @@ export const migrations = [
   {
     up: migration_20250317_100057.up,
     down: migration_20250317_100057.down,
-    name: '20250317_100057'
+    name: '20250317_100057',
   },
-];
+  {
+    up: migration_20250318_000001_remove_unique_email_company_users.up,
+    down: migration_20250318_000001_remove_unique_email_company_users.down,
+    name: '20250318_000001_remove_unique_email_company_users',
+  },
+]
