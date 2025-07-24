@@ -122,7 +122,6 @@ const CompanyUsers: CollectionConfig = {
                           <p style="word-break: break-all; color: #666;">
                             ${getServerSideURL()}/auth/complate-registration?email=${data?.email}
                           </p>
-                          <p>This link will expire in 24 hours.</p>
                           <hr style="border: 1px solid #eee; margin: 20px 0;">
                           <p style="color: #666; font-size: 12px;">This is an automated message, please do not reply to this email.</p>
                         </div>
