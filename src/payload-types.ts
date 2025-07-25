@@ -129,6 +129,10 @@ export interface CompanyUser {
    */
   sendEmail?: boolean | null;
   registrationCompleted?: boolean | null;
+  /**
+   * Checked if the user has verified their email address.
+   */
+  emailVerified?: boolean | null;
   fullname: string;
   personalPhoneNumber: string;
   position?: string | null;
@@ -640,6 +644,7 @@ export interface CompanyUsersSelect<T extends boolean = true> {
   hashedPassword?: T;
   sendEmail?: T;
   registrationCompleted?: T;
+  emailVerified?: T;
   fullname?: T;
   personalPhoneNumber?: T;
   position?: T;

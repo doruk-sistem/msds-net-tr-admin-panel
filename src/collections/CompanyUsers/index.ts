@@ -169,6 +169,22 @@ const CompanyUsers: CollectionConfig = {
       },
     },
     {
+      name: 'emailVerified',
+      label: {
+        tr: 'E-posta Doğrulandı',
+        en: 'Email Verified',
+      },
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        hidden: true,
+        description: {
+          tr: 'Kullanıcının e-posta adresi doğrulandıysa işaretlenir.',
+          en: 'Checked if the user has verified their email address.',
+        },
+      },
+    },
+    {
       type: 'tabs',
       tabs: [
         {
