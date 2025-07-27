@@ -35,6 +35,7 @@ export async function POST(request: Request) {
       data: {
         hashedPassword: await bcrypt.hash(password, 10),
         registrationCompleted: true,
+        emailVerified: true,
       },
     })
 

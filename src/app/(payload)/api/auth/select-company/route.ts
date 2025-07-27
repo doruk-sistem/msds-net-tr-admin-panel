@@ -25,6 +25,14 @@ export async function POST(request: Request) {
 
     // Kullanıcı zaten login sırasında doğrulanmış, şifre kontrolü yapmaya gerek yok
     // JWT token oluştur
+
+    // Kullanıcıyı lastActiveAt ile güncelle
+    await payload.update({
+      collection: 'companyUsers',
+      id: user.id,
+      data: { lastActiveAt: new Date().toISOString() },
+    })
+
     const { accessToken, refreshToken } = await authHelper.encrypt({
       userId: user.id,
     })
