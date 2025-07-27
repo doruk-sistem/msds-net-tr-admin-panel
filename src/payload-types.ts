@@ -133,6 +133,10 @@ export interface CompanyUser {
    * Checked if the user has verified their email address.
    */
   emailVerified?: boolean | null;
+  /**
+   * The date and time when the user was last active in the system.
+   */
+  lastActiveAt?: string | null;
   fullname: string;
   personalPhoneNumber: string;
   position?: string | null;
@@ -645,6 +649,7 @@ export interface CompanyUsersSelect<T extends boolean = true> {
   sendEmail?: T;
   registrationCompleted?: T;
   emailVerified?: T;
+  lastActiveAt?: T;
   fullname?: T;
   personalPhoneNumber?: T;
   position?: T;
