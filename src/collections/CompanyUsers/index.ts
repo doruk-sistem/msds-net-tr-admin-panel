@@ -27,7 +27,7 @@ const CompanyUsers: CollectionConfig = {
     update: authenticated,
   },
   admin: {
-    defaultColumns: ['fullname', 'email', 'personalPhoneNumber', 'company'],
+    defaultColumns: ['fullname', 'email', 'personalPhoneNumber', 'company', 'lastActiveAt'],
     useAsTitle: 'fullname',
     listSearchableFields: ['fullname', 'email'],
   },
@@ -166,6 +166,37 @@ const CompanyUsers: CollectionConfig = {
       defaultValue: false,
       admin: {
         hidden: true,
+      },
+    },
+    {
+      name: 'emailVerified',
+      label: {
+        tr: 'E-posta Doğrulandı',
+        en: 'Email Verified',
+      },
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        hidden: true,
+        description: {
+          tr: 'Kullanıcının e-posta adresi doğrulandıysa işaretlenir.',
+          en: 'Checked if the user has verified their email address.',
+        },
+      },
+    },
+    {
+      name: 'lastActiveAt',
+      label: {
+        tr: 'Son Aktif Tarih',
+        en: 'Last Active At',
+      },
+      type: 'date',
+      admin: {
+        hidden: true,
+        description: {
+          tr: 'Kullanıcının sisteme en son giriş yaptığı tarih ve saat.',
+          en: 'The date and time when the user was last active in the system.',
+        },
       },
     },
     {
