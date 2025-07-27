@@ -70,6 +70,14 @@ export async function POST(request: Request) {
 
     // Tek şirkete kayıtlı kullanıcı için direkt giriş yap
     // registrationCompleted kontrolü kaldırıldı - kullanıcı şifre ile giriş yapabilir
+
+    // Kullanıcıyı lastActiveAt ile güncelle
+    await payload.update({
+      collection: 'companyUsers',
+      id: validUser.id,
+      data: { lastActiveAt: new Date().toISOString() },
+    })
+
     const { accessToken, refreshToken } = await authHelper.encrypt({
       userId: validUser.id,
     })
