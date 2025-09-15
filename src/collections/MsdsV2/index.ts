@@ -161,6 +161,12 @@ const MsdsV2: CollectionConfig = {
             en: 'Preparation Date',
           },
           type: 'date',
+          admin: {
+            date: {
+              pickerAppearance: 'dayAndTime',
+              displayFormat: 'dd/MM/yyyy',
+            },
+          },
         },
 
         {
@@ -178,6 +184,12 @@ const MsdsV2: CollectionConfig = {
             en: 'New Regulation Date',
           },
           type: 'date',
+          admin: {
+            date: {
+              pickerAppearance: 'dayAndTime',
+              displayFormat: 'dd/MM/yyyy',
+            },
+          },
         },
         {
           name: 'updatedCount',
@@ -204,6 +216,12 @@ const MsdsV2: CollectionConfig = {
             en: 'Certificate Date',
           },
           type: 'date',
+          admin: {
+            date: {
+              pickerAppearance: 'dayAndTime',
+              displayFormat: 'dd/MM/yyyy',
+            },
+          },
         },
         {
           name: 'expiryDate',
@@ -216,6 +234,10 @@ const MsdsV2: CollectionConfig = {
             description: {
               tr: 'MSDS belgesinin geçerlilik süresi sonu (Sertifika tarihinden 5 yıl sonra)',
               en: 'End of validity period for MSDS document (5 years after certificate date)',
+            },
+            date: {
+              pickerAppearance: 'dayAndTime',
+              displayFormat: 'dd/MM/yyyy',
             },
           },
           hooks: {
