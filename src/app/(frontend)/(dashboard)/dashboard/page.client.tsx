@@ -62,7 +62,7 @@ export default function DashboardClient({ serverData: { companyUsers, msdsV2, ac
     : null
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full overflow-hidden">
       <div className="flex flex-col gap-2">
         <h2 className="text-3xl font-bold tracking-tight">{t('title')}</h2>
         {activeCompanyName && (
@@ -96,16 +96,20 @@ export default function DashboardClient({ serverData: { companyUsers, msdsV2, ac
         <CardHeader>
           <CardTitle>{t('msdsContent')}</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="mb-4">
+        <CardContent className="p-0">
+          <div className="p-6 pb-0">
             <SearchMsds />
           </div>
-          {Array.isArray(data) ? (
-            <>
-              <DataTable columns={tableColumns} data={data} />
-              <TablePagination totalPages={msdsV2?.totalPages || 1} />
-            </>
-          ) : null}
+          <div className="p-6 pt-4">
+            {Array.isArray(data) ? (
+              <>
+                <DataTable columns={tableColumns} data={data} />
+                <div className="mt-4">
+                  <TablePagination totalPages={msdsV2?.totalPages || 1} />
+                </div>
+              </>
+            ) : null}
+          </div>
         </CardContent>
       </Card>
     </div>

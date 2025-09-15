@@ -4,10 +4,12 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Search, X } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import React, { useEffect, useState } from 'react'
 
 export default function SearchMsds() {
   const [searchValue, setSearchValue] = useState('')
+  const t = useTranslations('dashboardPage')
 
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -49,7 +51,7 @@ export default function SearchMsds() {
           <Search className="h-4 w-4 text-slate-400" aria-hidden="true" />
         </div>
         <Input
-          placeholder="Search by MSDS Name..."
+          placeholder={t('msdsContentDataTable.searchByMSDSName')}
           value={searchValue}
           onChange={(event) => setSearchValue(event.target.value)}
           className="pl-10 py-2 bg-white/50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-primary focus:border-transparent rounded-lg shadow-sm"

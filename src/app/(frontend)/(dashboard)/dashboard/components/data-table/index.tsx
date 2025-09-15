@@ -50,7 +50,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   return (
     <div className="relative overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900 shadow-md">
       <div className="overflow-x-auto w-full">
-        <Table className="w-full">
+        <Table className="w-full min-w-[620px]">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
