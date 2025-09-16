@@ -15,10 +15,10 @@ import ActionsCell from './actions-cell'
 import formatDate from '@/utilities/formatDate'
 import { Button } from '@/components/ui/button'
 import { Printer, QrCodeIcon, SquareArrowOutUpRight, FileText } from 'lucide-react'
+import Tooltip from '@/components/ui/tooltip-basic'
 import QRCode from 'react-qr-code'
 import { useTranslations } from 'next-intl'
 import { useReactToPrint } from 'react-to-print'
-import Tooltip from '@/components/ui/tooltip-basic'
 import { useToast } from '@/hooks/use-toast'
 type MsdsContent = DataFromCollectionSlug<'msdsV2'>
 
@@ -67,15 +67,16 @@ const QRCodeCell = ({ row }: { row: any }) => {
   return (
     <Dialog open={qrDialogOpen} onOpenChange={setQrDialogOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className="flex items-center gap-2"
-          onClick={() => setQrDialogOpen(true)}
-        >
-          <QrCodeIcon className="h-4 w-4" />
-          <span>{t('dashboardPage.openTheContentDialog.showQRCode')}</span>
-        </Button>
+        <Tooltip delayDuration={0} content={<p>{t('dashboardPage.openTheContentDialog.showQRCode')}</p>}>
+          <Button
+            variant="outline"
+            size="sm"
+            className="flex items-center justify-center px-1 py-1 h-7 w-7"
+            onClick={() => setQrDialogOpen(true)}
+          >
+            <QrCodeIcon className="h-4 w-4" />
+          </Button>
+        </Tooltip>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -124,7 +125,7 @@ function PdfLinkCell({ row }: { row: any }) {
     });
   };
   return (
-    <div style={{ minWidth: 20, maxWidth: 24, display: 'flex', justifyContent: 'center' }}>
+    <div style={{ minWidth: 20, maxWidth: 24, display: 'flex', justifyContent: 'center' }} className="ml-4">
       <Tooltip delayDuration={0} content={<p>{t('dashboardPage.openTheContentDialog.copyPDFLink')}</p>}>
         <Button
           variant="ghost"
@@ -156,11 +157,12 @@ export const getColumns = (t: any): ColumnDef<Row>[] => [
     cell: ({ row }) => {
       const formNo = row.original.formNo
       return (
-        <div className="font-medium text-sm text-slate-600 w-24">
+        <div className="font-medium text-sm text-slate-600 w-14 min-w-[50px]">
           {formNo || 'N/A'}
         </div>
       )
     },
+    size: 50,
   },
   {
     accessorKey: 'name',
@@ -169,8 +171,8 @@ export const getColumns = (t: any): ColumnDef<Row>[] => [
     },
     cell: ({ row: { original: { name, url } } }) => {
       return (
-        <div className="flex items-center space-x-1 max-w-[160px] truncate">
-          <div className="font-medium text-slate-900 dark:text-slate-100 truncate max-w-[140px]">{name}</div>
+        <div className="flex items-center space-x-1 max-w-[160px] min-w-[140px] truncate">
+          <div className="font-medium text-sm text-slate-900 dark:text-slate-100 truncate max-w-[150px]">{name}</div>
           {url ? (
             <a href={url} target="_blank" rel="noopener noreferrer" className="block">
               <Button variant="ghost" size="sm">
@@ -181,6 +183,7 @@ export const getColumns = (t: any): ColumnDef<Row>[] => [
         </div>
       )
     },
+    size: 160,
   },
   {
     accessorKey: 'language',
@@ -193,10 +196,42 @@ export const getColumns = (t: any): ColumnDef<Row>[] => [
         typeof language === 'object' ? `${language?.code} (${language?.name})` : ''
 
       return (
-        <div className="flex flex-col w-20 truncate">
-          <span className="text-sm text-slate-900 dark:text-slate-100 truncate">{formattedLanguage}</span>
+        <div className="flex flex-col w-20 min-w-[80px]">
+          <span className="text-sm text-slate-900 dark:text-slate-100">{formattedLanguage}</span>
         </div>
       )
+    },
+    size: 80,
+  },
+  {
+    accessorKey: 'msdsUpdatedAt',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="flex items-center gap-2 justify-start px-0"
+        >
+          {t('msdsContentDataTable.publishedAt')}
+          <ArrowUpDown className="h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => {
+      const date = row.original.msdsUpdatedAt
+      return (
+        <div className="flex flex-col w-14 min-w-[50px]">
+          <span className="text-sm text-slate-900 dark:text-slate-100">
+            {date ? formatDate(date) : 'N/A'}
+          </span>
+        </div>
+      )
+    },
+    size: 50,
+    sortingFn: (rowA, rowB, columnId) => {
+      const dateA = rowA.original.msdsUpdatedAt ? new Date(rowA.original.msdsUpdatedAt).getTime() : 0
+      const dateB = rowB.original.msdsUpdatedAt ? new Date(rowB.original.msdsUpdatedAt).getTime() : 0
+      return dateA - dateB
     },
   },
   {
@@ -216,13 +251,14 @@ export const getColumns = (t: any): ColumnDef<Row>[] => [
     cell: ({ row }) => {
       const date = row.original.certificateDate
       return (
-        <div className="flex flex-col w-28">
+        <div className="flex flex-col w-14 min-w-[50px]">
           <span className="text-sm text-slate-900 dark:text-slate-100">
             {date ? formatDate(date) : 'N/A'}
           </span>
         </div>
       )
     },
+    size: 50,
     sortingFn: (rowA, rowB, columnId) => {
       const dateA = rowA.original.certificateDate ? new Date(rowA.original.certificateDate).getTime() : 0
       const dateB = rowB.original.certificateDate ? new Date(rowB.original.certificateDate).getTime() : 0
@@ -258,18 +294,19 @@ export const getColumns = (t: any): ColumnDef<Row>[] => [
       const isValid = expiryDate ? new Date() < new Date(expiryDate) : false
 
       return (
-        <div className="flex flex-row items-center gap-2 w-40">
+        <div className="flex flex-row items-center gap-3 w-32 min-w-[120px]">
           {expiryDate && (
             isValid ?
-              <CheckCircle2 className="h-5 w-5 text-green-400" /> :
+              <CheckCircle2 className="h-4 w-4 text-green-500" /> :
               <XCircle className="h-5 w-5 text-red-500" />
           )}
           <span className={`text-sm ${isValid ? 'text-slate-900 dark:text-slate-100' : 'text-red-500'}`}>
-            {expiryDate ? (t === undefined ? `Valid until ${formatDate(expiryDate)}` : `${t('msdsContentDataTable.validUntil')} ${formatDate(expiryDate)}`) : 'N/A'}
+            {expiryDate ? formatDate(expiryDate) : 'N/A'}
           </span>
         </div>
       )
     },
+    size: 120,
     sortingFn: (rowA, rowB, columnId) => {
       // Calculate expiry dates for both rows
       let expiryDateA = rowA.original.expiryDate
@@ -298,16 +335,18 @@ export const getColumns = (t: any): ColumnDef<Row>[] => [
     header: t('msdsContentDataTable.qrCode'),
     cell: ({ row }) => {
       return (
-        <div className="flex items-center gap-2 justify-start px-0">
+        <div className="flex items-center gap-1 justify-center px-0 w-10 min-w-[40px] mr-4">
           <QRCodeCell row={row} />
         </div>
       )
     },
+    size: 40,
   },
   {
     id: 'pdfLink',
     header: t('msdsContentDataTable.pdfLink'),
     cell: PdfLinkCell,
+    size: 30,
   },
   {
     id: 'actions',

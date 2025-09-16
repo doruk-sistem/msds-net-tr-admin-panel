@@ -69,7 +69,7 @@ export default function ActionsCell({ row }: CellContext<Row, unknown>): React.J
     <div className="flex justify-end items-center">
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="outline" size="sm" className="flex items-center gap-2">
+          <Button variant="outline" size="sm" className="flex items-center gap-1 px-3 py-1 h-8">
             <FileStack className="h-4 w-4" />
             <span>{t('msdsContentDataTable.viewDetails')}</span>
           </Button>
