@@ -58,9 +58,18 @@ export default async function DashboardPage({ searchParams: searchParamsPromise 
           },
           ...(!!name
             ? {
-              name: {
-                like: name,
-              },
+              or: [
+                {
+                  name: {
+                    like: name,
+                  },
+                },
+                {
+                  formNo: {
+                    like: name,
+                  },
+                },
+              ],
             }
             : {}),
         },
