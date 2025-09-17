@@ -197,8 +197,10 @@ const MsdsV2: CollectionConfig = {
             tr: 'Düzenlenme Sayısı',
             en: 'How Many Regulations',
           },
-
           type: 'number',
+          admin: {
+            step: 0.1,
+          },
         },
         {
           name: 'author',
