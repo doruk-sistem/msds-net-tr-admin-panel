@@ -27,9 +27,9 @@ export const aiScanning: BeforeChangeHook = async ({ req, operation, data }) => 
       },
       updatedCount: {
         type: 'number',
-        description: `Integer olmalı. Kaçıncı düzenleme olduğu ya da Düzenleme Sayısı`,
-        afterScanning: async (value: string) =>
-          typeof value !== 'string' ? parseInt(value) : value,
+        description: `Düzenleme Sayısı veya kaçıncı düzenleme olduğu (ondalık sayı olabilir, örn: 1.1, 1.2, 2.5)`,
+        afterScanning: async (value: string | number) =>
+          typeof value === 'string' ? parseFloat(value) : value,
       },
       author: {
         type: 'string',
