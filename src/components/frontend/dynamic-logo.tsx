@@ -20,9 +20,9 @@ export default function DynamicLogo({ imageClassName, className }: Props) {
 
   const logoLight = () => (
     <Image
-      className={cn('w-[170px]', imageClassName)}
-      src="/msds-logo-light.png"
-      alt="msds.com.tr logo light"
+      className={cn('h-auto', imageClassName)}
+      src="/msds-net-logo-light.png"
+      alt="msds.net.tr logo light"
       width={400}
       height={100}
     />
@@ -30,16 +30,16 @@ export default function DynamicLogo({ imageClassName, className }: Props) {
 
   const logoDark = () => (
     <Image
-      className={cn('w-[170px]', imageClassName)}
-      src="/msds-logo-dark.png"
-      alt="msds.com.tr logo dark"
+      className={cn('h-auto', imageClassName)}
+      src="/msds-net-logo-dark.png"
+      alt="msds.net.tr logo dark"
       width={400}
       height={100}
     />
   )
 
   return (
-    <Link href="/" className={className}>
+    <Link href="/" className={cn('block', className)}>
       {resolvedTheme === 'dark' ? logoLight() : logoDark()}
     </Link>
   )
