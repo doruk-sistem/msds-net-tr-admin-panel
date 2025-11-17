@@ -117,8 +117,10 @@ export default function LoginClient() {
         </div>
 
         <div className="w-full max-w-[400px] order-1 lg:order-2">
-          <div className="mb-6 lg:mb-8 text-center lg:text-left">
-            <DynamicLogo imageClassName="w-[160px] lg:w-[180px] mx-auto lg:mx-0 hover:opacity-90 transition-all" />
+          <div className="-ml-6">
+            <DynamicLogo
+              imageClassName="w-[200px] lg:w-[240px] hover:opacity-90 transition-all"
+            />
           </div>
 
           <Card className="border-0 shadow-xl bg-card/50 dark:bg-card/50 backdrop-blur-sm">

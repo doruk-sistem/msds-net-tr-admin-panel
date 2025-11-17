@@ -47,9 +47,9 @@ export function UserNav() {
 
   return (
     <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="flex h-16 items-center px-4 md:px-6">
-        <DynamicLogo />
-        <div className="ml-auto flex items-center gap-6">
+      <div className="flex h-16 items-center px-0">
+        <DynamicLogo imageClassName="w-[230px]" />
+        <div className="ml-auto flex items-center gap-6 pr-4 md:pr-6">
           <div className="flex items-center gap-3">
             <p className="text-sm font-medium hidden md:block">
               {t('userNav.welcome', { name: user?.fullname })}
