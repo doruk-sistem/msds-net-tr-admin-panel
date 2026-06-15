@@ -16,23 +16,36 @@ dotenv.config({
   path: path.resolve(dirname, '../../.env'),
 })
 
-const openRouterApiKey = process.env.OPENROUTER_API_KEY
 const model = process.env.OPENROUTER_MODEL || 'openai/gpt-4.1-mini'
 
-const client = new OpenAI({
-  baseURL: 'https://openrouter.ai/api/v1',
-  apiKey: openRouterApiKey,
-  defaultHeaders: {
-    'HTTP-Referer': process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
-    'X-Title': 'MSDS Admin Panel',
-  },
-})
+let client: OpenAI | null = null
+
+function getClient() {
+  if (!client) {
+    const openRouterApiKey = process.env.OPENROUTER_API_KEY
+
+    if (!openRouterApiKey) {
+      throw new Error('OPENROUTER_API_KEY is not configured')
+    }
+
+    client = new OpenAI({
+      baseURL: 'https://openrouter.ai/api/v1',
+      apiKey: openRouterApiKey,
+      defaultHeaders: {
+        'HTTP-Referer': process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
+        'X-Title': 'MSDS Admin Panel',
+      },
+    })
+  }
+
+  return client
+}
 
 export async function processPDF(dataBuffer: Buffer, question: string) {
   try {
     const pdfData = await pdf(dataBuffer)
 
-    const result = await client.chat.completions.create({
+    const result = await getClient().chat.completions.create({
       messages: [
         {
           role: 'system',
