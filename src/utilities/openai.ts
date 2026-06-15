@@ -3,7 +3,7 @@ import { fileURLToPath } from 'url'
 import path from 'path'
 
 import dotenv from 'dotenv'
-import { AzureOpenAI } from 'openai'
+import OpenAI from 'openai'
 import * as pdf from 'pdf-parse/lib/pdf-parse.js'
 
 const filename = fileURLToPath(import.meta.url)
@@ -12,17 +12,20 @@ const dirname = path.dirname(filename)
 dotenv.config({
   path: path.resolve(dirname, `../../.env.${process.env.NODE_ENV}`),
 })
+dotenv.config({
+  path: path.resolve(dirname, '../../.env'),
+})
 
-const azureEndpoint = process.env.AZURE_OPENAI_ENDPOINT
-const azureApiKey = process.env.AZURE_OPENAI_KEY
-const deploymentName = process.env.AZURE_OPENAI_DEPLOYMENT
-const apiVersion = process.env.AZURE_OPENAI_API_VERSION
+const openRouterApiKey = process.env.OPENROUTER_API_KEY
+const model = process.env.OPENROUTER_MODEL || 'openai/gpt-4.1-mini'
 
-const client = new AzureOpenAI({
-  apiKey: azureApiKey,
-  deployment: deploymentName,
-  endpoint: azureEndpoint,
-  apiVersion,
+const client = new OpenAI({
+  baseURL: 'https://openrouter.ai/api/v1',
+  apiKey: openRouterApiKey,
+  defaultHeaders: {
+    'HTTP-Referer': process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
+    'X-Title': 'MSDS Admin Panel',
+  },
 })
 
 export async function processPDF(dataBuffer: Buffer, question: string) {
@@ -38,7 +41,7 @@ export async function processPDF(dataBuffer: Buffer, question: string) {
         },
         { role: 'user', content: `PDF İçeriği:\n${pdfData.text}\n\nSoru: ${question}` },
       ],
-      model: 'gpt-4o-mini',
+      model,
       temperature: 0.7,
       max_tokens: 500,
     })
