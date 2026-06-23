@@ -16,26 +16,19 @@ dotenv.config({
   path: path.resolve(dirname, '../../.env'),
 })
 
-const model = process.env.OPENROUTER_MODEL || 'openai/gpt-4.1-mini'
+const model = process.env.OPENAI_MODEL || 'gpt-4.1-mini'
 
 let client: OpenAI | null = null
 
 function getClient() {
   if (!client) {
-    const openRouterApiKey = process.env.OPENROUTER_API_KEY
+    const apiKey = process.env.OPENAI_API_KEY
 
-    if (!openRouterApiKey) {
-      throw new Error('OPENROUTER_API_KEY is not configured')
+    if (!apiKey) {
+      throw new Error('OPENAI_API_KEY is not configured')
     }
 
-    client = new OpenAI({
-      baseURL: 'https://openrouter.ai/api/v1',
-      apiKey: openRouterApiKey,
-      defaultHeaders: {
-        'HTTP-Referer': process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
-        'X-Title': 'MSDS Admin Panel',
-      },
-    })
+    client = new OpenAI({ apiKey })
   }
 
   return client
